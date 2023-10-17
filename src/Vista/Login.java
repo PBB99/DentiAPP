@@ -26,9 +26,10 @@ public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-
+	private JTextField dniText;
+	private JTextField passwordText;
+	private ConexionMySQL conex;
+	private Connection cn;
 	/**
 	 * Launch the application.
 	 */
@@ -49,6 +50,9 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		conex = new ConexionMySQL();
+		cn = conex.conectar();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -57,42 +61,39 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Login");
-		lblNewLabel.setBounds(182, 23, 46, 14);
-		contentPane.add(lblNewLabel);
+		JLabel loginLabel = new JLabel("Login");
+		loginLabel.setBounds(182, 23, 46, 14);
+		contentPane.add(loginLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Username");
-		lblNewLabel_1.setBounds(94, 74, 62, 14);
-		contentPane.add(lblNewLabel_1);
+		JLabel dniLabel = new JLabel("DNI");
+		dniLabel.setBounds(94, 74, 62, 14);
+		contentPane.add(dniLabel);
 		
-		JLabel lblNewLabel_2 = new JLabel("Password");
-		lblNewLabel_2.setBounds(94, 129, 46, 14);
-		contentPane.add(lblNewLabel_2);
+		JLabel passwordLabel = new JLabel("Password");
+		passwordLabel.setBounds(94, 129, 46, 14);
+		contentPane.add(passwordLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(240, 71, 75, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		dniText = new JTextField();
+		dniText.setBounds(240, 71, 75, 20);
+		contentPane.add(dniText);
+		dniText.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(240, 126, 75, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		passwordText = new JTextField();
+		passwordText.setBounds(240, 126, 75, 20);
+		contentPane.add(passwordText);
+		passwordText.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Login");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton loginButton = new JButton("Login");
+		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String username = textField.getText();
-				String password = textField_1.getText();
-				ConexionMySQL conex = new ConexionMySQL();
-				Connection cn = null;
+				String username = dniText.getText();
+				String password = passwordText.getText();
 				ResultSet rs = null;
 				String dni = null;
 				String contra = null;
 				boolean correcto = false;
 				
 				try {
-					cn = conex.conectar();
 					rs = conex.ejecutarSelect("Select * from usuario",cn);
 					//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
 					while (rs.next() && correcto == false) {
@@ -112,8 +113,8 @@ public class Login extends JFrame {
 				}
 			}
 		});
-		btnNewButton.setBounds(155, 206, 89, 23);
-		contentPane.add(btnNewButton);
+		loginButton.setBounds(155, 206, 89, 23);
+		contentPane.add(loginButton);
 	}
 
 }
