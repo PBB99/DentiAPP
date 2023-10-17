@@ -26,8 +26,8 @@ public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField dniText;
-	private JTextField passwordText;
+	private JTextField tfDNI;
+	private JTextField tfPassword;
 	private ConexionMySQL conex;
 	private Connection cn;
 	/**
@@ -61,33 +61,33 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel loginLabel = new JLabel("Login");
-		loginLabel.setBounds(182, 23, 46, 14);
-		contentPane.add(loginLabel);
+		JLabel lblLogin = new JLabel("Login");
+		lblLogin.setBounds(182, 23, 46, 14);
+		contentPane.add(lblLogin);
 		
-		JLabel dniLabel = new JLabel("DNI");
-		dniLabel.setBounds(94, 74, 62, 14);
-		contentPane.add(dniLabel);
+		JLabel lblDNI = new JLabel("DNI");
+		lblDNI.setBounds(94, 74, 62, 14);
+		contentPane.add(lblDNI);
 		
-		JLabel passwordLabel = new JLabel("Password");
-		passwordLabel.setBounds(94, 129, 46, 14);
-		contentPane.add(passwordLabel);
+		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setBounds(94, 129, 46, 14);
+		contentPane.add(lblPassword);
 		
-		dniText = new JTextField();
-		dniText.setBounds(240, 71, 75, 20);
-		contentPane.add(dniText);
-		dniText.setColumns(10);
+		tfDNI = new JTextField();
+		tfDNI.setBounds(240, 71, 75, 20);
+		contentPane.add(tfDNI);
+		tfDNI.setColumns(10);
 		
-		passwordText = new JTextField();
-		passwordText.setBounds(240, 126, 75, 20);
-		contentPane.add(passwordText);
-		passwordText.setColumns(10);
+		tfPassword = new JTextField();
+		tfPassword.setBounds(240, 126, 75, 20);
+		contentPane.add(tfPassword);
+		tfPassword.setColumns(10);
 		
-		JButton loginButton = new JButton("Login");
-		loginButton.addActionListener(new ActionListener() {
+		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String username = dniText.getText();
-				String password = passwordText.getText();
+				String username = tfDNI.getText();
+				String password = tfPassword.getText();
 				ResultSet rs = null;
 				String dni = null;
 				String contra = null;
@@ -113,8 +113,8 @@ public class Login extends JFrame {
 				}
 			}
 		});
-		loginButton.setBounds(155, 206, 89, 23);
-		contentPane.add(loginButton);
+		btnLogin.setBounds(155, 206, 89, 23);
+		contentPane.add(btnLogin);
 	}
 
 }
