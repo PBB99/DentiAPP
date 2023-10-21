@@ -1,12 +1,14 @@
 package Vista;
 
 import java.awt.EventQueue;
-
+import Modelo.Specialist;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.ConexionMySQL;
+import Controlador.SpecialistController;
 
 import java.awt.EventQueue;
 
@@ -20,16 +22,19 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 public class Login extends JFrame {
+	//declaracion de variables
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField tfDNI;
 	private JTextField tfPassword;
 	private ConexionMySQL conex;
-	private Connection cn;
+	private SpecialistController sp;
+	private ArrayList<Specialist> speciaList;
 	/**
 	 * Launch the application.
 	 */
@@ -50,8 +55,16 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
-		conex = new ConexionMySQL();
-		cn = conex.conectar();
+		//declaracion de las conexiones
+		this.conex = new ConexionMySQL();
+		 conex.conectar();
+		sp=new SpecialistController(conex);
+		//traemos todos los datos de la tabla especialista a nuestro ArrayList del modelo Specialist
+		try {
+			speciaList=sp.getAllSpecialist();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -93,24 +106,10 @@ public class Login extends JFrame {
 				String contra = null;
 				boolean correcto = false;
 				
-				try {
-					rs = conex.ejecutarSelect("Select * from usuario",cn);
-					//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
-					while (rs.next() && correcto == false) {
-		                dni = rs.getString("dni");
-		                System.out.println(dni);
-		                contra = rs.getString("contraseña");
-		                if(dni.equalsIgnoreCase(username) && contra.equalsIgnoreCase(password))
-		                	correcto = true;
-		            }
-					if(correcto == true) {
-						JOptionPane.showMessageDialog(null,"You have log in succesfully");
-					}else {
-						JOptionPane.showMessageDialog(null,"This user doesn't exist in the sistem", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
-					}
-				} catch (Exception e2) {
-					// TODO: handle exception
+				for(Specialist x:speciaList) {
+					if()
 				}
+			
 			}
 		});
 		btnLogin.setBounds(155, 206, 89, 23);
