@@ -115,7 +115,7 @@ public class Login extends JFrame {
 					if((x.getDni().toString().equals(username))&&(x.getPass().toString().equals(password))&&aux2) {
 						//esta dado de alta
 						
-						aux2=false;
+						
 						if(x.isState()) {
 							
 							for(Specialist s:speciaList) {//interactua por todos los especistas existentes
@@ -129,10 +129,10 @@ public class Login extends JFrame {
 										pAdmin pa=new pAdmin();
 										
 										pa.setVisible(true);
-										break;
+										dispose();
 									}else {//si no es admin es doctor
 										//declaracion de la pantalla doctor
-										break;
+										dispose();
 									}
 								}else {
 									//si no encuentra el usuario en los especialistas
