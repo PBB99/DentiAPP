@@ -93,41 +93,48 @@ public class Login extends JFrame {
 		contentPane.add(loginPane);
 		loginPane.setLayout(null);
 		
+		// Label del Logo
 		JLabel lblLogo = new JLabel("");
 		//lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblLogo.setBounds(0, 0, 550, 200);
 		lblLogo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoFinal.png")));
 		loginPane.add(lblLogo);
 		
+		// Label de usurario
 		JLabel lblDNI = new JLabel("Usuario");
 		//lblDNI.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblDNI.setBounds(75, 250, 400, 50);
 		lblDNI.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		loginPane.add(lblDNI);
 		
+		//Label de Contraseña
 		JLabel lblPassword = new JLabel("Contraseña");
 		//lblPassword.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblPassword.setBounds(75, 425, 400, 50);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		loginPane.add(lblPassword);
 		
+		//TexField DNI
 		tfDNI = new JTextField();
 		//tfDNI.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tfDNI.setBounds(75, 315, 400, 50);
 		tfDNI.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		loginPane.add(tfDNI);
 		
+		//TextField Password
 		tfPassword = new JPasswordField();
 		//tfPassword.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tfPassword.setBounds(75, 490, 400, 50);
 		tfPassword.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		loginPane.add(tfPassword);
 		
+		//Botón de Login
 		JButton btnLogin = new JButton("Iniciar sesión");
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
 		loginPane.add(btnLogin);
 		
+		//Botón de Close
 		JButton btnClose = new JButton();
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -171,6 +178,7 @@ public class Login extends JFrame {
 		contentPane.add(btnClose);
 	}
 	
+	// -------------------- Métodos y Funciones --------------------
 	//Método para transparentar los botones
 	public static void makeTransparent(JButton btn) {
 		btn.setOpaque(false);
