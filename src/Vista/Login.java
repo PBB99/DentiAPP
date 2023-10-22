@@ -119,7 +119,7 @@ public class Login extends JFrame {
 							
 							for(Specialist s:speciaList) {//interactua por todos los especistas existentes
 								if(x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
-									speciaList.clear();
+									
 									//en el caso de que el usuario este dentro de los especialistas del centro dental
 									if(s.getId_speciality()==1) {
 										//se abre la pantalla de admin
@@ -128,22 +128,24 @@ public class Login extends JFrame {
 										pAdmin pa=new pAdmin();
 										
 										pa.setVisible(true);
+										break;
 									}else {//si no es admin es doctor
 										//declaracion de la pantalla doctor
+										break;
 									}
 								}else {
 									//si no encuentra el usuario en los especialistas
 									JOptionPane.showMessageDialog(btnLogin,"Su usuario no esta registrado como especialista", "Error",JOptionPane.ERROR_MESSAGE);
-									
+									break;
 								}
 							}
 						}else {//esta dado de baja
 							JOptionPane.showMessageDialog(btnLogin,"Cuidado","Este usuario ya no es válido",JOptionPane.WARNING_MESSAGE);
-							
+							break;
 						}
 					}else {
 						JOptionPane.showMessageDialog(btnLogin,"Su usuario o contraseña no coincide.\n Intentelo de nuevo", "Error",JOptionPane.ERROR_MESSAGE);
-						
+						break;
 					}
 				}
 			
