@@ -108,13 +108,14 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String username = tfDNI.getText();
 				String password = tfPassword.getText();
-				
+				boolean aux2=true;
 				
 				for(User x:userList) {
 					//si coinciden nombre y contraseña con alguno de los usuarios
-					if((x.getDni().toString().equals(username))&&(x.getPass().toString().equals(password))) {
+					if((x.getDni().toString().equals(username))&&(x.getPass().toString().equals(password))&&aux2) {
 						//esta dado de alta
-						userList.clear();
+						
+						aux2=false;
 						if(x.isState()) {
 							
 							for(Specialist s:speciaList) {//interactua por todos los especistas existentes
