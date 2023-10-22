@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -69,6 +71,7 @@ public class AdminUsuarios extends JFrame {
 		btnAppointment.setBounds(0, 135, 135, 135);
 		btnAppointment.setBorderPainted(false);
 		btnAppointment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/calendar.png")));
+		btnAppointment.setToolTipText("Pedro chupame el pie");
 		menuPane.add(btnAppointment);
 		
 		JButton btnUsers = new JButton();
@@ -76,6 +79,42 @@ public class AdminUsuarios extends JFrame {
 		btnUsers.setBounds(0, 270, 135, 135);
 		btnUsers.setBorderPainted(false);
 		btnUsers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
+		btnUsers.setToolTipText("Pedro chupame el pie");
+		btnUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnUsers.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnUsers.setBackground(new Color(148,220,219));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnUsers.setBackground(new Color(31,192,191));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		menuPane.add(btnUsers);
 		
 		JButton btnCustomers = new JButton();
@@ -118,12 +157,13 @@ public class AdminUsuarios extends JFrame {
 			}
 		});
 		
+		/*
 		JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");
 		internalFrame.setBorder(null);
 		internalFrame.setBounds(185, 135, 1685, 810);
 		internalFrame.setBorder(new LineBorder(new Color(0, 0, 0)));
 		contentPane.add(internalFrame);
 		internalFrame.setVisible(true);
-		
+		*/
 	}
 }

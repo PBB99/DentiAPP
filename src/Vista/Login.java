@@ -71,7 +71,7 @@ public class Login extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(0, 0, 1920, 1080);
 		contentPane = new JPanel() {
-			@Override
+			@Override	
 			public void paint(Graphics g) {
 				Image bg = new ImageIcon(getClass().getResource("/Resources/images/bg_Login.jpg")).getImage();
 				g.drawImage(bg,0,0,getWidth(),getHeight(), this);
