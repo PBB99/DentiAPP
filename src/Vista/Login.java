@@ -81,16 +81,14 @@ public class Login extends JFrame {
 		};
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setUndecorated(true);
-		
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		contentPane.setLayout(null);
 		
 		// -------------------- Componentes --------------------
 		// Login Layout
 		JPanel loginPane = new JPanel();
 		loginPane.setBounds(685, 165, 550, 750);
-		loginPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		//loginPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		loginPane.setBackground(Color.WHITE);
 		contentPane.add(loginPane);
 		loginPane.setLayout(null);
@@ -152,12 +150,12 @@ public class Login extends JFrame {
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoutWhite.png")));
+				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
+				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoutWhite.png")));
 			}
 			
 			@Override
@@ -168,7 +166,7 @@ public class Login extends JFrame {
 		});
 		btnClose.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnClose.setBounds(25, 985, 75, 75);
-		btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoutWhite.png")));
+		btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
 		makeTransparent(btnClose);
 		contentPane.add(btnClose);
 	}
