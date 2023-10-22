@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class ConexionMySQL {
 	private static String CONTROLADOR = "com.mysql.jdbc.Driver";
-	private static String URL = "byprip7xk9sybmhhq0jf-mysql.services.clever-cloud.com?useSSL=false";
+	private static String URL = "jdbc:mysql://byprip7xk9sybmhhq0jf-mysql.services.clever-cloud.com:3306/byprip7xk9sybmhhq0jf?useSSL=false";
 	private static final String USUARIO = "uqtcrrg2q5csusyf";
 	private static final String CLAVE = "dONGT5r9C4UPYGtaPXPD";
 	private boolean conectado = false;

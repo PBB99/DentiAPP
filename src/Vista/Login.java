@@ -121,6 +121,7 @@ public class Login extends JFrame {
 									//en el caso de que el usuario este dentro de los especialistas del centro dental
 									if(s.getId_speciality()==1) {
 										//se abre la pantalla de admin
+										System.out.println("adsijdashbasdhi");
 										User aux=x;
 										pAdmin pa=new pAdmin();
 										

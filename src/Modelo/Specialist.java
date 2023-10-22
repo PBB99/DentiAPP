@@ -13,10 +13,10 @@ public class Specialist {
 	private int id_speciality;
 	private int id_specialist;
 
-	public Specialist(String dni, int id_speciality, int id_specialist) {
+	public Specialist(int id_speciality, String dni, int id_specialist) {
 		super();
-		this.dni = dni;
 		this.id_speciality = id_speciality;
+		this.dni = dni;
 		this.id_specialist = id_specialist;
 	}
 
