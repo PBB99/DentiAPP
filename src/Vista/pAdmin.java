@@ -57,49 +57,49 @@ public class pAdmin extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.CYAN);
-		panel_1.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		panel_1.setBounds(0, 0, 100, 736);
-		panel.add(panel_1);
-		panel_1.setLayout(null);
+		JPanel panelIzquierdo = new JPanel();
+		panelIzquierdo.setBackground(Color.CYAN);
+		panelIzquierdo.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		panelIzquierdo.setBounds(0, 0, 100, 736);
+		panel.add(panelIzquierdo);
+		panelIzquierdo.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Citas");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnCitas = new JButton("Citas");
+		btnCitas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton.setBackground(Color.WHITE);
-		btnNewButton.setBounds(0, 100, 100, 100);
-		panel_1.add(btnNewButton);
+		btnCitas.setBackground(Color.WHITE);
+		btnCitas.setBounds(0, 100, 100, 100);
+		panelIzquierdo.add(btnCitas);
 		
-		JButton btnNewButton_1 = new JButton("Usuarios");
-		btnNewButton_1.setBackground(Color.CYAN);
-		btnNewButton_1.setBounds(0, 200, 100, 100);
-		panel_1.add(btnNewButton_1);
+		JButton btnUsuarios = new JButton("Usuarios");
+		btnUsuarios.setBackground(Color.CYAN);
+		btnUsuarios.setBounds(0, 200, 100, 100);
+		panelIzquierdo.add(btnUsuarios);
 		
-		JButton btnNewButton_1_1 = new JButton("Pacientes");
-		btnNewButton_1_1.setBackground(Color.CYAN);
-		btnNewButton_1_1.setBounds(0, 300, 100, 100);
-		panel_1.add(btnNewButton_1_1);
+		JButton btnPacientes = new JButton("Pacientes");
+		btnPacientes.setBackground(Color.CYAN);
+		btnPacientes.setBounds(0, 300, 100, 100);
+		panelIzquierdo.add(btnPacientes);
 		
-		JButton btnNewButton_1_1_1 = new JButton("Material");
-		btnNewButton_1_1_1.setBackground(Color.CYAN);
-		btnNewButton_1_1_1.setBounds(0, 400, 100, 100);
-		panel_1.add(btnNewButton_1_1_1);
+		JButton btnMaterial = new JButton("Material");
+		btnMaterial.setBackground(Color.CYAN);
+		btnMaterial.setBounds(0, 400, 100, 100);
+		panelIzquierdo.add(btnMaterial);
 		
-		JButton btnNewButton_1_1_1_1 = new JButton("Medica");
-		btnNewButton_1_1_1_1.setBackground(Color.CYAN);
-		btnNewButton_1_1_1_1.setBounds(0, 500, 100, 100);
-		panel_1.add(btnNewButton_1_1_1_1);
+		JButton btnMedica = new JButton("Medica");
+		btnMedica.setBackground(Color.CYAN);
+		btnMedica.setBounds(0, 500, 100, 100);
+		panelIzquierdo.add(btnMedica);
 		
-		JButton btnNewButton_1_1_1_1_1 = new JButton("Economico");
-		btnNewButton_1_1_1_1_1.setBackground(Color.CYAN);
-		btnNewButton_1_1_1_1_1.setBounds(0, 600, 100, 100);
-		panel_1.add(btnNewButton_1_1_1_1_1);
+		JButton btnEconomica = new JButton("Economico");
+		btnEconomica.setBackground(Color.CYAN);
+		btnEconomica.setBounds(0, 600, 100, 100);
+		panelIzquierdo.add(btnEconomica);
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(100, 0, 784, 736);
-		panel.add(panel_2);
+		JPanel panelDerecho = new JPanel();
+		panelDerecho.setBounds(100, 0, 784, 736);
+		panel.add(panelDerecho);
 	}
 }
