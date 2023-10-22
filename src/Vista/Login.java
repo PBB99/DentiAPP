@@ -2,6 +2,8 @@ package Vista;
 
 import java.awt.EventQueue;
 import Modelo.Specialist;
+import Modelo.User;
+
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 import Controlador.ConexionMySQL;
 import Controlador.SpecialistController;
+import Controlador.UserController;
 
 import java.awt.EventQueue;
 
@@ -33,8 +36,10 @@ public class Login extends JFrame {
 	private JTextField tfDNI;
 	private JTextField tfPassword;
 	private ConexionMySQL conex;
+	private UserController us;
+	private ArrayList<User> userList;
+	private ArrayList<Specialist>speciaList;
 	private SpecialistController sp;
-	private ArrayList<Specialist> speciaList;
 	/**
 	 * Launch the application.
 	 */
@@ -58,10 +63,12 @@ public class Login extends JFrame {
 		//declaracion de las conexiones
 		this.conex = new ConexionMySQL();
 		 conex.conectar();
+		us=new UserController(conex);
 		sp=new SpecialistController(conex);
 		//traemos todos los datos de la tabla especialista a nuestro ArrayList del modelo Specialist
 		try {
 			speciaList=sp.getAllSpecialist();
+			userList=us.getAllUsers();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -101,13 +108,35 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String username = tfDNI.getText();
 				String password = tfPassword.getText();
-				ResultSet rs = null;
-				String dni = null;
-				String contra = null;
-				boolean correcto = false;
 				
-				for(Specialist x:speciaList) {
-					if()
+				
+				for(User x:userList) {
+					//si coinciden nombre y contraseña con alguno de los usuarios
+					if((x.getDni().toString().equals(username))&&(x.getPass().toString().equals(password))) {
+						//esta dado de alta
+						if(x.isState()) {
+							
+							for(Specialist s:speciaList) {//interactua por todos los especistas existentes
+								if(x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
+									//en el caso de que el usuario este dentro de los especialistas del centro dental
+									if(s.getId_speciality()==1) {
+										//se abre la pantalla de admin
+										pAdmin pa=new pAdmin();
+										pa.setVisible(true);
+									}else {//si no es admin es doctor
+										//declaracion de la pantalla doctor
+									}
+								}else {
+									//si no encuentra el usuario en los especialistas
+									JOptionPane.showMessageDialog(btnLogin, "Error","Su usuario no esta registrado como especialista",JOptionPane.ERROR_MESSAGE);
+								}
+							}
+						}else {//esta dado de baja
+							JOptionPane.showMessageDialog(btnLogin,"Cuidado","Este usuario ya no es válido",JOptionPane.WARNING_MESSAGE);
+						}
+					}else {
+						JOptionPane.showMessageDialog(btnLogin, "Error","Su usuario o contraseña no coincide.\n Intentelo de nuevo",JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			
 			}
