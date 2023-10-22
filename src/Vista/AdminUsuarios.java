@@ -58,7 +58,7 @@ public class AdminUsuarios extends JFrame {
 		contentPane.add(menuPane);
 		menuPane.setLayout(null);
 		
-		JLabel lblLogo = new JLabel("");
+		JLabel lblLogo = new JLabel();
 		//lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblLogo.setBounds(0, 0, 135, 135);
 		lblLogo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoMenu.png")));
@@ -71,35 +71,35 @@ public class AdminUsuarios extends JFrame {
 		btnAppointment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/calendar.png")));
 		menuPane.add(btnAppointment);
 		
-		JButton btnUsers = new JButton("Usuarios");
+		JButton btnUsers = new JButton();
 		btnUsers.setBackground(new Color(148,220,219));
 		btnUsers.setBounds(0, 270, 135, 135);
 		btnUsers.setBorderPainted(false);
 		btnUsers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
 		menuPane.add(btnUsers);
 		
-		JButton btnCustomers = new JButton("Pacientes");
+		JButton btnCustomers = new JButton();
 		btnCustomers.setBackground(new Color(148,220,219));
 		btnCustomers.setBounds(0, 405, 135, 135);
 		btnCustomers.setBorderPainted(false);
 		btnCustomers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
 		menuPane.add(btnCustomers);
 		
-		JButton btnStock = new JButton("Inventario");
+		JButton btnStock = new JButton();
 		btnStock.setBackground(new Color(148,220,219));
 		btnStock.setBounds(0, 540, 135, 135);
 		btnStock.setBorderPainted(false);
 		btnStock.setIcon(new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
 		menuPane.add(btnStock);
 		
-		JButton btnClinic = new JButton("Clinica");
+		JButton btnClinic = new JButton();
 		btnClinic.setBackground(new Color(148,220,219));
 		btnClinic.setBounds(0, 675, 135, 135);
 		btnClinic.setBorderPainted(false);
 		btnClinic.setIcon(new ImageIcon(getClass().getResource("/Resources/images/clinicGrey.png")));
 		menuPane.add(btnClinic);
 		
-		JButton btnPayments = new JButton("Econimico");
+		JButton btnPayments = new JButton();
 		btnPayments.setBackground(new Color(148,220,219));
 		btnPayments.setBounds(0,810,135,135);
 		btnPayments.setBorderPainted(false);
@@ -117,5 +117,13 @@ public class AdminUsuarios extends JFrame {
 				dispose();
 			}
 		});
+		
+		JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");
+		internalFrame.setBorder(null);
+		internalFrame.setBounds(185, 135, 1685, 810);
+		internalFrame.setBorder(new LineBorder(new Color(0, 0, 0)));
+		contentPane.add(internalFrame);
+		internalFrame.setVisible(true);
+		
 	}
 }
