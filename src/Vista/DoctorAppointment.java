@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ public class DoctorAppointment extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private Connection cn;
 
 	/**
 	 * Launch the application.
@@ -39,6 +41,7 @@ public class DoctorAppointment extends JFrame {
 	 * Create the frame.
 	 */
 	public DoctorAppointment() {
+		//cn = conex;
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -65,6 +68,11 @@ public class DoctorAppointment extends JFrame {
 
 		// Botón de citas
 		JButton btnAppointment = new JButton();
+		btnAppointment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				   
+			}
+		});
 		btnAppointment.setBackground(new Color(238, 238, 238));
 		btnAppointment.setBounds(0, 135, 135, 135);
 		btnAppointment.setBorderPainted(false);
@@ -73,6 +81,13 @@ public class DoctorAppointment extends JFrame {
 
 		// Botón de Pacientes
 		JButton btnCustomers = new JButton();
+		btnCustomers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame frame = new DoctorCustomers();
+			    frame.setVisible( true );
+			    dispose();
+			}
+		});
 		btnCustomers.setBackground(new Color(148, 220, 219));
 		btnCustomers.setBounds(0, 270, 135, 135);
 		btnCustomers.setBorderPainted(false);
