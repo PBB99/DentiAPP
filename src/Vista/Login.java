@@ -229,7 +229,7 @@ public class Login extends JFrame {
 										// se abre la pantalla de admin
 										System.out.println("adsijdashbasdhi");
 										User aux = x;
-										AdminUsuarios pa=new AdminUsuarios();
+										AdminUsers pa=new AdminUsers();
 
 										pa.setVisible(true);
 										dispose();
