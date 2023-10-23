@@ -236,7 +236,7 @@ public class Login extends JFrame {
 										// se abre la pantalla de admin
 										System.out.println("adsijdashbasdhi");
 										User aux = x;
-										AdminUsers pa=new AdminUsers();
+										AdminUsers pa=new AdminUsers(conex);
 
 										pa.setVisible(true);
 										dispose();

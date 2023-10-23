@@ -20,10 +20,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
 
+import Controlador.ConexionMySQL;
+
 public class AdminUsers extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private ConexionMySQL conex;
 
 	/**
 	 * Launch the application.
@@ -31,12 +34,12 @@ public class AdminUsers extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					AdminUsers frame = new AdminUsers();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					AdminUsers frame = new AdminUsers();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 	}
@@ -44,7 +47,8 @@ public class AdminUsers extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminUsers() {
+	public AdminUsers(ConexionMySQL conex) {
+		this.conex=conex;
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -316,6 +320,16 @@ public class AdminUsers extends JFrame {
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
 		menuPane.add(btnClose);
+		
+		JButton btnNewButton = new JButton("PRUEBA");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminInsertUser us=new AdminInsertUser(conex);
+				us.setVisible(true);
+			}
+		});
+		btnNewButton.setBounds(524, 525, 89, 23);
+		contentPane.add(btnNewButton);
 
 		/*
 		 * JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");
