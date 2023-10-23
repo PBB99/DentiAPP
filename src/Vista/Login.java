@@ -100,8 +100,10 @@ public class Login extends JFrame {
 		                dni = rs.getString("dni");
 		                System.out.println(dni);
 		                contra = rs.getString("contraseña");
-		                if(dni.equalsIgnoreCase(username) && contra.equalsIgnoreCase(password))
-		                	correcto = true;
+		                if(dni.equalsIgnoreCase(username) && contra.equalsIgnoreCase(password)) {
+		                	rs = conex.ejecutarSelect("Select * from especialistas",cn);
+		                }
+		                	
 		            }
 					if(correcto == true) {
 						JOptionPane.showMessageDialog(null,"You have log in succesfully");
