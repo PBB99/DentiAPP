@@ -103,6 +103,8 @@ public class Login extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(0, 0, 1920, 1080);
+		
+		//---------------------------------------------IMAGEN DE FONDO--------------------------------------
 		contentPane = new JPanel() {
 			@Override	
 			public void paint(Graphics g) {
@@ -124,7 +126,6 @@ public class Login extends JFrame {
 		loginPane.setBounds(685, 165, 550, 750);
 		//loginPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		loginPane.setBackground(Color.WHITE);
-		contentPane.add(loginPane);
 		loginPane.setLayout(null);
 		
 		// Label del Logo
@@ -132,44 +133,50 @@ public class Login extends JFrame {
 		//lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblLogo.setBounds(0, 0, 550, 200);
 		lblLogo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoFinal.png")));
-		loginPane.add(lblLogo);
+		
 		
 		// Label de usurario
 		JLabel lblDNI = new JLabel("Usuario");
 		//lblDNI.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblDNI.setBounds(75, 250, 400, 50);
 		lblDNI.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		loginPane.add(lblDNI);
+		
 		
 		//Label de Contraseña
 		JLabel lblPassword = new JLabel("Contraseña");
 		//lblPassword.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblPassword.setBounds(75, 425, 400, 50);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		loginPane.add(lblPassword);
+		
 		
 		//TexField DNI
 		tfDNI = new JTextField();
 		//tfDNI.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tfDNI.setBounds(75, 315, 400, 50);
 		tfDNI.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		loginPane.add(tfDNI);
+		
 		
 		//TextField Password
 		tfPassword = new JPasswordField();
 		//tfPassword.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tfPassword.setBounds(75, 490, 400, 50);
 		tfPassword.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		loginPane.add(tfPassword);
+		
 		
 		//Botón de Login
 		JButton btnLogin = new JButton("Iniciar sesión");
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
-		loginPane.add(btnLogin);
 		
 		//Botón de Close
-		JButton btnClose = new JButton();
+				JButton btnClose = new JButton();
+				btnClose.setFont(new Font("Tahoma", Font.PLAIN, 19));
+				btnClose.setBounds(25, 985, 75, 75);
+				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
+				makeTransparent(btnClose);
+		
+		//----------------------------------------------LOGICA----------------------------------------------------------
+		
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -205,7 +212,7 @@ public class Login extends JFrame {
 			
 			}});
 
-		
+		//acciones del boton login, carga dos tablas, compara los datos el usuario introducido y da paso o no a la siguiente pantalla
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String username = tfDNI.getText();
@@ -254,11 +261,16 @@ public class Login extends JFrame {
 
 			}
 		});
-		btnClose.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		btnClose.setBounds(25, 985, 75, 75);
-		btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-		makeTransparent(btnClose);
+		
+		//-------------------------------------ADICIONES AL PANEL Y AL LOGIN PANEL-----------------
 		contentPane.add(btnClose);
+		contentPane.add(loginPane);
+		loginPane.add(btnLogin);
+		loginPane.add(tfPassword);
+		loginPane.add(tfDNI);
+		loginPane.add(lblPassword);
+		loginPane.add(lblDNI);
+		loginPane.add(lblLogo);
 	}
 		
 	// -------------------- Métodos y Funciones --------------------
