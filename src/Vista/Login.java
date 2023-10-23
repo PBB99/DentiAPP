@@ -223,19 +223,17 @@ public class Login extends JFrame {
 					// si coinciden nombre y contraseña con alguno de los usuarios
 					if ((x.getDni().toString().equals(username)) && (x.getPass().toString().equals(password)) && aux2) {
 						// esta dado de alta
-
 						aux2 = false;
 						if (x.isState()) {
 
 							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
 								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
-
 									// en el caso de que el usuario este dentro de los especialistas del centro
 									// dental
-									if (s.getId_speciality() == 1) {
+									if (s.getId_specialist() == 0) {
 										// se abre la pantalla de admin
 										System.out.println("adsijdashbasdhi");
-										User aux = x;
+										//User aux = x;
 										AdminUsers pa=new AdminUsers(conex);
 
 										pa.setVisible(true);

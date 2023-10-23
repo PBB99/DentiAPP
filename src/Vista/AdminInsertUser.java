@@ -116,6 +116,11 @@ public class AdminInsertUser extends JDialog {
 		getRootPane().setDefaultButton(okButton);
 		
 		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		cancelButton.setActionCommand("Cancel");
 		
 		JComboBox cbEspecialidad = new JComboBox();
@@ -174,6 +179,7 @@ public class AdminInsertUser extends JDialog {
 					            }
 								conex.ejecutarInsertUpdateDelete("insert into especialista values ('" + numIdEspecialista + "', '" + dni + "', '" + nEsp + "')");
 								JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
+								dispose();
 							}
 							
 						} catch (Exception e2) {

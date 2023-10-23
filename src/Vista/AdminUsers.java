@@ -326,6 +326,7 @@ public class AdminUsers extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				AdminInsertUser us=new AdminInsertUser(conex);
 				us.setVisible(true);
+				us.setModal(true);
 			}
 		});
 		btnNewButton.setBounds(524, 525, 89, 23);
