@@ -27,6 +27,7 @@ public class AdminUsers extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ConexionMySQL conex;
+	private AdminUsers frame;
 
 	/**
 	 * Launch the application.
@@ -49,6 +50,8 @@ public class AdminUsers extends JFrame {
 	 */
 	public AdminUsers(ConexionMySQL conex) {
 		this.conex=conex;
+		frame = this;
+		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -313,7 +316,7 @@ public class AdminUsers extends JFrame {
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminAppointment admAppointment = new AdminAppointment();
+				AdminAppointment admAppointment = new AdminAppointment(conex);
 				admAppointment.setVisible(true);
 				dispose();
 			}
@@ -322,7 +325,7 @@ public class AdminUsers extends JFrame {
 		// Acción del Módulo de pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminCustomers admCustomers = new AdminCustomers();
+				AdminCustomers admCustomers = new AdminCustomers(conex);
 				admCustomers.setVisible(true);
 				dispose();
 			}
@@ -331,7 +334,7 @@ public class AdminUsers extends JFrame {
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock();
+				AdminStock admStock = new AdminStock(conex);
 				admStock.setVisible(true);
 				dispose();
 			}
@@ -340,7 +343,7 @@ public class AdminUsers extends JFrame {
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic();
+				AdminClinic admClinic = new AdminClinic(conex);
 				admClinic.setVisible(true);
 				dispose();
 			}
@@ -349,7 +352,7 @@ public class AdminUsers extends JFrame {
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments();
+				AdminPayments admPayments = new AdminPayments(conex);
 				admPayments.setVisible(true);
 				dispose();
 			}
@@ -369,9 +372,9 @@ public class AdminUsers extends JFrame {
 		JButton btnNewButton = new JButton("PRUEBA");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminInsertUser us=new AdminInsertUser(conex);
+				AdminInsertUser us=new AdminInsertUser(conex, frame, true);
 				us.setVisible(true);
-				us.setModal(true);
+				
 			}
 		});
 		btnNewButton.setBounds(524, 525, 89, 23);

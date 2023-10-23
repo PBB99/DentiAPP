@@ -232,6 +232,9 @@ public class Login extends JFrame {
 										dispose();
 									} else {// si no es admin es doctor
 											// declaracion de la pantalla doctor
+										DoctorAppointment pd=new DoctorAppointment(conex);
+
+										pd.setVisible(true);
 										dispose();
 									}
 								}

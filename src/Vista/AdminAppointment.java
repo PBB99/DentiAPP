@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,10 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Controlador.ConexionMySQL;
+
 public class AdminAppointment extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private ConexionMySQL conex;
 
 	/**
 	 * Launch the application.
@@ -25,12 +29,12 @@ public class AdminAppointment extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					AdminAppointment frame = new AdminAppointment();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					AdminAppointment frame = new AdminAppointment();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 	}
@@ -38,7 +42,9 @@ public class AdminAppointment extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminAppointment() {
+	public AdminAppointment(ConexionMySQL conex) {
+		this.conex = conex; 
+		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -304,7 +310,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers();
+				AdminUsers admUsers = new AdminUsers(conex);
 				admUsers.setVisible(true);
 				dispose();
 			}
@@ -313,7 +319,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminCustomers admCustomers = new AdminCustomers();
+				AdminCustomers admCustomers = new AdminCustomers(conex);
 				admCustomers.setVisible(true);
 				dispose();
 			}
@@ -322,7 +328,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock();
+				AdminStock admStock = new AdminStock(conex);
 				admStock.setVisible(true);
 				dispose();
 			}
@@ -331,7 +337,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic();
+				AdminClinic admClinic = new AdminClinic(conex);
 				admClinic.setVisible(true);
 				dispose();
 			}
@@ -340,7 +346,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments();
+				AdminPayments admPayments = new AdminPayments(conex);
 				admPayments.setVisible(true);
 				dispose();
 			}

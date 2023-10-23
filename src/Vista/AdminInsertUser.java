@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.awt.event.ActionEvent;
@@ -50,21 +51,23 @@ public class AdminInsertUser extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
+//	public static void main(String[] args) {
+//		try {
 //			AdminInsertUser dialog = new AdminInsertUser();
 //			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 //			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public AdminInsertUser(ConexionMySQL conex) {
+	public AdminInsertUser(ConexionMySQL conex, AdminUsers parent, boolean modal) {
 		this.conex=conex;
+		setModal(modal);
+		
 		//-----------------------COMPONENTES-------------------
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -118,7 +121,10 @@ public class AdminInsertUser extends JDialog {
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				setModal(false);
+				setVisible(false);
+				AdminInsertUser.this.dispatchEvent(new WindowEvent(
+						AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
 			}
 		});
 		cancelButton.setActionCommand("Cancel");
@@ -179,7 +185,10 @@ public class AdminInsertUser extends JDialog {
 					            }
 								conex.ejecutarInsertUpdateDelete("insert into especialista values ('" + numIdEspecialista + "', '" + dni + "', '" + nEsp + "')");
 								JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
-								dispose();
+								setModal(false);
+								setVisible(false);
+								AdminInsertUser.this.dispatchEvent(new WindowEvent(
+										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
 							}
 							
 						} catch (Exception e2) {
