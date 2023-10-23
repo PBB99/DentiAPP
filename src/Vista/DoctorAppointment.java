@@ -212,6 +212,24 @@ public class DoctorAppointment extends JFrame {
 			}
 		});
 
+		// Acción de ir a Módulo pacientes
+		btnCustomers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DoctorCustomers docCustomers = new DoctorCustomers();
+				docCustomers.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción de ir a Módulo Stock
+		btnStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DoctorStock docStock = new DoctorStock();
+				docStock.setVisible(true);
+				dispose();
+			}
+		});
+
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		menuPane.add(lblLogo);

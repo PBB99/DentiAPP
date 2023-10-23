@@ -1,26 +1,19 @@
 package Vista;
 
 import java.awt.EventQueue;
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-
 import Modelo.Specialist;
 import Modelo.User;
-
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import Controlador.ConexionMySQL;
-
 import Controlador.SpecialistController;
 import Controlador.UserController;
-
-
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,7 +31,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
@@ -84,7 +76,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
-
+		
 		// declaracion de las conexiones
 		this.conex = new ConexionMySQL();
 		conex.conectar();
@@ -98,7 +90,7 @@ public class Login extends JFrame {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -301,6 +301,51 @@ public class AdminAppointment extends JFrame {
 			}
 		});
 
+		// Acción del Módulo de usuarios
+		btnUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminUsers admUsers = new AdminUsers();
+				admUsers.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de pacientes
+		btnCustomers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminCustomers admCustomers = new AdminCustomers();
+				admCustomers.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de inventario
+		btnStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminStock admStock = new AdminStock();
+				admStock.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de la clínica
+		btnClinic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminClinic admClinic = new AdminClinic();
+				admClinic.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo económico
+		btnPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminPayments admPayments = new AdminPayments();
+				admPayments.setVisible(true);
+				dispose();
+			}
+		});
+
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		menuPane.add(lblLogo);

@@ -309,6 +309,51 @@ public class AdminUsers extends JFrame {
 				dispose();
 			}
 		});
+		
+		// Acción del Módulo de citas
+		btnAppointment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminAppointment admAppointment = new AdminAppointment();
+				admAppointment.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de pacientes
+		btnCustomers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminCustomers admCustomers = new AdminCustomers();
+				admCustomers.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de inventario
+		btnStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminStock admStock = new AdminStock();
+				admStock.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de la clínica
+		btnClinic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminClinic admClinic = new AdminClinic();
+				admClinic.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo económico
+		btnPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminPayments admPayments = new AdminPayments();
+				admPayments.setVisible(true);
+				dispose();
+			}
+		});
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
