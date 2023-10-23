@@ -217,7 +217,6 @@ public class AdminClinic extends JFrame {
 		btnClinic.setBorderPainted(false);
 		btnClinic.setIcon(new ImageIcon(getClass().getResource("/Resources/images/clinic.png")));
 		btnClinic.setToolTipText("Módulo clínico");
-		
 
 		// Botón del Módulo economico
 		JButton btnPayments = new JButton();

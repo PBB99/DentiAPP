@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class AdminAppointment extends JFrame {
+public class DoctorAppointment extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -26,7 +26,7 @@ public class AdminAppointment extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminAppointment frame = new AdminAppointment();
+					DoctorAppointment frame = new DoctorAppointment();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +38,7 @@ public class AdminAppointment extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminAppointment() {
+	public DoctorAppointment() {
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -71,47 +71,10 @@ public class AdminAppointment extends JFrame {
 		btnAppointment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/calendar.png")));
 		btnAppointment.setToolTipText("Módulo de citas");
 
-		// Botón de usuarios
-		JButton btnUsers = new JButton();
-		btnUsers.setBackground(new Color(148, 220, 219));
-		btnUsers.setBounds(0, 270, 135, 135);
-		btnUsers.setBorderPainted(false);
-		btnUsers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
-		btnUsers.setToolTipText("Módulo de usuarios");
-		btnUsers.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnUsers.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnUsers.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
 		// Botón de Pacientes
 		JButton btnCustomers = new JButton();
 		btnCustomers.setBackground(new Color(148, 220, 219));
-		btnCustomers.setBounds(0, 405, 135, 135);
+		btnCustomers.setBounds(0, 270, 135, 135);
 		btnCustomers.setBorderPainted(false);
 		btnCustomers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
 		btnCustomers.setToolTipText("Módulo de pacientes");
@@ -148,7 +111,7 @@ public class AdminAppointment extends JFrame {
 		// Botón de Inventario
 		JButton btnStock = new JButton();
 		btnStock.setBackground(new Color(148, 220, 219));
-		btnStock.setBounds(0, 540, 135, 135);
+		btnStock.setBounds(0, 405, 135, 135);
 		btnStock.setBorderPainted(false);
 		btnStock.setIcon(new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
 		btnStock.setToolTipText("Módulo de materiales");
@@ -173,80 +136,6 @@ public class AdminAppointment extends JFrame {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnStock.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		// Botón de Tratamientos y Especialidades
-		JButton btnClinic = new JButton();
-		btnClinic.setBackground(new Color(148, 220, 219));
-		btnClinic.setBounds(0, 675, 135, 135);
-		btnClinic.setBorderPainted(false);
-		btnClinic.setIcon(new ImageIcon(getClass().getResource("/Resources/images/clinicGrey.png")));
-		btnClinic.setToolTipText("Módulo clínico");
-		btnClinic.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnClinic.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnClinic.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		// Botón del Módulo economico
-		JButton btnPayments = new JButton();
-		btnPayments.setBackground(new Color(148, 220, 219));
-		btnPayments.setBounds(0, 810, 135, 135);
-		btnPayments.setBorderPainted(false);
-		btnPayments.setIcon(new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
-		btnPayments.setToolTipText("Módulo Económico");
-		btnPayments.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnPayments.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnPayments.setBackground(new Color(31, 192, 191));
 			}
 
 			@Override
@@ -305,11 +194,8 @@ public class AdminAppointment extends JFrame {
 		contentPane.add(menuPane);
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
-		menuPane.add(btnUsers);
 		menuPane.add(btnCustomers);
 		menuPane.add(btnStock);
-		menuPane.add(btnClinic);
-		menuPane.add(btnPayments);
 		menuPane.add(btnClose);
 	}
 

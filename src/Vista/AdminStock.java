@@ -180,7 +180,6 @@ public class AdminStock extends JFrame {
 		btnStock.setBorderPainted(false);
 		btnStock.setIcon(new ImageIcon(getClass().getResource("/Resources/images/stock.png")));
 		btnStock.setToolTipText("Módulo de materiales");
-		
 
 		// Botón de Tratamientos y Especialidades
 		JButton btnClinic = new JButton();
