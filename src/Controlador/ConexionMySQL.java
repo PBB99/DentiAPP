@@ -7,9 +7,9 @@ import java.sql.Statement;
 
 public class ConexionMySQL {
 	private static String CONTROLADOR = "com.mysql.jdbc.Driver";
-	private static String URL = "jdbc:mysql://localhost:3306/proyecto?useSSL=false";
-	private static final String USUARIO = "root";
-	private static final String CLAVE = "1234";
+	private static String URL = "jdbc:mysql://byprip7xk9sybmhhq0jf-mysql.services.clever-cloud.com:3306/byprip7xk9sybmhhq0jf?useSSL=false";
+	private static final String USUARIO = "uqtcrrg2q5csusyf";
+	private static final String CLAVE = "dONGT5r9C4UPYGtaPXPD";
 	private boolean conectado = false;
 	private Connection conexion;
 
@@ -33,12 +33,12 @@ public class ConexionMySQL {
 		}
 	}
 
-	public ResultSet ejecutarSelect(String consulta, Connection conexion) throws SQLException {
+	public ResultSet ejecutarSelect(String consulta) throws SQLException {
 		Statement STMT = conexion.createStatement();
 		return STMT.executeQuery(consulta);
 	}
 
-	public int ejecutarInsertUpdateDelete(String consulta,Connection conexion)throws SQLException{
+	public int ejecutarInsertUpdateDelete(String consulta)throws SQLException{
 		Statement STMT=conexion.createStatement();
 		return STMT.executeUpdate(consulta);
 	}

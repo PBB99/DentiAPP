@@ -1,14 +1,26 @@
 package Vista;
 
 import java.awt.EventQueue;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+
+import Modelo.Specialist;
+import Modelo.User;
+
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import Controlador.ConexionMySQL;
+
+import Controlador.SpecialistController;
+import Controlador.UserController;
+
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,23 +35,34 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Font;
 
+
+
 public class Login extends JFrame {
+	// declaracion de variables
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ConexionMySQL conex;
+
 	private Connection cn;
 	private JTextField tfDNI;
 	private JTextField tfPassword;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private UserController us;
+	private ArrayList<User> userList;
+	private ArrayList<Specialist> speciaList;
+	private SpecialistController sp;
+
 
 	/**
 	 * Launch the application.
@@ -61,12 +84,22 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
-		// -------------------- Conexión --------------------
-		
-		conex = new ConexionMySQL();
-		cn = conex.conectar();
-		
-		// -------------------- JFrame --------------------
+
+		// declaracion de las conexiones
+		this.conex = new ConexionMySQL();
+		conex.conectar();
+		us = new UserController(conex);
+		sp = new SpecialistController(conex);
+		// traemos todos los datos de la tabla especialista a nuestro ArrayList del
+		// modelo Specialist
+		try {
+			speciaList = sp.getAllSpecialist();
+			userList = us.getAllUsers();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(0, 0, 1920, 1080);
@@ -83,6 +116,7 @@ public class Login extends JFrame {
 		this.setUndecorated(true);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
 		
 		// -------------------- Componentes --------------------
 		// Login Layout
@@ -169,6 +203,77 @@ public class Login extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
+
+
+		JLabel lblLogin = new JLabel("Login");
+		lblLogin.setBounds(182, 23, 46, 14);
+		contentPane.add(lblLogin);
+
+		JLabel lblDNI = new JLabel("DNI");
+		lblDNI.setBounds(94, 74, 62, 14);
+		contentPane.add(lblDNI);
+
+		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setBounds(94, 129, 46, 14);
+		contentPane.add(lblPassword);
+
+		tfDNI = new JTextField();
+		tfDNI.setBounds(240, 71, 75, 20);
+		contentPane.add(tfDNI);
+		tfDNI.setColumns(10);
+
+		tfPassword = new JTextField();
+		tfPassword.setBounds(240, 126, 75, 20);
+		contentPane.add(tfPassword);
+		tfPassword.setColumns(10);
+
+		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String username = tfDNI.getText();
+				String password = tfPassword.getText();
+				boolean aux2 = true;
+
+				for (User x : userList) {
+					// si coinciden nombre y contraseña con alguno de los usuarios
+					if ((x.getDni().toString().equals(username)) && (x.getPass().toString().equals(password)) && aux2) {
+						// esta dado de alta
+
+						aux2 = false;
+						if (x.isState()) {
+
+							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
+								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
+
+									// en el caso de que el usuario este dentro de los especialistas del centro
+									// dental
+									if (s.getId_speciality() == 1) {
+										// se abre la pantalla de admin
+										System.out.println("adsijdashbasdhi");
+										User aux = x;
+										pAdmin pa = new pAdmin();
+
+										pa.setVisible(true);
+										dispose();
+									} else {// si no es admin es doctor
+											// declaracion de la pantalla doctor
+										dispose();
+									}
+								}
+							}
+						} else {// esta dado de baja
+							JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
+									JOptionPane.WARNING_MESSAGE);
+							break;
+						}
+					}
+				}
+				if (aux2 == true) {
+					JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
+							"Error", JOptionPane.ERROR_MESSAGE);
+				}
+
+
 			}
 		});
 		btnClose.setFont(new Font("Tahoma", Font.PLAIN, 19));
