@@ -202,32 +202,10 @@ public class Login extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+			
+			}});
 
-
-		JLabel lblLogin = new JLabel("Login");
-		lblLogin.setBounds(182, 23, 46, 14);
-		contentPane.add(lblLogin);
-
-		JLabel lblDNI = new JLabel("DNI");
-		lblDNI.setBounds(94, 74, 62, 14);
-		contentPane.add(lblDNI);
-
-		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(94, 129, 46, 14);
-		contentPane.add(lblPassword);
-
-		tfDNI = new JTextField();
-		tfDNI.setBounds(240, 71, 75, 20);
-		contentPane.add(tfDNI);
-		tfDNI.setColumns(10);
-
-		tfPassword = new JTextField();
-		tfPassword.setBounds(240, 126, 75, 20);
-		contentPane.add(tfPassword);
-		tfPassword.setColumns(10);
-
-		JButton btnLogin = new JButton("Login");
+		
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String username = tfDNI.getText();
@@ -251,7 +229,7 @@ public class Login extends JFrame {
 										// se abre la pantalla de admin
 										System.out.println("adsijdashbasdhi");
 										User aux = x;
-										pAdmin pa = new pAdmin();
+										AdminUsuarios pa=new AdminUsuarios();
 
 										pa.setVisible(true);
 										dispose();
@@ -282,7 +260,7 @@ public class Login extends JFrame {
 		makeTransparent(btnClose);
 		contentPane.add(btnClose);
 	}
-	
+		
 	// -------------------- Métodos y Funciones --------------------
 	//Método para transparentar los botones
 	public static void makeTransparent(JButton btn) {
