@@ -19,6 +19,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 
 import Controlador.ConexionMySQL;
+import Controlador.SpecialistController;
+import Modelo.Specialist;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -30,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -165,17 +168,16 @@ public class AdminInsertUser extends JDialog {
 						boolean encontrado = false;
 						int numIdEspecialista;
 						int nEsp = 0;
-						ResultSet rs = null;
+						ArrayList<Specialist> arSpe = null;
 						try {
 							if(dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
 								JOptionPane.showMessageDialog(null,"Debes rellenar todos los campos", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
 							}else {
-								rs = conex.ejecutarSelect("Select * from especialista");
+								arSpe = new SpecialistController(conex).getAllSpecialist();
 								//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
-								rs.last();
-								numIdEspecialista = rs.getInt("id_especialista") + 1;
+								//numIdEspecialista = arSpe.get(arSpe.size()).getId_specialist();
 								conex.ejecutarInsertUpdateDelete("insert into usuario values ('" + dni + "', '" + nom + "', '" + ape + "', '" + contra + "', true)");
-								rs = conex.ejecutarSelect("Select * from especialidades");
+								arSpe = conex.ejecutarSelect("Select * from especialidades");
 								System.out.println(especialidad);
 								while (encontrado == false && rs.next() ) {
 					                if(especialidad.equalsIgnoreCase(rs.getString("especialidad"))) {
