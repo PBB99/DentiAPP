@@ -20,12 +20,11 @@ public class SpecialistController {
 		String consulta = "Select * From byprip7xk9sybmhhq0jf.especialista";
 		ResultSet rset = conexion.ejecutarSelect(consulta);
 		while (rset.next()) {
-			int id_specialist=rset.getInt("id_especialista");
 			String dni = rset.getString("dni_usuario");
 			int id_speciality=rset.getInt("especialidad");
 
 
-			Specialist specialist= new Specialist(id_specialist, dni,id_speciality);
+			Specialist specialist= new Specialist(dni,id_speciality);
 			allSpecialist.add(specialist);
 		}
 		return allSpecialist;
