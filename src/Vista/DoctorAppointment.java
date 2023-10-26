@@ -15,11 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Controlador.ConexionMySQL;
+
 public class DoctorAppointment extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private Connection cn;
+	private ConexionMySQL conex;
 
 	/**
 	 * Launch the application.
@@ -27,12 +29,12 @@ public class DoctorAppointment extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					DoctorAppointment frame = new DoctorAppointment();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					DoctorAppointment frame = new DoctorAppointment();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 	}
@@ -40,8 +42,8 @@ public class DoctorAppointment extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DoctorAppointment() {
-		//cn = conex;
+	public DoctorAppointment(ConexionMySQL conex) {
+		this.conex = conex;
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -68,11 +70,6 @@ public class DoctorAppointment extends JFrame {
 
 		// Botón de citas
 		JButton btnAppointment = new JButton();
-		btnAppointment.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				   
-			}
-		});
 		btnAppointment.setBackground(new Color(238, 238, 238));
 		btnAppointment.setBounds(0, 135, 135, 135);
 		btnAppointment.setBorderPainted(false);
@@ -81,13 +78,6 @@ public class DoctorAppointment extends JFrame {
 
 		// Botón de Pacientes
 		JButton btnCustomers = new JButton();
-		btnCustomers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new DoctorCustomers();
-			    frame.setVisible( true );
-			    dispose();
-			}
-		});
 		btnCustomers.setBackground(new Color(148, 220, 219));
 		btnCustomers.setBounds(0, 270, 135, 135);
 		btnCustomers.setBorderPainted(false);
@@ -201,6 +191,24 @@ public class DoctorAppointment extends JFrame {
 		// Acción de salir
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+
+		// Acción de ir a Módulo pacientes
+		btnCustomers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DoctorCustomers docCustomers = new DoctorCustomers(conex);
+				docCustomers.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción de ir a Módulo Stock
+		btnStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DoctorStock docStock = new DoctorStock(conex);
+				docStock.setVisible(true);
 				dispose();
 			}
 		});

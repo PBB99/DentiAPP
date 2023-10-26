@@ -14,10 +14,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Controlador.ConexionMySQL;
+
 public class DoctorCustomers extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private ConexionMySQL conex;
 
 	/**
 	 * Launch the application.
@@ -25,12 +28,12 @@ public class DoctorCustomers extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					DoctorCustomers frame = new DoctorCustomers();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					DoctorCustomers frame = new DoctorCustomers();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 	}
@@ -38,7 +41,9 @@ public class DoctorCustomers extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DoctorCustomers() {
+	public DoctorCustomers(ConexionMySQL conex) {
+		this.conex = conex;
+		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -186,6 +191,24 @@ public class DoctorCustomers extends JFrame {
 		// Acción de salir
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+
+		// Acción de ir a Módulo Citas
+		btnAppointment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DoctorAppointment docAppointment = new DoctorAppointment(conex);
+				docAppointment.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción de ir a Módulo Stock
+		btnStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DoctorStock docStock = new DoctorStock(conex);
+				docStock.setVisible(true);
 				dispose();
 			}
 		});

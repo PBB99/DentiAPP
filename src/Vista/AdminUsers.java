@@ -20,10 +20,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
 
+import Controlador.ConexionMySQL;
+
 public class AdminUsers extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private ConexionMySQL conex;
+	private AdminUsers frame;
 
 	/**
 	 * Launch the application.
@@ -31,12 +35,12 @@ public class AdminUsers extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					AdminUsers frame = new AdminUsers();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					AdminUsers frame = new AdminUsers();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		});
 	}
@@ -44,7 +48,10 @@ public class AdminUsers extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminUsers() {
+	public AdminUsers(ConexionMySQL conex) {
+		this.conex=conex;
+		frame = this;
+		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -305,6 +312,51 @@ public class AdminUsers extends JFrame {
 				dispose();
 			}
 		});
+		
+		// Acción del Módulo de citas
+		btnAppointment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminAppointment admAppointment = new AdminAppointment(conex);
+				admAppointment.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de pacientes
+		btnCustomers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminCustomers admCustomers = new AdminCustomers(conex);
+				admCustomers.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de inventario
+		btnStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminStock admStock = new AdminStock(conex);
+				admStock.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo de la clínica
+		btnClinic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminClinic admClinic = new AdminClinic(conex);
+				admClinic.setVisible(true);
+				dispose();
+			}
+		});
+
+		// Acción del Módulo económico
+		btnPayments.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminPayments admPayments = new AdminPayments(conex);
+				admPayments.setVisible(true);
+				dispose();
+			}
+		});
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
@@ -316,6 +368,17 @@ public class AdminUsers extends JFrame {
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
 		menuPane.add(btnClose);
+		
+		JButton btnNewButton = new JButton("PRUEBA");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AdminInsertUser us=new AdminInsertUser(conex, frame, true);
+				us.setVisible(true);
+				
+			}
+		});
+		btnNewButton.setBounds(524, 525, 89, 23);
+		contentPane.add(btnNewButton);
 
 		/*
 		 * JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");

@@ -1,26 +1,19 @@
 package Vista;
 
 import java.awt.EventQueue;
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-
 import Modelo.Specialist;
 import Modelo.User;
-
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import Controlador.ConexionMySQL;
-
 import Controlador.SpecialistController;
 import Controlador.UserController;
-
-
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,7 +31,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
@@ -84,7 +76,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
-
+		
 		// declaracion de las conexiones
 		this.conex = new ConexionMySQL();
 		conex.conectar();
@@ -98,7 +90,7 @@ public class Login extends JFrame {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -223,25 +215,26 @@ public class Login extends JFrame {
 					// si coinciden nombre y contraseña con alguno de los usuarios
 					if ((x.getDni().toString().equals(username)) && (x.getPass().toString().equals(password)) && aux2) {
 						// esta dado de alta
-
 						aux2 = false;
 						if (x.isState()) {
 
 							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
 								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
-
 									// en el caso de que el usuario este dentro de los especialistas del centro
 									// dental
-									if (s.getId_speciality() == 1) {
+									if (s.getId_specialist() == 0) {
 										// se abre la pantalla de admin
 										System.out.println("adsijdashbasdhi");
-										User aux = x;
-										AdminUsers pa=new AdminUsers();
+										//User aux = x;
+										AdminAppointment pa=new AdminAppointment(conex);
 
 										pa.setVisible(true);
 										dispose();
 									} else {// si no es admin es doctor
 											// declaracion de la pantalla doctor
+										DoctorAppointment pd=new DoctorAppointment(conex);
+
+										pd.setVisible(true);
 										dispose();
 									}
 								}
