@@ -20,7 +20,9 @@ import javax.swing.border.SoftBevelBorder;
 
 import Controlador.ConexionMySQL;
 import Controlador.SpecialistController;
+import Controlador.SpecialityController;
 import Modelo.Specialist;
+import Modelo.Speciality;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -138,13 +140,13 @@ public class AdminInsertUser extends JDialog {
 		cbEspecialidad.addItem("");
 		
 		//------------------------------------------LOGICA-----------------------------------------------
-		ResultSet rs = null;
+		ResultSet resSet = null;
 		try {//CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
 		
-			rs = conex.ejecutarSelect("Select * from especialidades");
+			resSet = conex.ejecutarSelect("Select * from especialidades");
 			//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
-			while (rs.next()) {
-				cbEspecialidad.addItem(rs.getString("especialidad"));
+			while (resSet.next()) {
+				cbEspecialidad.addItem(resSet.getString("especialidad"));
             }
 		} catch (Exception e2) {
 			// TODO: handle exception
@@ -166,31 +168,36 @@ public class AdminInsertUser extends JDialog {
 						String contra = tfContraseña.getText();
 						String especialidad = cbEspecialidad.getSelectedItem().toString();
 						boolean encontrado = false;
-						int numIdEspecialista;
 						int nEsp = 0;
-						ArrayList<Specialist> arSpe = null;
+						SpecialityController spe = new SpecialityController(conex);
+						
+						ArrayList<Speciality> arSpe = null;
 						try {
 							if(dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
 								JOptionPane.showMessageDialog(null,"Debes rellenar todos los campos", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
 							}else {
-								arSpe = new SpecialistController(conex).getAllSpecialist();
+								//arSpe = new SpecialistController(conex).getAllSpecialist();
 								//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
 								//numIdEspecialista = arSpe.get(arSpe.size()).getId_specialist();
 								conex.ejecutarInsertUpdateDelete("insert into usuario values ('" + dni + "', '" + nom + "', '" + ape + "', '" + contra + "', true)");
-								arSpe = conex.ejecutarSelect("Select * from especialidades");
+								arSpe = spe.getAllSpecialist();
 								System.out.println(especialidad);
-								while (encontrado == false && rs.next() ) {
-					                if(especialidad.equalsIgnoreCase(rs.getString("especialidad"))) {
+								for (int i = 0; i < arSpe.size() && encontrado == false; i++) {
+									System.out.println(i);
+					                if(especialidad.equalsIgnoreCase(arSpe.get(i).getSpeciality())) {
 					                	encontrado = true;
-					                	nEsp = rs.getInt("id_especialidad");
+					                	nEsp = arSpe.get(i).getId_speciality();
 					                }
 					            }
-								conex.ejecutarInsertUpdateDelete("insert into especialista values ('" + numIdEspecialista + "', '" + dni + "', '" + nEsp + "')");
+								//conex.ejecutarInsertUpdateDelete("insert into especialista values ('"+ dni + "', '" + nEsp + "')");
+								new SpecialistController(conex).insert(new Specialist(dni, nEsp));
+								System.out.println("fuera");
 								JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
 								setModal(false);
 								setVisible(false);
-								AdminInsertUser.this.dispatchEvent(new WindowEvent(
-										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
+								dispose();
+//								AdminInsertUser.this.dispatchEvent(new WindowEvent(
+//										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
 							}
 							
 						} catch (Exception e2) {
