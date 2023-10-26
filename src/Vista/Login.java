@@ -45,7 +45,6 @@ public class Login extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ConexionMySQL conex;
-
 	private Connection cn;
 	private JTextField tfDNI;
 	private JTextField tfPassword;
@@ -54,6 +53,7 @@ public class Login extends JFrame {
 	private ArrayList<User> userList;
 	private ArrayList<Specialist> speciaList;
 	private SpecialistController sp;
+	private Dimension dim;
 
 
 	/**
@@ -93,8 +93,8 @@ public class Login extends JFrame {
 		
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 1920, 1080);
+		dim=super.getToolkit().getScreenSize();
+		setSize(dim);
 		
 		//---------------------------------------------IMAGEN DE FONDO--------------------------------------
 		contentPane = new JPanel() {
@@ -102,7 +102,7 @@ public class Login extends JFrame {
 			public void paint(Graphics g) {
 				Image bg = new ImageIcon(getClass().getResource("/Resources/images/bg_Login.jpg")).getImage();
 				g.drawImage(bg,0,0,getWidth(),getHeight(), this);
-				setOpaque(false);
+				//setOpaque(false);
 				super.paint(g);
 			}
 		};
@@ -160,54 +160,21 @@ public class Login extends JFrame {
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
 		
-		//Botón de Close
-				JButton btnClose = new JButton();
-				btnClose.setFont(new Font("Tahoma", Font.PLAIN, 19));
-				btnClose.setBounds(25, 985, 75, 75);
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-				makeTransparent(btnClose);
-		
 		//----------------------------------------------LOGICA----------------------------------------------------------
 		
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		btnClose.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoutWhite.png")));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-			
-			}});
-
 		//acciones del boton login, carga dos tablas, compara los datos el usuario introducido y da paso o no a la siguiente pantalla
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String username = tfDNI.getText();
+				AdminAppointment pa=new AdminAppointment(conex,dim);
+				pa.setVisible(true);
+				try {
+		            //Ponemos a "Dormir" el programa durante 3 segundos
+		            Thread.sleep(1000);
+		         } catch (Exception ex) {
+		            System.out.println(ex);
+		         }
+				dispose();
+				/*String username = tfDNI.getText();
 				String password = tfPassword.getText();
 				boolean aux2 = true;
 
@@ -217,24 +184,31 @@ public class Login extends JFrame {
 						// esta dado de alta
 						aux2 = false;
 						if (x.isState()) {
-
 							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
 								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
 									// en el caso de que el usuario este dentro de los especialistas del centro
 									// dental
 									if (s.getId_specialist() == 0) {
 										// se abre la pantalla de admin
-										System.out.println("adsijdashbasdhi");
-										//User aux = x;
 										AdminAppointment pa=new AdminAppointment(conex);
-
 										pa.setVisible(true);
+										try {
+								            //Ponemos a "Dormir" el programa durante 3 segundos
+								            Thread.sleep(1000);
+								         } catch (Exception ex) {
+								            System.out.println(ex);
+								         }
 										dispose();
 									} else {// si no es admin es doctor
 											// declaracion de la pantalla doctor
 										DoctorAppointment pd=new DoctorAppointment(conex);
-
 										pd.setVisible(true);
+										try {
+								            //Ponemos a "Dormir" el programa durante 3 segundos
+								            Thread.sleep(1000);
+								         } catch (Exception ex) {
+								            System.out.println(ex);
+								         }
 										dispose();
 									}
 								}
@@ -250,13 +224,12 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
 							"Error", JOptionPane.ERROR_MESSAGE);
 				}
-
+				*/
 
 			}
 		});
 		
 		//-------------------------------------ADICIONES AL PANEL Y AL LOGIN PANEL-----------------
-		contentPane.add(btnClose);
 		contentPane.add(loginPane);
 		loginPane.add(btnLogin);
 		loginPane.add(tfPassword);

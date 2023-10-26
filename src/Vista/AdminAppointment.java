@@ -1,6 +1,7 @@
 package Vista;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,7 @@ public class AdminAppointment extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ConexionMySQL conex;
+	private Dimension dim;
 
 	/**
 	 * Launch the application.
@@ -29,12 +31,13 @@ public class AdminAppointment extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-//				try {
-//					AdminAppointment frame = new AdminAppointment();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+			try {
+					Dimension dim2 = new Dimension(1920, 1080);
+					AdminAppointment frame = new AdminAppointment(null, dim2);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -42,16 +45,16 @@ public class AdminAppointment extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminAppointment(ConexionMySQL conex) {
+	public AdminAppointment(ConexionMySQL conex, Dimension dim) {
 		this.conex = conex; 
+		this.dim = dim;
 		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 1920, 1080);
+		setSize(super.getToolkit().getScreenSize());
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.setUndecorated(true);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
