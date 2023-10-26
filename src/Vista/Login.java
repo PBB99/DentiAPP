@@ -235,8 +235,8 @@ public class Login extends JFrame {
 										AdminAppointment pa=new AdminAppointment(conex,frame);
 										pa.setVisible(true);
 										try {
-								            //Ponemos a "Dormir" el programa durante 3 segundos
-								            Thread.sleep(1000);
+								            //Ponemos a "Dormir" el programa para que cargue
+								            Thread.sleep(500);
 								         } catch (Exception ex) {
 								            System.out.println(ex);
 								         }
@@ -246,8 +246,8 @@ public class Login extends JFrame {
 										DoctorAppointment pd=new DoctorAppointment(conex,frame);
 										pd.setVisible(true);
 										try {
-								            //Ponemos a "Dormir" el programa durante 3 segundos
-								            Thread.sleep(1000);
+								            //Ponemos a "Dormir" el programa para que cargue
+								            Thread.sleep(500);
 								         } catch (Exception ex) {
 								            System.out.println(ex);
 								         }
