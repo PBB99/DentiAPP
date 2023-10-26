@@ -32,8 +32,7 @@ public class AdminAppointment extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 			try {
-					Dimension dim2 = new Dimension(1920, 1080);
-					AdminAppointment frame = new AdminAppointment(null, dim2);
+					AdminAppointment frame = new AdminAppointment(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,9 +44,8 @@ public class AdminAppointment extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminAppointment(ConexionMySQL conex, Dimension dim) {
+	public AdminAppointment(ConexionMySQL conex) {
 		this.conex = conex; 
-		this.dim = dim;
 		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

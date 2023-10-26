@@ -53,7 +53,6 @@ public class Login extends JFrame {
 	private ArrayList<User> userList;
 	private ArrayList<Specialist> speciaList;
 	private SpecialistController sp;
-	private Dimension dim;
 
 
 	/**
@@ -93,8 +92,7 @@ public class Login extends JFrame {
 		
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		dim=super.getToolkit().getScreenSize();
-		setSize(dim);
+		setSize(screenSize);
 		
 		//---------------------------------------------IMAGEN DE FONDO--------------------------------------
 		contentPane = new JPanel() {
@@ -165,7 +163,7 @@ public class Login extends JFrame {
 		//acciones del boton login, carga dos tablas, compara los datos el usuario introducido y da paso o no a la siguiente pantalla
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminAppointment pa=new AdminAppointment(conex,dim);
+				AdminAppointment pa=new AdminAppointment(conex);
 				pa.setVisible(true);
 				try {
 		            //Ponemos a "Dormir" el programa durante 3 segundos
