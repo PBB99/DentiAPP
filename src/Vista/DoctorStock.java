@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +23,7 @@ public class DoctorStock extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ConexionMySQL conex;
+	private JFrame parent, frame;
 
 
 	/**
@@ -42,16 +45,17 @@ public class DoctorStock extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DoctorStock(ConexionMySQL conex) {
+	public DoctorStock(ConexionMySQL conex, JFrame parent) {
 		this.conex = conex;
 		
 		// -------------------- JFrame --------------------
+		this.frame=this;
+		this.parent=parent;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 1920, 1080);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.setUndecorated(true);
+		setResizable(false);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -189,28 +193,78 @@ public class DoctorStock extends JFrame {
 		});
 
 		// -------------------- Lógica --------------------
+		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+				this.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						try {
+							Thread.sleep(300);
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+						parent.dispose();
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+        
 		// Acción de salir
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				Login log = new Login(frame);
+				log.setVisible(true);
 			}
 		});
 
 		// Acción de ir a Módulo Citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DoctorAppointment docAppointment = new DoctorAppointment(conex);
+				DoctorAppointment docAppointment = new DoctorAppointment(conex, frame);
 				docAppointment.setVisible(true);
-				dispose();
 			}
 		});
 
 		// Acción de ir a Módulo pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DoctorCustomers docCustomers = new DoctorCustomers(conex);
+				DoctorCustomers docCustomers = new DoctorCustomers(conex, frame);
 				docCustomers.setVisible(true);
-				dispose();
 			}
 		});
 

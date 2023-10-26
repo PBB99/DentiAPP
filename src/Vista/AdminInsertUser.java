@@ -160,42 +160,42 @@ public class AdminInsertUser extends JDialog {
 				
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						String dni = tfDNI.getText();
-						String nom = tfNombre.getText();
-						String ape = tfApellido.getText();
-						String contra = tfContraseña.getText();
-						String especialidad = cbEspecialidad.getSelectedItem().toString();
-						boolean encontrado = false;
-						int numIdEspecialista;
-						int nEsp = 0;
-						ArrayList<Specialist> arSpe = null;
-						try {
-							if(dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
-								JOptionPane.showMessageDialog(null,"Debes rellenar todos los campos", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
-							}else {
-								arSpe = new SpecialistController(conex).getAllSpecialist();
-								//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
-								//numIdEspecialista = arSpe.get(arSpe.size()).getId_specialist();
-								conex.ejecutarInsertUpdateDelete("insert into usuario values ('" + dni + "', '" + nom + "', '" + ape + "', '" + contra + "', true)");
-								arSpe = conex.ejecutarSelect("Select * from especialidades");
-								System.out.println(especialidad);
-								while (encontrado == false && rs.next() ) {
-					                if(especialidad.equalsIgnoreCase(rs.getString("especialidad"))) {
-					                	encontrado = true;
-					                	nEsp = rs.getInt("id_especialidad");
-					                }
-					            }
-								conex.ejecutarInsertUpdateDelete("insert into especialista values ('" + numIdEspecialista + "', '" + dni + "', '" + nEsp + "')");
-								JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
-								setModal(false);
-								setVisible(false);
-								AdminInsertUser.this.dispatchEvent(new WindowEvent(
-										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
-							}
-							
-						} catch (Exception e2) {
-							// TODO: handle exception
-						}
+//						String dni = tfDNI.getText();
+//						String nom = tfNombre.getText();
+//						String ape = tfApellido.getText();
+//						String contra = tfContraseña.getText();
+//						String especialidad = cbEspecialidad.getSelectedItem().toString();
+//						boolean encontrado = false;
+//						int numIdEspecialista;
+//						int nEsp = 0;
+//						ArrayList<Specialist> arSpe = null;
+//						try {
+//							if(dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
+//								JOptionPane.showMessageDialog(null,"Debes rellenar todos los campos", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
+//							}else {
+//								arSpe = new SpecialistController(conex).getAllSpecialist();
+//								//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
+//								//numIdEspecialista = arSpe.get(arSpe.size()).getId_specialist();
+//								conex.ejecutarInsertUpdateDelete("insert into usuario values ('" + dni + "', '" + nom + "', '" + ape + "', '" + contra + "', true)");
+//								arSpe = conex.ejecutarSelect("Select * from especialidades");
+//								System.out.println(especialidad);
+//								while (encontrado == false && rs.next() ) {
+//					                if(especialidad.equalsIgnoreCase(rs.getString("especialidad"))) {
+//					                	encontrado = true;
+//					                	nEsp = rs.getInt("id_especialidad");
+//					                }
+//					            }
+//								conex.ejecutarInsertUpdateDelete("insert into especialista values ('" + numIdEspecialista + "', '" + dni + "', '" + nEsp + "')");
+//								JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
+//								setModal(false);
+//								setVisible(false);
+//								AdminInsertUser.this.dispatchEvent(new WindowEvent(
+//										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
+//							}
+//							
+//						} catch (Exception e2) {
+//							// TODO: handle exception
+//						}
 					}
 				});
 				

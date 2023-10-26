@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,7 +29,7 @@ public class AdminUsers extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ConexionMySQL conex;
-	private AdminUsers frame;
+	private JFrame parent, frame;
 
 	/**
 	 * Launch the application.
@@ -48,17 +50,17 @@ public class AdminUsers extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminUsers(ConexionMySQL conex) {
+	public AdminUsers(ConexionMySQL conex, JFrame parent) {
 		this.conex=conex;
-		frame = this;
+		this.frame=this;
+		this.parent=parent;
 		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 1920, 1080);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.setUndecorated(true);
+		setResizable(false);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -306,55 +308,102 @@ public class AdminUsers extends JFrame {
 		});
 
 		// -------------------- Lógica --------------------
+		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+				this.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						try {
+							Thread.sleep(300);
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+						parent.dispose();
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+        
 		// Acción de salir
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				Login log = new Login(frame);
+				log.setVisible(true);
 			}
 		});
 		
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminAppointment admAppointment = new AdminAppointment(conex);
+				AdminAppointment admAppointment = new AdminAppointment(conex, frame);
 				admAppointment.setVisible(true);
-				dispose();
 			}
 		});
 
 		// Acción del Módulo de pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminCustomers admCustomers = new AdminCustomers(conex);
+				AdminCustomers admCustomers = new AdminCustomers(conex, frame);
 				admCustomers.setVisible(true);
-				dispose();
 			}
 		});
 
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock(conex);
+				AdminStock admStock = new AdminStock(conex, frame);
 				admStock.setVisible(true);
-				dispose();
 			}
 		});
 
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic(conex);
+				AdminClinic admClinic = new AdminClinic(conex, frame);
 				admClinic.setVisible(true);
-				dispose();
 			}
 		});
 
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments(conex);
+				AdminPayments admPayments = new AdminPayments(conex, frame);
 				admPayments.setVisible(true);
-				dispose();
 			}
 		});
 
@@ -372,7 +421,7 @@ public class AdminUsers extends JFrame {
 		JButton btnNewButton = new JButton("PRUEBA");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminInsertUser us=new AdminInsertUser(conex, frame, true);
+				AdminInsertUser us=new AdminInsertUser(conex, (AdminUsers)frame, true);
 				us.setVisible(true);
 				
 			}
