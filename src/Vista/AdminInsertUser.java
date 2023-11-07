@@ -177,7 +177,7 @@ public class AdminInsertUser extends JDialog {
 								//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
 								//numIdEspecialista = arSpe.get(arSpe.size()).getId_specialist();
 								conex.ejecutarInsertUpdateDelete("insert into usuario values ('" + dni + "', '" + nom + "', '" + ape + "', '" + contra + "', true)");
-								arSpe = conex.ejecutarSelect("Select * from especialidades");
+								//arSpe = conex.ejecutarSelect("Select * from especialidades");
 								System.out.println(especialidad);
 								while (encontrado == false && rs.next() ) {
 					                if(especialidad.equalsIgnoreCase(rs.getString("especialidad"))) {
