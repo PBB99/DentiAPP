@@ -444,12 +444,15 @@ public class AdminAppointment extends JFrame {
 		});
 		
 		//logica click item salir
-		ItemPass.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		ItemOut.addActionListener(new ActionListener() {
 			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("funciona");
 				Login login=new Login(frame);
 				login.setVisible(true);
+			
 			}
 		});
 		

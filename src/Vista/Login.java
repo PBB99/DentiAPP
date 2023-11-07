@@ -170,7 +170,9 @@ public class Login extends JFrame {
 						} catch (Exception e2) {
 							e2.printStackTrace();
 						}
-						parent.dispose();
+						if(parent!=null) {
+							parent.dispose();
+						}
 						
 					}
 					
@@ -240,7 +242,7 @@ public class Login extends JFrame {
 								         } catch (Exception ex) {
 								            System.out.println(ex);
 								         }
-										dispose();
+									
 									} else {// si no es admin es doctor
 											// declaracion de la pantalla doctor
 										DoctorAppointment pd=new DoctorAppointment(conex,frame);
@@ -251,7 +253,7 @@ public class Login extends JFrame {
 								         } catch (Exception ex) {
 								            System.out.println(ex);
 								         }
-										dispose();
+										
 									}
 								}
 							}
