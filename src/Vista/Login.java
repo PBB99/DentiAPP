@@ -26,6 +26,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,16 +47,14 @@ public class Login extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ConexionMySQL conex;
-
 	private Connection cn;
 	private JTextField tfDNI;
 	private JTextField tfPassword;
-	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private UserController us;
 	private ArrayList<User> userList;
 	private ArrayList<Specialist> speciaList;
 	private SpecialistController sp;
-
+	private JFrame parent,frame;
 
 	/**
 	 * Launch the application.
@@ -63,7 +63,7 @@ public class Login extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login frame = new Login();
+					Login frame = new Login(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -75,8 +75,8 @@ public class Login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
-		
+	public Login(JFrame parent) {
+		//---------------------------------------------Conexiones--------------------------------------
 		// declaracion de las conexiones
 		this.conex = new ConexionMySQL();
 		conex.conectar();
@@ -91,12 +91,11 @@ public class Login extends JFrame {
 			e.printStackTrace();
 		}
 		
-
+		//---------------------------------------------JFrame--------------------------------------
+		this.frame=this;
+		this.parent=parent;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 1920, 1080);
-		
-		//---------------------------------------------IMAGEN DE FONDO--------------------------------------
 		contentPane = new JPanel() {
 			@Override	
 			public void paint(Graphics g) {
@@ -107,12 +106,12 @@ public class Login extends JFrame {
 			}
 		};
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.setUndecorated(true);
+		setResizable(false);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		
-		// -------------------- Componentes --------------------
+		// --------------------Componentes--------------------
 		// Login Layout
 		JPanel loginPane = new JPanel();
 		loginPane.setBounds(685, 165, 550, 750);
@@ -160,53 +159,63 @@ public class Login extends JFrame {
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
 		
-		//Botón de Close
-				JButton btnClose = new JButton();
-				btnClose.setFont(new Font("Tahoma", Font.PLAIN, 19));
-				btnClose.setBounds(25, 985, 75, 75);
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-				makeTransparent(btnClose);
-		
 		//----------------------------------------------LOGICA----------------------------------------------------------
-		
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		btnClose.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoutWhite.png")));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-			
-			}});
-
+		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+				this.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						try {
+							Thread.sleep(300);
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+						parent.dispose();
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+		        
 		//acciones del boton login, carga dos tablas, compara los datos el usuario introducido y da paso o no a la siguiente pantalla
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+//				AdminAppointment pa=new AdminAppointment(conex, frame);
+//				pa.setVisible(true);
 				String username = tfDNI.getText();
 				String password = tfPassword.getText();
 				boolean aux2 = true;
@@ -217,24 +226,31 @@ public class Login extends JFrame {
 						// esta dado de alta
 						aux2 = false;
 						if (x.isState()) {
-
 							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
 								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
 									// en el caso de que el usuario este dentro de los especialistas del centro
 									// dental
 									if (s.getId_specialist() == 0) {
 										// se abre la pantalla de admin
-										System.out.println("adsijdashbasdhi");
-										//User aux = x;
-										AdminAppointment pa=new AdminAppointment(conex);
-
+										AdminAppointment pa=new AdminAppointment(conex,frame);
 										pa.setVisible(true);
+										try {
+								            //Ponemos a "Dormir" el programa para que cargue
+								            Thread.sleep(500);
+								         } catch (Exception ex) {
+								            System.out.println(ex);
+								         }
 										dispose();
 									} else {// si no es admin es doctor
 											// declaracion de la pantalla doctor
-										DoctorAppointment pd=new DoctorAppointment(conex);
-
+										DoctorAppointment pd=new DoctorAppointment(conex,frame);
 										pd.setVisible(true);
+										try {
+								            //Ponemos a "Dormir" el programa para que cargue
+								            Thread.sleep(500);
+								         } catch (Exception ex) {
+								            System.out.println(ex);
+								         }
 										dispose();
 									}
 								}
@@ -250,13 +266,10 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
 							"Error", JOptionPane.ERROR_MESSAGE);
 				}
-
-
 			}
 		});
 		
 		//-------------------------------------ADICIONES AL PANEL Y AL LOGIN PANEL-----------------
-		contentPane.add(btnClose);
 		contentPane.add(loginPane);
 		loginPane.add(btnLogin);
 		loginPane.add(tfPassword);
@@ -265,12 +278,5 @@ public class Login extends JFrame {
 		loginPane.add(lblDNI);
 		loginPane.add(lblLogo);
 	}
-		
-	// -------------------- Métodos y Funciones --------------------
-	//Método para transparentar los botones
-	public static void makeTransparent(JButton btn) {
-		btn.setOpaque(false);
-		btn.setContentAreaFilled(false);
-		btn.setBorderPainted(false);
-	}
+	
 }
