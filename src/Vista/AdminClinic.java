@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.ConexionMySQL;
+import btndentiapp.ButtonDentiApp;
 
 public class AdminClinic extends JFrame {
 
@@ -24,7 +25,6 @@ public class AdminClinic extends JFrame {
 	private JPanel contentPane;
 	private ConexionMySQL conex;
 	private JFrame parent, frame;
-
 
 	/**
 	 * Launch the application.
@@ -47,10 +47,10 @@ public class AdminClinic extends JFrame {
 	 */
 	public AdminClinic(ConexionMySQL conex, JFrame parent) {
 		this.conex = conex;
-		
+
 		// -------------------- JFrame --------------------
-		this.frame=this;
-		this.parent=parent;
+		this.frame = this;
+		this.parent = parent;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setResizable(false);
@@ -73,295 +73,87 @@ public class AdminClinic extends JFrame {
 		lblLogo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoMenu.png")));
 
 		// Botón de citas
-		JButton btnAppointment = new JButton();
-		btnAppointment.setBackground(new Color(148, 220, 219));
-		btnAppointment.setBounds(0, 135, 135, 135);
-		btnAppointment.setBorderPainted(false);
-		btnAppointment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
-		btnAppointment.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnAppointment.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnAppointment.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		ButtonDentiApp btnAppointment = new ButtonDentiApp(0, 135, false,
+				new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
 		btnAppointment.setToolTipText("Módulo de citas");
 
 		// Botón de usuarios
-		JButton btnUsers = new JButton();
-		btnUsers.setBackground(new Color(148, 220, 219));
-		btnUsers.setBounds(0, 270, 135, 135);
-		btnUsers.setBorderPainted(false);
-		btnUsers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
-		btnUsers.setToolTipText("Módulo de usuarios");
-		btnUsers.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnUsers.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnUsers.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		ButtonDentiApp btnUsers = new ButtonDentiApp(0, 270, false,
+				new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
+		btnAppointment.setToolTipText("Módulo de Usuarios");
 
 		// Botón de Pacientes
-		JButton btnCustomers = new JButton();
-		btnCustomers.setBackground(new Color(148, 220, 219));
-		btnCustomers.setBounds(0, 405, 135, 135);
-		btnCustomers.setBorderPainted(false);
-		btnCustomers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
+		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 405, false,
+				new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
 		btnCustomers.setToolTipText("Módulo de pacientes");
-		btnCustomers.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnCustomers.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnCustomers.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
 
 		// Botón de Inventario
-		JButton btnStock = new JButton();
-		btnStock.setBackground(new Color(148, 220, 219));
-		btnStock.setBounds(0, 540, 135, 135);
-		btnStock.setBorderPainted(false);
-		btnStock.setIcon(new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
+		ButtonDentiApp btnStock = new ButtonDentiApp(0, 540, false,
+				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
 		btnStock.setToolTipText("Módulo de materiales");
-		btnStock.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnStock.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnStock.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
 
 		// Botón de Tratamientos y Especialidades
-		JButton btnClinic = new JButton();
-		btnClinic.setBackground(new Color(238, 238, 238));
-		btnClinic.setBounds(0, 675, 135, 135);
-		btnClinic.setBorderPainted(false);
-		btnClinic.setIcon(new ImageIcon(getClass().getResource("/Resources/images/clinic.png")));
+		ButtonDentiApp btnClinic = new ButtonDentiApp(0, 675, true,
+				new ImageIcon(getClass().getResource("/Resources/images/clinic.png")));
 		btnClinic.setToolTipText("Módulo clínico");
 
 		// Botón del Módulo economico
-		JButton btnPayments = new JButton();
-		btnPayments.setBackground(new Color(148, 220, 219));
-		btnPayments.setBounds(0, 810, 135, 135);
-		btnPayments.setBorderPainted(false);
-		btnPayments.setIcon(new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
+		ButtonDentiApp btnPayments = new ButtonDentiApp(0, 810, false,
+				new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
 		btnPayments.setToolTipText("Módulo Económico");
-		btnPayments.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnPayments.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnPayments.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		// Botón de Salir
-		JButton btnClose = new JButton();
-		btnClose.setBackground(new Color(148, 220, 219));
-		btnClose.setBounds(0, 945, 135, 135);
-		btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoutMenuGrey.png")));
-		btnClose.setToolTipText("Módulo Económico");
-		btnClose.setBorderPainted(false);
-		btnClose.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnClose.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnClose.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
 
 		// -------------------- Lógica --------------------
-		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
-				this.addWindowListener(new WindowListener() {
-					
-					@Override
-					public void windowOpened(WindowEvent e) {
-						try {
-							Thread.sleep(300);
-						} catch (Exception e2) {
-							e2.printStackTrace();
-						}
-						parent.dispose();
-						
-					}
-					
-					@Override
-					public void windowIconified(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowDeiconified(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowDeactivated(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowClosing(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowClosed(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowActivated(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-        
-		// Acción de salir
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Login log = new Login(frame);
-				log.setVisible(true);
+		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+		this.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				try {
+					Thread.sleep(300);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				parent.dispose();
+
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+
 			}
 		});
-		
+
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -369,7 +161,7 @@ public class AdminClinic extends JFrame {
 				admAppointment.setVisible(true);
 			}
 		});
-		
+
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -411,7 +203,6 @@ public class AdminClinic extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-		menuPane.add(btnClose);
 	}
 
 }
