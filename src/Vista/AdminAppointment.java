@@ -53,7 +53,7 @@ public class AdminAppointment extends JFrame {
 		this.parent=parent;
 		this.frame=this;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -267,43 +267,6 @@ public class AdminAppointment extends JFrame {
 			}
 		});
 
-		// Botón de Salir
-		JButton btnClose = new JButton();
-		btnClose.setBackground(new Color(148, 220, 219));
-		btnClose.setBounds(0, 945, 135, 135);
-		btnClose.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoutMenuGrey.png")));
-		btnClose.setToolTipText("Módulo Económico");
-		btnClose.setBorderPainted(false);
-		btnClose.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnClose.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnClose.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
 		// -------------------- Lógica --------------------
 		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
@@ -353,14 +316,6 @@ public class AdminAppointment extends JFrame {
 			public void windowActivated(WindowEvent e) {
 				// TODO Auto-generated method stub
 				
-			}
-		});
-        
-		// Acción de salir
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Login log = new Login(frame);
-				log.setVisible(true);
 			}
 		});
 
@@ -413,7 +368,6 @@ public class AdminAppointment extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-		menuPane.add(btnClose);
 	}
 
 }
