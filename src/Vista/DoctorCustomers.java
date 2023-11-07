@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.ConexionMySQL;
+import btndentiapp.ButtonDentiApp;
 
 public class DoctorCustomers extends JFrame {
 
@@ -32,7 +33,7 @@ public class DoctorCustomers extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DoctorCustomers frame = new DoctorCustomers(null,null);
+					DoctorCustomers frame = new DoctorCustomers(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,10 +47,10 @@ public class DoctorCustomers extends JFrame {
 	 */
 	public DoctorCustomers(ConexionMySQL conex, JFrame parent) {
 		this.conex = conex;
-		
+
 		// -------------------- JFrame --------------------
-		this.frame=this;
-		this.parent=parent;
+		this.frame = this;
+		this.parent = parent;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
@@ -73,138 +74,71 @@ public class DoctorCustomers extends JFrame {
 		lblLogo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoMenu.png")));
 
 		// Botón de citas
-		JButton btnAppointment = new JButton();
-		btnAppointment.setBackground(new Color(148, 220, 219));
-		btnAppointment.setBounds(0, 135, 135, 135);
-		btnAppointment.setBorderPainted(false);
-		btnAppointment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
+		ButtonDentiApp btnAppointment = new ButtonDentiApp(0, 135, false,
+				new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
 		btnAppointment.setToolTipText("Módulo de citas");
-		btnAppointment.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnAppointment.setBackground(new Color(148, 220, 219));
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnAppointment.setBackground(new Color(31, 192, 191));
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
 
 		// Botón de Pacientes
-		JButton btnCustomers = new JButton();
-		btnCustomers.setBackground(new Color(238, 238, 238));
-		btnCustomers.setBounds(0, 270, 135, 135);
-		btnCustomers.setBorderPainted(false);
-		btnCustomers.setIcon(new ImageIcon(getClass().getResource("/Resources/images/customers.png")));
+		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 270, true,
+				new ImageIcon(getClass().getResource("/Resources/images/customers.png")));
 		btnCustomers.setToolTipText("Módulo de pacientes");
 
 		// Botón de Inventario
-		JButton btnStock = new JButton();
-		btnStock.setBackground(new Color(148, 220, 219));
-		btnStock.setBounds(0, 405, 135, 135);
-		btnStock.setBorderPainted(false);
-		btnStock.setIcon(new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
+		ButtonDentiApp btnStock = new ButtonDentiApp(0, 405, false,
+				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
 		btnStock.setToolTipText("Módulo de materiales");
-		btnStock.addMouseListener(new MouseListener() {
+
+		// -------------------- Lógica --------------------
+		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+		this.addWindowListener(new WindowListener() {
+
 			@Override
-			public void mouseReleased(MouseEvent e) {
+			public void windowOpened(WindowEvent e) {
+				try {
+					Thread.sleep(300);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				parent.dispose();
+
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void windowDeiconified(WindowEvent e) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {
-				btnStock.setBackground(new Color(148, 220, 219));
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnStock.setBackground(new Color(31, 192, 191));
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+
 			}
 
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
 				// TODO Auto-generated method stub
 
 			}
 		});
-
-		// -------------------- Lógica --------------------
-		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
-				this.addWindowListener(new WindowListener() {
-					
-					@Override
-					public void windowOpened(WindowEvent e) {
-						try {
-							Thread.sleep(300);
-						} catch (Exception e2) {
-							e2.printStackTrace();
-						}
-						parent.dispose();
-						
-					}
-					
-					@Override
-					public void windowIconified(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowDeiconified(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowDeactivated(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowClosing(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowClosed(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowActivated(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
 
 		// Acción de ir a Módulo Citas
 		btnAppointment.addActionListener(new ActionListener() {
