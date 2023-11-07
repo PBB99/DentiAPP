@@ -1,6 +1,7 @@
 package Vista;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
@@ -11,13 +12,24 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
+
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import Controlador.ConexionMySQL;
+import javax.swing.JMenuBar;
+import java.awt.Point;
+import javax.swing.JMenu;
+import java.awt.Insets;
+import javax.swing.JMenuItem;
+import java.awt.Rectangle;
+import java.awt.Window.Type;
+import java.awt.event.MouseAdapter;
 
 public class AdminAppointment extends JFrame {
 
@@ -30,23 +42,25 @@ public class AdminAppointment extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//			try {
-//					AdminAppointment frame = new AdminAppointment(null,null);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+			try {
+					AdminAppointment frame = new AdminAppointment(null,null);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public AdminAppointment(ConexionMySQL conex, JFrame parent) {
+		setType(Type.POPUP);
+		setBounds(new Rectangle(10, 0, 0, 0));
 		this.conex = conex; 
 		
 		// -------------------- JFrame --------------------
@@ -67,7 +81,32 @@ public class AdminAppointment extends JFrame {
 		menuPane.setBounds(0, 0, 135, 1080);
 		contentPane.add(menuPane);
 		menuPane.setLayout(null);
-
+		
+		//barra oculat de arriba
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 1900, 50);
+		
+		menuBar.setMargin(new Insets(50, 0, 0, 25));
+		menuBar.setOpaque(false);
+		menuBar.setBorderPainted(false);
+		menuBar.add(Box.createHorizontalGlue());
+		//item 
+		JMenu mnNewMenu = new JMenu("");
+		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
+		mnNewMenu.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		
+		//nombre del doctor o admin
+		JMenuItem ItemName = new JMenuItem("");
+		ItemName.setText("name");
+		
+		//item cambio contraseña
+		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
+		ItemPass.setIcon(new ImageIcon(getClass().getResource("/Resources/images/keypass.png")));
+		
+		//item cerrar sesion
+		JMenuItem ItemOut = new JMenuItem("Cerrar Sesión");
+		ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
+		
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -403,6 +442,18 @@ public class AdminAppointment extends JFrame {
 				admPayments.setVisible(true);
 			}
 		});
+		
+		//logica click item salir
+		ItemPass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			
+				Login login=new Login(frame);
+				login.setVisible(true);
+			}
+		});
+		
+		
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
@@ -414,6 +465,14 @@ public class AdminAppointment extends JFrame {
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
 		menuPane.add(btnClose);
+		contentPane.add(menuBar);
+		menuBar.add(mnNewMenu);
+		mnNewMenu.add(ItemName);
+		mnNewMenu.add(ItemPass);
+		mnNewMenu.add(ItemOut);
+		
+		
+		
+		
 	}
-
 }
