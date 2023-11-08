@@ -4,11 +4,14 @@ import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JTextField;
@@ -22,6 +25,7 @@ public class PruebasCalendario extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -77,6 +81,20 @@ public class PruebasCalendario extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"a.m", "p.m"}));
 		comboBox.setBounds(82, 11, 48, 22);
 		contentPane.add(comboBox);
+		
+		DefaultTableModel modelo = new DefaultTableModel();
+		table = new JTable();
+		table.setModel(modelo);
+		modelo.addColumn("Hora");
+		modelo.addColumn("Cita");
+		for (int i = 9; i < 15; i++) {
+			modelo.insertRow(modelo.getRowCount(), new Object[] { i+":00", "" });
+		}
+		for (int i = 17; i < 20; i++) {
+			modelo.insertRow(modelo.getRowCount(), new Object[] { i+":00", "" });
+		}
+		table.setBounds(338, 168, 199, 196);
+		contentPane.add(table);
 		
 		//JTable table = new JTable();
 		
