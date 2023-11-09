@@ -3,6 +3,13 @@ package Vista;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Iterator;
 
@@ -14,10 +21,15 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
+
+import Controlador.ConexionMySQL;
+import Modelo.User;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ListSelectionModel;
 
 public class PruebasCalendario extends JFrame {
 
@@ -56,11 +68,11 @@ public class PruebasCalendario extends JFrame {
 		contentPane.setLayout(null);
 		
 		JCalendar calendar = new JCalendar();
-		calendar.setBounds(108, 50, 184, 153);
+		calendar.setBounds(23, 77, 184, 153);
 		contentPane.add(calendar);
 		
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(105, 301, 70, 20);
+		dateChooser.setBounds(221, 12, 70, 20);
 		contentPane.add(dateChooser);
 		
 		textField = new JTextField();
@@ -84,16 +96,42 @@ public class PruebasCalendario extends JFrame {
 		
 		DefaultTableModel modelo = new DefaultTableModel();
 		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(modelo);
 		modelo.addColumn("Hora");
 		modelo.addColumn("Cita");
+		modelo.insertRow(0, new Object[] {"Hora", "Cita" });
+		LocalDate fecha = LocalDate.now();
+		Calendar fechaCalen = new GregorianCalendar();
+		DateFormat formateador= new SimpleDateFormat("dd/M/yy");
+		System.out.println(formateador.format(fechaCalen.getTime()));
+		ConexionMySQL conexion = new ConexionMySQL();
+		conexion.conectar();
+		String consulta = "Select * From byprip7xk9sybmhhq0jf.cita";
+		try {
+			ResultSet rset = conexion.ejecutarSelect(consulta);
+			
+			while (rset.next()) {
+				Date dia = rset.getDate("fecha");
+				System.out.println(formateador.format(dia) + "------");
+				if(formateador.format(fechaCalen.getTime()).equals(formateador.format(dia))) {
+					System.out.println("oooooooooo");
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		for (int i = 9; i < 15; i++) {
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i+":00", "" });
 		}
 		for (int i = 17; i < 20; i++) {
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i+":00", "" });
 		}
-		table.setBounds(338, 168, 199, 196);
+		table.setBounds(302, 77, 199, 196);
 		contentPane.add(table);
 		
 		//JTable table = new JTable();
