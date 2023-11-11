@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import Controlador.ConexionMySQL;
 import btndentiapp.ButtonDentiApp;
@@ -29,18 +30,18 @@ public class AdminClinic extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					AdminClinic frame = new AdminClinic(null,null);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminClinic frame = new AdminClinic(null, null);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
@@ -101,6 +102,20 @@ public class AdminClinic extends JFrame {
 		ButtonDentiApp btnPayments = new ButtonDentiApp(0, 810, false,
 				new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
 		btnPayments.setToolTipText("Módulo Económico");
+
+		// Panel de especialidades
+		JPanel menuSpecialities = new JPanel();
+		menuSpecialities.setBackground(new Color(148, 220, 219));
+		menuSpecialities.setBorder(new LineBorder(new Color(0, 0, 0)));
+		menuSpecialities.setBounds(418, 270, 500, 675);
+		menuSpecialities.setLayout(null);
+
+		// Panel de tratamientos
+		JPanel menuTreatments = new JPanel();
+		menuTreatments.setBackground(new Color(148, 220, 219));
+		menuTreatments.setBorder(new LineBorder(new Color(0, 0, 0)));
+		menuTreatments.setBounds(1137, 270, 500, 675);
+		menuTreatments.setLayout(null);
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
@@ -196,6 +211,8 @@ public class AdminClinic extends JFrame {
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
+		contentPane.add(menuSpecialities);
+		contentPane.add(menuTreatments);
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
