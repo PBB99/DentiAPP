@@ -8,17 +8,26 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
 import Controlador.ConexionMySQL;
+import Modelo.SpecialityHibernate;
 import btndentiapp.ButtonDentiApp;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 public class AdminClinic extends JFrame {
 
@@ -48,6 +57,11 @@ public class AdminClinic extends JFrame {
 	 */
 	public AdminClinic(ConexionMySQL conex, JFrame parent) {
 		this.conex = conex;
+
+		// -------------------- Conexión ------------------
+		SessionFactory instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
+		Session session = instancia.openSession();
 
 		// -------------------- JFrame --------------------
 		this.frame = this;
@@ -109,6 +123,11 @@ public class AdminClinic extends JFrame {
 		menuSpecialities.setBorder(new LineBorder(new Color(0, 0, 0)));
 		menuSpecialities.setBounds(418, 270, 500, 675);
 		menuSpecialities.setLayout(null);
+
+		// Tabla para mostrar los datos
+		JTable specialityTable = new JTable();
+		specialityTable.setBounds(0, 0, 500, 675);
+		specialityTable.setVisible(true);
 
 		// Panel de tratamientos
 		JPanel menuTreatments = new JPanel();
@@ -208,6 +227,25 @@ public class AdminClinic extends JFrame {
 				admPayments.setVisible(true);
 			}
 		});
+		
+		//Mostrar cosas en la tabla
+		//Consulta 1
+        String hql = "FROM SpecialityHibernate"; 
+        Query<SpecialityHibernate> consulta = session.createQuery(hql,SpecialityHibernate.class); 
+        List<SpecialityHibernate> results = consulta.getResultList();
+        DefaultTableModel model = (DefaultTableModel) specialityTable.getModel();
+		model.setColumnIdentifiers(new String[] { "Id Especialidad", "Especialidad"});
+		model.setRowCount(results.size()+1);
+		int fila = 0, columna=0;
+		model.setValueAt("Id Especialidad", fila, columna);
+		model.setValueAt("Especialidad", fila, columna+1);
+		fila++;
+        for(SpecialityHibernate especialidad : results){
+        	model.setValueAt(especialidad.getId_especialidad(), fila, columna);
+            model.setValueAt(especialidad.getEspecialidad(), fila, columna+1);
+            fila++;
+            columna=0;
+        }
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
@@ -220,6 +258,7 @@ public class AdminClinic extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
+		menuSpecialities.add(specialityTable);
 	}
 
 }

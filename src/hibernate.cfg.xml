@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "classpath://org/hibernate/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <!--Hibernate utiliza JDBC. Solo traduce -->
+        <property name="connection.url">jdbc:mysql://byprip7xk9sybmhhq0jf-mysql.services.clever-cloud.com:3306/byprip7xk9sybmhhq0jf?useSSL=false</property>
+        <property name="connection.username">uqtcrrg2q5csusyf</property>
+        <property name="connection.password">dONGT5r9C4UPYGtaPXPD</property>
+        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <!--Muestra las sentencias sql al ejecutarse hibernate -->
+        <property name="hibernate.show_sql">true</property>
+        
+        <!-- mapping resource="accesodatos/pruebaHibernate/customer.hbm.xml"/-->
+        <!-- mapping class="accesodatos.pruebahibernate.Customer"/-->
+        <property name="format_sql">true</property>
+        <!--Cómo se comporta hibernate al iniciarse 
+        Create. Vuelve a crear las tablas
+        Create-drop. Crea las tablas y elimina al terminar 
+        update. Actualiza las tablas 
+        Validate. Comprueba si son correctas
+        -->
+        <property name="hbm2ddl.auto">update</property>
+        
+        <mapping class="Modelo.SpecialityHibernate" />
+        
+    </session-factory>
+</hibernate-configuration>
