@@ -23,6 +23,7 @@
         <property name="hbm2ddl.auto">update</property>
         
         <mapping class="Modelo.SpecialityHibernate" />
+        <mapping class="Modelo.TreatmentsHibernate" />
         
     </session-factory>
 </hibernate-configuration>

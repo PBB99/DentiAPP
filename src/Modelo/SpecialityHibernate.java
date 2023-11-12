@@ -1,6 +1,8 @@
 package Modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -16,9 +18,12 @@ public class SpecialityHibernate  implements Serializable{
 	@Column(name = "especialidad", nullable = false)
 	private String especialidad;
 	
-	public SpecialityHibernate() {}
+	public SpecialityHibernate() {
+		super();
+	}
 	
 	public SpecialityHibernate(Integer id_especialidad, String especialidad) {
+		super();
 		this.id_especialidad = id_especialidad;
 		this.especialidad = especialidad;
 	}
@@ -39,5 +44,19 @@ public class SpecialityHibernate  implements Serializable{
 		this.especialidad = especialidad;
 	}
 	
+	@OneToMany(mappedBy = "especialidad_tratamiento", cascade = CascadeType.ALL)
+    
+    private List<TreatmentsHibernate> tratamientos;
+    
+    public List<TreatmentsHibernate> getPedidos(){
+        return tratamientos;
+    }
+    
+    public void addPedido(TreatmentsHibernate th){
+        if (tratamientos == null) tratamientos=new ArrayList<>();
+        tratamientos.add(th);
+        th.setEspecialidad(this);
+    }
+
 	
 }
