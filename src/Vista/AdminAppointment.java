@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import Controlador.ConexionMySQL;
-<<<<<<< HEAD
+
 import javax.swing.JMenuBar;
 import java.awt.Point;
 import javax.swing.JMenu;
@@ -31,9 +31,9 @@ import javax.swing.JMenuItem;
 import java.awt.Rectangle;
 import java.awt.Window.Type;
 import java.awt.event.MouseAdapter;
-=======
+
 import btndentiapp.ButtonDentiApp;
->>>>>>> master
+
 
 public class AdminAppointment extends JFrame {
 
@@ -46,7 +46,7 @@ public class AdminAppointment extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-<<<<<<< HEAD
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -59,7 +59,7 @@ public class AdminAppointment extends JFrame {
 			}
 		});
 	}
-=======
+
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
 //			public void run() {
@@ -72,21 +72,21 @@ public class AdminAppointment extends JFrame {
 //			}
 //		});
 //	}
->>>>>>> master
+
 
 	/**
 	 * Create the frame.
 	 */
 	public AdminAppointment(ConexionMySQL conex, JFrame parent) {
-<<<<<<< HEAD
+
 		setType(Type.POPUP);
 		setBounds(new Rectangle(10, 0, 0, 0));
 		this.conex = conex; 
 		
-=======
+
 		this.conex = conex;
 
->>>>>>> master
+
 		// -------------------- JFrame --------------------
 		this.parent = parent;
 		this.frame = this;
@@ -283,8 +283,8 @@ public class AdminAppointment extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-<<<<<<< HEAD
-		menuPane.add(btnClose);
+
+		//menuPane.add(btnClose);
 		contentPane.add(menuBar);
 		menuBar.add(mnNewMenu);
 		mnNewMenu.add(ItemName);
@@ -294,8 +294,8 @@ public class AdminAppointment extends JFrame {
 		
 		
 		
-=======
 
->>>>>>> master
+
+
 	}
 }
