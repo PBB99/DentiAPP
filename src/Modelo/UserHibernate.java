@@ -8,62 +8,96 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "usuario")
-public class UserHibernate {
 
+
+public class UserHibernate  implements Serializable{
+	
 	@Id
 	@Column(name = "dni", nullable = false)
 	private String dni;
+	
 	@Column(name = "nombre", nullable = false)
 	private String nombre;
+	
 	@Column(name = "apellido", nullable = false)
 	private String apellido;
+	
 	@Column(name = "contraseña", nullable = false)
 	private String contraseña;
+	
 	@Column(name = "estado", nullable = false)
-	private boolean estado;
+	private int estado;
+	
+	public UserHibernate() {
+		super();
+	}
+	
+	public UserHibernate(String dni, String nombre, String apellido, String contraseña, int estado) {
+		super();
+		this.dni = dni;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.contraseña = contraseña;
+		this.estado = estado;
+	}
+
+	
+	
 	public String getDni() {
 		return dni;
 	}
+
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
+
 	public String getNombre() {
 		return nombre;
 	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
 	public String getApellido() {
 		return apellido;
 	}
+
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
+
 	public String getContraseña() {
 		return contraseña;
 	}
+
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
 	}
-	public boolean isEstado() {
+
+	public int getEstado() {
 		return estado;
 	}
-	public void setEstado(boolean estado) {
+
+	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	@Override
-	public String toString() {
-		return "TreatmentsUser [dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + ", contraseña="
-				+ contraseña + ", estado=" + estado + "]";
-	}
-	
-	public UserHibernate() {}
-	
-	public UserHibernate(String dni, String nombre, String apellido, String contraseña, boolean estado) {
-		this.dni=dni;
-		this.nombre=nombre;
-		this.apellido=apellido;
-		this.contraseña=contraseña;
-		this.estado=estado;
-	}
+
+    @ManyToMany(mappedBy = "users")
+    private List<SpecialityHibernate> clientes = new ArrayList<SpecialityHibernate>();
+
+    public List<SpecialityHibernate> getSpeciality() {
+        return clientes;
+    }
+
+    public void setEspeciality(List<SpecialityHibernate> clientes) {
+        this.clientes = clientes;
+    }
+    
+    public void addEspeciality(SpecialityHibernate c)
+    {
+        this.clientes.add(c);
+        c.getUser().add(this);
+    }
+
 }
