@@ -67,8 +67,11 @@ public class Login extends JFrame {
 					e.printStackTrace();
 				}
 			}
-		});
+			});
+	
 	}
+
+	
 
 	/**
 	 * Create the frame.
@@ -151,6 +154,62 @@ public class Login extends JFrame {
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
 
+		//----------------------------------------------LOGICA----------------------------------------------------------
+		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+				this.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						try {
+							Thread.sleep(300);
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+						if(parent!=null) {
+							parent.dispose();
+						}
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+		        
+		//acciones del boton login, carga dos tablas, compara los datos el usuario introducido y da paso o no a la siguiente pantalla
+
 		// ----------------------------------------------LOGICA----------------------------------------------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
@@ -206,6 +265,7 @@ public class Login extends JFrame {
 
 		// acciones del boton login, carga dos tablas, compara los datos el usuario
 		// introducido y da paso o no a la siguiente pantalla
+
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 //				AdminAppointment pa=new AdminAppointment(conex, frame);
@@ -229,24 +289,48 @@ public class Login extends JFrame {
 										AdminAppointment pa = new AdminAppointment(conex, frame);
 										pa.setVisible(true);
 										try {
+
+								            //Ponemos a "Dormir" el programa para que cargue
+								            Thread.sleep(500);
+								         } catch (Exception ex) {
+								            System.out.println(ex);
+								         
+									
+
 											// Ponemos a "Dormir" el programa para que cargue
-											Thread.sleep(500);
-										} catch (Exception ex) {
-											System.out.println(ex);
-										}
+											try {
+												Thread.sleep(500);
+											} catch (InterruptedException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+										} 
+
 									} else {// si no es admin es doctor
 											// declaracion de la pantalla doctor
 										DoctorAppointment pd = new DoctorAppointment(conex, frame);
 										pd.setVisible(true);
 										try {
+
+								            //Ponemos a "Dormir" el programa para que cargue
+								            Thread.sleep(500);
+								         } catch (Exception ex) {
+								            System.out.println(ex);
+								         
+										
+
 											// Ponemos a "Dormir" el programa para que cargue
-											Thread.sleep(500);
-										} catch (Exception ex) {
-											System.out.println(ex);
+											try {
+												Thread.sleep(500);
+											} catch (InterruptedException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
 										}
+
 									}
 								}
-							}
+					}
 						} else {// esta dado de baja
 							JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
 									JOptionPane.WARNING_MESSAGE);
@@ -258,18 +342,17 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
 							"Error", JOptionPane.ERROR_MESSAGE);
 				}
-			}
+				}
 		});
-
-		// -------------------------------------ADICIONES AL PANEL Y AL LOGIN
-		// PANEL-----------------
-		contentPane.add(loginPane);
-		loginPane.add(btnLogin);
-		loginPane.add(tfPassword);
-		loginPane.add(tfDNI);
-		loginPane.add(lblPassword);
-		loginPane.add(lblDNI);
-		loginPane.add(lblLogo);
-	}
-
+		
+// -------------------------------------ADICIONES AL PANEL Y AL LOGIN
+// PANEL-----------------
+	contentPane.add(loginPane);
+	loginPane.add(btnLogin);
+	loginPane.add(tfPassword);
+	loginPane.add(tfDNI);
+	loginPane.add(lblPassword);
+	loginPane.add(lblDNI);
+	loginPane.add(lblLogo);
 }
+	}
