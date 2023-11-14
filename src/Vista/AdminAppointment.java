@@ -23,6 +23,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import Controlador.ConexionMySQL;
 import Modelo.UserHibernate;
@@ -38,14 +40,15 @@ import java.awt.event.MouseAdapter;
 
 import btndentiapp.ButtonDentiApp;
 
-
 public class AdminAppointment extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private ConexionMySQL conex;
+	// private ConexionMySQL conex;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private JFrame parent, frame;
+	private SessionFactory instancia;
+	private Session session;
 
 	/**
 	 * Launch the application.
@@ -77,19 +80,17 @@ public class AdminAppointment extends JFrame {
 //		});
 //	}
 
-
 	/**
 	 * Create the frame.
 	 */
-	public AdminAppointment(UserHibernate userHi,Session session, JFrame parent) {
+	public AdminAppointment(UserHibernate userHi, JFrame parent) {
 
 		setType(Type.POPUP);
 		setBounds(new Rectangle(10, 0, 0, 0));
-		this.conex = conex; 
-		
-
-		this.conex = conex;
-
+		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(UserHibernate.class).buildSessionFactory();
+		this.session = instancia.openSession();
+		this.session.beginTransaction();
 
 		// -------------------- JFrame --------------------
 		this.parent = parent;
@@ -109,32 +110,32 @@ public class AdminAppointment extends JFrame {
 		menuPane.setBounds(0, 0, 135, 1080);
 		contentPane.add(menuPane);
 		menuPane.setLayout(null);
-		
-		//barra oculat de arriba
+
+		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);
-		
+
 		menuBar.setMargin(new Insets(50, 0, 0, 25));
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
-		//item 
+		// item
 		JMenu mnNewMenu = new JMenu("");
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
 		mnNewMenu.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		
-		//nombre del doctor o admin
+
+		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem("");
 		ItemName.setText("name");
-		
-		//item cambio contraseña
+
+		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
 		ItemPass.setIcon(new ImageIcon(getClass().getResource("/Resources/images/keypass.png")));
-		
-		//item cerrar sesion
+
+		// item cerrar sesion
 		JMenuItem ItemOut = new JMenuItem("Cerrar Sesión");
 		ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-		
+
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -262,36 +263,35 @@ public class AdminAppointment extends JFrame {
 				admPayments.setVisible(true);
 			}
 		});
-		
-		//logica click item salir
+
+		// logica click item salir
 		ItemOut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("funciona");
-				Login login=new Login(frame);
+				Login login = new Login(frame);
 				login.setVisible(true);
-			
+
 			}
 		});
-		
-		//logica click cambiar contraseña
-		
+
+		// logica click cambiar contraseña
+
 		ItemPass.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				DChangePass cP=new DChangePass(userHi);
+				DChangePass cP = new DChangePass(userHi);
 				cP.setVisible(true);
-				
+				cP.setModal(true);
+				System.out.println("PINCHADO");
+				session.close();
+
 			}
 		});
-		
-		
-		
-		
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
@@ -303,18 +303,12 @@ public class AdminAppointment extends JFrame {
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
 
-		//menuPane.add(btnClose);
+		// menuPane.add(btnClose);
 		contentPane.add(menuBar);
 		menuBar.add(mnNewMenu);
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-		
-		
-		
-		
-
-
 
 	}
 }

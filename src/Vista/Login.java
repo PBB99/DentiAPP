@@ -299,8 +299,9 @@ public class Login extends JFrame {
 						if (x.getEstado()==1) {
 							if (x.getSpeciality().get(0).getId_especialidad() == 0) {
 								// se abre la pantalla de admin
-								AdminAppointment pa = new AdminAppointment(x,session, frame);
+								AdminAppointment pa = new AdminAppointment(x, frame);
 								pa.setVisible(true);
+								session.close();
 								try {
 
 									// Ponemos a "Dormir" el programa para que cargue

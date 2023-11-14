@@ -96,6 +96,7 @@ public class DChangePass extends JDialog {
 								session.update(userHi);
 								//confirma los cambios en la base de datos
 								session.getTransaction().commit();
+								session.close();
 								JOptionPane.showMessageDialog(okButton, "Contrseña cambiada correctamene","Contraseña Actualizada",JOptionPane.INFORMATION_MESSAGE);
 								dispose();
 							}else {
