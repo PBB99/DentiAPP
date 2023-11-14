@@ -44,15 +44,15 @@ public class SpecialityHibernate  implements Serializable{
 		this.especialidad = especialidad;
 	}
 	
-	@OneToMany(mappedBy = "especialidad_tratamiento", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "especialidad", cascade = CascadeType.ALL)
     
     private List<TreatmentsHibernate> tratamientos;
     
-    public List<TreatmentsHibernate> getPedidos(){
+    public List<TreatmentsHibernate> getTratamientos(){
         return tratamientos;
     }
     
-    public void addPedido(TreatmentsHibernate th){
+    public void addTratamiento(TreatmentsHibernate th){
         if (tratamientos == null) tratamientos=new ArrayList<>();
         tratamientos.add(th);
         th.setEspecialidad(this);

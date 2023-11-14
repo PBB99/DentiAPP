@@ -68,7 +68,8 @@ public class AdminClinic extends JFrame {
 
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(SpecialityHibernate.class).addAnnotatedClass(TreatmentsHibernate.class)
+				.buildSessionFactory();
 		this.session = instancia.openSession();
 
 		// -------------------- JFrame --------------------
@@ -133,12 +134,26 @@ public class AdminClinic extends JFrame {
 		btnInsertSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertSpeciality.setBorderPainted(false);
 
-		// Botón de insertar especialidad
+		// Botón de insertar tratamiento
+		JButton btnInsertTreatment = new JButton();
+		btnInsertTreatment.setBackground(Color.WHITE);
+		btnInsertTreatment.setBounds(1577, 240, 30, 30);
+		btnInsertTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
+		btnInsertTreatment.setBorderPainted(false);
+
+		// Botón de borrar especialidad
 		JButton btnDeleteSpeciality = new JButton();
 		btnDeleteSpeciality.setBackground(Color.WHITE);
 		btnDeleteSpeciality.setBounds(888, 240, 30, 30);
 		btnDeleteSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/delete.png")));
 		btnDeleteSpeciality.setBorderPainted(false);
+
+		// Botón de borrar especialidad
+		JButton btnDeleteTreatment = new JButton();
+		btnDeleteTreatment.setBackground(Color.WHITE);
+		btnDeleteTreatment.setBounds(1607, 240, 30, 30);
+		btnDeleteTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/delete.png")));
+		btnDeleteTreatment.setBorderPainted(false);
 
 		// Panel de especialidades
 		JPanel menuSpecialities = new JPanel();
@@ -272,10 +287,12 @@ public class AdminClinic extends JFrame {
 					String hql = "FROM SpecialityHibernate where especialidad=:especialidad";
 					Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
 					consulta.setParameter("especialidad", selectedSpeciality);
+
+					// result es un objeto de especialidad con todos los campos
 					SpecialityHibernate result = consulta.getSingleResult();
 
 					// Carga los resultados
-					cargarTratamientos(tableTreatments, result.getId_especialidad());
+					cargarTratamientos(tableTreatments, result);
 				}
 			}
 		});
@@ -361,7 +378,9 @@ public class AdminClinic extends JFrame {
 		contentPane.add(menuSpecialities);
 		contentPane.add(menuTreatments);
 		contentPane.add(btnInsertSpeciality);
+		contentPane.add(btnInsertTreatment);
 		contentPane.add(btnDeleteSpeciality);
+		contentPane.add(btnDeleteTreatment);
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -395,17 +414,11 @@ public class AdminClinic extends JFrame {
 		model.setColumnIdentifiers(new String[] { "Especialidad" });
 		model.setRowCount(results.size() + 1);
 		int fila = 0, columna = 0;
-
-		// Pone el titulo de las columnas
-		// model.setValueAt("Id Especialidad", fila, columna);
-		// model.setValueAt("Especialidad", fila, columna + 1);
 		model.setValueAt("Especialidad", fila, columna);
 		fila++;
 
 		// Carga los datos
 		for (SpecialityHibernate especialidad : results) {
-			// model.setValueAt(especialidad.getId_especialidad(), fila, columna);
-			// model.setValueAt(especialidad.getEspecialidad(), fila, columna + 1);
 			model.setValueAt(especialidad.getEspecialidad(), fila, columna);
 			fila++;
 		}
@@ -414,8 +427,9 @@ public class AdminClinic extends JFrame {
 		lastIdSpeciality = results.getLast().getId_especialidad();
 	}
 
-	public void cargarTratamientos(JTable tableTreatments, int especialidad) {
-		// Relaiza la consulta
+	public void cargarTratamientos(JTable tableTreatments, SpecialityHibernate especialidad) {
+		// Busca en la tabla los tratamientos cuyo atributo objeto especialidad es igual
+		// al que sacamos de la consulta anterior
 		String hql = "FROM TreatmentsHibernate where especialidad=:especialidad";
 		Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
 		consulta.setParameter("especialidad", especialidad);
