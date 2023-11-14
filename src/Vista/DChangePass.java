@@ -62,6 +62,7 @@ public class DChangePass extends JDialog {
 	 * Create the dialog.
 	 */
 	public DChangePass(UserHibernate userHi) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		//conexion HIbernate
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(UserHibernate.class).buildSessionFactory();
@@ -96,6 +97,7 @@ public class DChangePass extends JDialog {
 								//confirma los cambios en la base de datos
 								session.getTransaction().commit();
 								JOptionPane.showMessageDialog(okButton, "Contrseña cambiada correctamene","Contraseña Actualizada",JOptionPane.INFORMATION_MESSAGE);
+								dispose();
 							}else {
 								JOptionPane.showMessageDialog(okButton, "Las contraseñas nuevas no coinciden ","Error contraseña nueva",JOptionPane.WARNING_MESSAGE);
 							}

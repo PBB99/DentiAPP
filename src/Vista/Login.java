@@ -59,7 +59,7 @@ public class Login extends JFrame {
 	private JTextField tfDNI;
 	private JTextField tfPassword;
 
-	private ArrayList<User> userList;
+	private ArrayList<UserHibernate> userList;
 
 	private JFrame parent, frame;
 	private SessionFactory instancia;
@@ -291,15 +291,15 @@ public class Login extends JFrame {
 				String password = tfPassword.getText();
 				boolean aux2 = true;
 
-				for (User x : userList) {
+				for (UserHibernate x : userList) {
 					// si coinciden nombre y contraseña con alguno de los usuarios
-					if ((x.getDni().toString().equals(username)) && (x.getPass().toString().equals(password)) && aux2) {
+					if ((x.getDni().toString().equals(username)) && (x.getContraseña().toString().equals(password)) && aux2) {
 						// esta dado de alta
 						aux2 = false;
-						if (x.isState()) {
-							if (x.getSpeciality().getEspecialidad == 0) {
+						if (x.getEstado()==1) {
+							if (x.getSpeciality().get(0).getId_especialidad() == 0) {
 								// se abre la pantalla de admin
-								AdminAppointment pa = new AdminAppointment(conex, frame);
+								AdminAppointment pa = new AdminAppointment(x,session, frame);
 								pa.setVisible(true);
 								try {
 

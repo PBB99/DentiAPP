@@ -21,7 +21,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.hibernate.Session;
+
 import Controlador.ConexionMySQL;
+import Modelo.UserHibernate;
 
 import javax.swing.JMenuBar;
 import java.awt.Point;
@@ -47,18 +51,18 @@ public class AdminAppointment extends JFrame {
 	 * Launch the application.
 	 */
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-			try {
-					AdminAppointment frame = new AdminAppointment(null,null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//			try {
+//					AdminAppointment frame = new AdminAppointment(null,null);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -77,7 +81,7 @@ public class AdminAppointment extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminAppointment(ConexionMySQL conex, JFrame parent) {
+	public AdminAppointment(UserHibernate userHi,Session session, JFrame parent) {
 
 		setType(Type.POPUP);
 		setBounds(new Rectangle(10, 0, 0, 0));
@@ -269,6 +273,19 @@ public class AdminAppointment extends JFrame {
 				Login login=new Login(frame);
 				login.setVisible(true);
 			
+			}
+		});
+		
+		//logica click cambiar contraseña
+		
+		ItemPass.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DChangePass cP=new DChangePass(userHi);
+				cP.setVisible(true);
+				
 			}
 		});
 		
