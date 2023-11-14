@@ -102,8 +102,8 @@ public class Login extends JFrame {
 //			speciaList = sp.getAllSpecialist();
 //			userList = us.getAllUsers();
 			String hql = "FROM usuario";
-			Query <UserHibernate>consulta=session.createQuery(hql,UserHibernate.class);
-			List<UserHibernate>userList=consulta.getResultList();
+			Query<UserHibernate> consulta = session.createQuery(hql, UserHibernate.class);
+			List<UserHibernate> userList = consulta.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -297,7 +297,7 @@ public class Login extends JFrame {
 						// esta dado de alta
 						aux2 = false;
 						if (x.isState()) {
-							if(x.getSpeciality().getEspecialidad==0) {
+							if (x.getSpeciality().getEspecialidad == 0) {
 								// se abre la pantalla de admin
 								AdminAppointment pa = new AdminAppointment(conex, frame);
 								pa.setVisible(true);
@@ -308,24 +308,26 @@ public class Login extends JFrame {
 								} catch (Exception ex) {
 									System.out.println(ex);
 								}
-									// Ponemos a "Dormir" el programa para que cargue
+								// Ponemos a "Dormir" el programa para que cargue
 								try {
 									Thread.sleep(500);
-									} catch (InterruptedException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();									}
-							}else {
+								} catch (InterruptedException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							} else {
 								DoctorAppointment pd = new DoctorAppointment(conex, frame);
-							pd.setVisible(true);
-								try {
-
-									// Ponemos a "Dormir" el programa para que cargue
-									Thread.sleep(500);
-								} catch (Exception ex) {
-									System.out.println(ex);
+								pd.setVisible(true);
 							}
-							
-							//VERSION OBSOLETA
+							try {
+
+								// Ponemos a "Dormir" el programa para que cargue
+								Thread.sleep(500);
+							} catch (Exception ex) {
+								System.out.println(ex);
+							}
+
+							// VERSION OBSOLETA
 //							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
 //								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
 //									// en el caso de que el usuario este dentro de los especialistas del centro
