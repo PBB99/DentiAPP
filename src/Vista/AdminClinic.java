@@ -267,14 +267,14 @@ public class AdminClinic extends JFrame {
 					selectedSpeciality = tableSpeciality
 							.getValueAt(tableSpeciality.getSelectedRow(), tableSpeciality.getSelectedColumn())
 							.toString();
-					
-					//Busca el id
+
+					// Busca el id
 					String hql = "FROM SpecialityHibernate where especialidad=:especialidad";
 					Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
 					consulta.setParameter("especialidad", selectedSpeciality);
 					SpecialityHibernate result = consulta.getSingleResult();
-					
-					//Carga los resultados
+
+					// Carga los resultados
 					cargarTratamientos(tableTreatments, result.getId_especialidad());
 				}
 			}
@@ -285,19 +285,20 @@ public class AdminClinic extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Solicita los parámetros de inserción
 				String especialidad = JOptionPane.showInputDialog("Introduzca el nombre de la especialidad");
+				if (especialidad != null) {
+					// Inserta la especialidad
+					SpecialityHibernate sh = new SpecialityHibernate((lastIdSpeciality + 1), especialidad);
+					session.beginTransaction();
+					session.save(sh);
+					session.getTransaction().commit();
 
-				// Inserta la especialidad
-				SpecialityHibernate sh = new SpecialityHibernate((lastIdSpeciality + 1), especialidad);
-				session.beginTransaction();
-				session.save(sh);
-				session.getTransaction().commit();
+					// Recarga la tabla
+					cargarEspecialidades(tableSpeciality);
 
-				// Recarga la tabla
-				cargarEspecialidades(tableSpeciality);
-
-				// Feedback al usuario
-				JOptionPane.showMessageDialog(contentPane, "Se ha insertado la especiaidad correctamente", "Insertado",
-						JOptionPane.INFORMATION_MESSAGE);
+					// Feedback al usuario
+					JOptionPane.showMessageDialog(contentPane, "Se ha insertado la especiaidad correctamente",
+							"Insertado", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 
@@ -327,7 +328,7 @@ public class AdminClinic extends JFrame {
 					}
 
 					// Feedback al usuario
-					if (sh.getId_especialidad()==null) {
+					if (sh.getId_especialidad() == null) {
 						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado la especialidad", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					} else {
@@ -341,11 +342,11 @@ public class AdminClinic extends JFrame {
 							session.beginTransaction();
 							session.delete(sh);
 							session.getTransaction().commit();
-							selectedSpeciality=null;
-							
+							selectedSpeciality = null;
+
 							// Recargamos la tabla
 							cargarEspecialidades(tableSpeciality);
-							
+
 							// Feedback al usuario
 							JOptionPane.showMessageDialog(contentPane, "Se ha borrardo la especiaidad correctamente",
 									"Borrar", JOptionPane.INFORMATION_MESSAGE);
@@ -412,7 +413,7 @@ public class AdminClinic extends JFrame {
 		// Guarda el último id de las especialidades
 		lastIdSpeciality = results.getLast().getId_especialidad();
 	}
-	
+
 	public void cargarTratamientos(JTable tableTreatments, int especialidad) {
 		// Relaiza la consulta
 		String hql = "FROM TreatmentsHibernate where especialidad=:especialidad";
@@ -431,19 +432,19 @@ public class AdminClinic extends JFrame {
 			}
 		};
 		tableTreatments.setModel(model);
-		model.setColumnIdentifiers(new String[] { "Tratamiento" , "Precio"});
+		model.setColumnIdentifiers(new String[] { "Tratamiento", "Precio" });
 		model.setRowCount(results.size() + 1);
 		int fila = 0, columna = 0;
 
 		// Pone el titulo de las columnas
 		model.setValueAt("Tratamiento", fila, columna);
-		model.setValueAt("Precio", fila, columna+1);
+		model.setValueAt("Precio", fila, columna + 1);
 		fila++;
 
 		// Carga los datos
 		for (TreatmentsHibernate tratamiento : results) {
 			model.setValueAt(tratamiento.getNombre(), fila, columna);
-			model.setValueAt(tratamiento.getPrecio(), fila, columna+1);
+			model.setValueAt(tratamiento.getPrecio(), fila, columna + 1);
 			fila++;
 		}
 
