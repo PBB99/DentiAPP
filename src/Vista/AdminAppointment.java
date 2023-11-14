@@ -273,6 +273,8 @@ public class AdminAppointment extends JFrame {
 		});
 		
 		
+		
+		
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);

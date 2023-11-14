@@ -6,7 +6,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import Modelo.Specialist;
 import Modelo.User;
+import Modelo.UserHibernate;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -36,6 +40,12 @@ import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -48,11 +58,12 @@ public class Login extends JFrame {
 	private Connection cn;
 	private JTextField tfDNI;
 	private JTextField tfPassword;
-	private UserController us;
+
 	private ArrayList<User> userList;
-	private ArrayList<Specialist> speciaList;
-	private SpecialistController sp;
+
 	private JFrame parent, frame;
+	private SessionFactory instancia;
+	private Session session;
 
 	/**
 	 * Launch the application.
@@ -67,11 +78,9 @@ public class Login extends JFrame {
 					e.printStackTrace();
 				}
 			}
-			});
-	
-	}
+		});
 
-	
+	}
 
 	/**
 	 * Create the frame.
@@ -79,16 +88,23 @@ public class Login extends JFrame {
 	public Login(JFrame parent) {
 		// ---------------------------------------------Conexiones--------------------------------------
 		// declaracion de las conexiones
-		this.conex = new ConexionMySQL();
-		conex.conectar();
-		us = new UserController(conex);
-		sp = new SpecialistController(conex);
+//		this.conex = new ConexionMySQL();
+//		conex.conectar();
+		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(UserHibernate.class).buildSessionFactory();
+		this.session = instancia.openSession();
+		this.session.beginTransaction();
+//		us = new UserController(conex);
+//		sp = new SpecialistController(conex);
 		// traemos todos los datos de la tabla especialista a nuestro ArrayList del
 		// modelo Specialist
 		try {
-			speciaList = sp.getAllSpecialist();
-			userList = us.getAllUsers();
-		} catch (SQLException e) {
+//			speciaList = sp.getAllSpecialist();
+//			userList = us.getAllUsers();
+			String hql = "FROM usuario";
+			Query<UserHibernate> consulta = session.createQuery(hql, UserHibernate.class);
+			List<UserHibernate> userList = consulta.getResultList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -154,61 +170,62 @@ public class Login extends JFrame {
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
 
-		//----------------------------------------------LOGICA----------------------------------------------------------
-		//Acción para cerrar la ventana solo cuando se ha abierto la siguiente
-				this.addWindowListener(new WindowListener() {
-					
-					@Override
-					public void windowOpened(WindowEvent e) {
-						try {
-							Thread.sleep(300);
-						} catch (Exception e2) {
-							e2.printStackTrace();
-						}
-						if(parent!=null) {
-							parent.dispose();
-						}
-						
-					}
-					
-					@Override
-					public void windowIconified(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowDeiconified(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowDeactivated(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowClosing(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowClosed(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowActivated(WindowEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-		        
-		//acciones del boton login, carga dos tablas, compara los datos el usuario introducido y da paso o no a la siguiente pantalla
+		// ----------------------------------------------LOGICA----------------------------------------------------------
+		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+		this.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				try {
+					Thread.sleep(300);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+				if (parent != null) {
+					parent.dispose();
+				}
+
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		// acciones del boton login, carga dos tablas, compara los datos el usuario
+		// introducido y da paso o no a la siguiente pantalla
 
 		// ----------------------------------------------LOGICA----------------------------------------------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
@@ -280,57 +297,61 @@ public class Login extends JFrame {
 						// esta dado de alta
 						aux2 = false;
 						if (x.isState()) {
-							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
-								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
-									// en el caso de que el usuario este dentro de los especialistas del centro
-									// dental
-									if (s.getId_specialist() == 0) {
-										// se abre la pantalla de admin
-										AdminAppointment pa = new AdminAppointment(conex, frame);
-										pa.setVisible(true);
-										try {
+							if (x.getSpeciality().getEspecialidad == 0) {
+								// se abre la pantalla de admin
+								AdminAppointment pa = new AdminAppointment(conex, frame);
+								pa.setVisible(true);
+								try {
 
-								            //Ponemos a "Dormir" el programa para que cargue
-								            Thread.sleep(500);
-								         } catch (Exception ex) {
-								            System.out.println(ex);
-								         
-									
-
-											// Ponemos a "Dormir" el programa para que cargue
-											try {
-												Thread.sleep(500);
-											} catch (InterruptedException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
-											}
-										} 
-
-									} else {// si no es admin es doctor
-											// declaracion de la pantalla doctor
-										DoctorAppointment pd = new DoctorAppointment(conex, frame);
-										pd.setVisible(true);
-										try {
-
-								            //Ponemos a "Dormir" el programa para que cargue
-								            Thread.sleep(500);
-								         } catch (Exception ex) {
-								            System.out.println(ex);
-								         
-										
-
-											// Ponemos a "Dormir" el programa para que cargue
-											try {
-												Thread.sleep(500);
-											} catch (InterruptedException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
-											}
-										}
-
-									}
+									// Ponemos a "Dormir" el programa para que cargue
+									Thread.sleep(500);
+								} catch (Exception ex) {
+									System.out.println(ex);
 								}
-					}
+								// Ponemos a "Dormir" el programa para que cargue
+								try {
+									Thread.sleep(500);
+								} catch (InterruptedException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							} else {
+								DoctorAppointment pd = new DoctorAppointment(conex, frame);
+								pd.setVisible(true);
+							}
+							try {
+
+								// Ponemos a "Dormir" el programa para que cargue
+								Thread.sleep(500);
+							} catch (Exception ex) {
+								System.out.println(ex);
+							}
+
+							// VERSION OBSOLETA
+//							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
+//								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
+//									// en el caso de que el usuario este dentro de los especialistas del centro
+//									// dental
+//									if (s.getId_specialist() == 0) {
+//										
+//										}
+//
+//									} else {// si no es admin es doctor
+//											// declaracion de la pantalla doctor
+//										
+//
+//											// Ponemos a "Dormir" el programa para que cargue
+//											try {
+//												Thread.sleep(500);
+//											} catch (InterruptedException e1) {
+//												// TODO Auto-generated catch block
+//												e1.printStackTrace();
+//											}
+//										}
+//
+//									}
+//								}
+//							}
 						} else {// esta dado de baja
 							JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
 									JOptionPane.WARNING_MESSAGE);
@@ -342,17 +363,17 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
 							"Error", JOptionPane.ERROR_MESSAGE);
 				}
-				}
+			}
 		});
-		
+
 // -------------------------------------ADICIONES AL PANEL Y AL LOGIN
 // PANEL-----------------
-	contentPane.add(loginPane);
-	loginPane.add(btnLogin);
-	loginPane.add(tfPassword);
-	loginPane.add(tfDNI);
-	loginPane.add(lblPassword);
-	loginPane.add(lblDNI);
-	loginPane.add(lblLogo);
-}
+		contentPane.add(loginPane);
+		loginPane.add(btnLogin);
+		loginPane.add(tfPassword);
+		loginPane.add(tfDNI);
+		loginPane.add(lblPassword);
+		loginPane.add(lblDNI);
+		loginPane.add(lblLogo);
 	}
+}

@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "usuario")
 
+
 public class UserHibernate  implements Serializable{
 	
 	@Id
@@ -98,4 +99,5 @@ public class UserHibernate  implements Serializable{
         this.clientes.add(c);
         c.getUser().add(this);
     }
+
 }

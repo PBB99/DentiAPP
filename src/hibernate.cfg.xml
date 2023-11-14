@@ -24,6 +24,7 @@
         
         <mapping class="Modelo.SpecialityHibernate" />
         <mapping class="Modelo.TreatmentsHibernate" />
+        <mapping class="Modelo.UserHibernate"/>
         
     </session-factory>
 </hibernate-configuration>
