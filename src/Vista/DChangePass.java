@@ -39,19 +39,19 @@ public class DChangePass extends JDialog {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		//try {
-//			DChangePass dialog = new DChangePass();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-		//}
+		try {
+		DChangePass dialog = new DChangePass();
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public DChangePass(ConexionMySQL conexion,String usuario) {
+	public DChangePass() {
 		this.conexion=conexion;
 		userController=new UserController(conexion);
 		//aparece en x:1360 y y:0, se extiende 560 pixeles  a la derecha y 1080 hacia abajo
