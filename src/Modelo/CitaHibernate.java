@@ -84,4 +84,16 @@ public class CitaHibernate {
     public void setCliente(ClienteHibernate clienteHiber) {
         this.clienteHiber = clienteHiber;
     }
+    
+    @ManyToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name = "tratamientos")
+    private TreatmentsHibernate tratamientoHiber; //Este atributo va a @OneToMany en Cliente
+
+    public ClienteHibernate getTratamiento() {
+        return clienteHiber;
+    }
+
+    public void setTratamiento(TreatmentsHibernate tratamientoHiber) {
+        this.tratamientoHiber = tratamientoHiber;
+    }
 }
