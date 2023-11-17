@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.ConexionMySQL;
+import Modelo.UserHibernate;
 import btndentiapp.ButtonDentiApp;
 
 public class AdminCustomers extends JFrame {
@@ -25,7 +26,7 @@ public class AdminCustomers extends JFrame {
 	private JPanel contentPane;
 	private ConexionMySQL conex;
 	private JFrame parent, frame;
-
+	private UserHibernate userHi;
 	/**
 	 * Launch the application.
 	 */
@@ -45,8 +46,8 @@ public class AdminCustomers extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminCustomers(ConexionMySQL conex, JFrame parent) {
-		this.conex = conex;
+	public AdminCustomers( UserHibernate userHi,JFrame parent) {
+		this.userHi=userHi;
 
 		// -------------------- JFrame --------------------
 		this.frame = this;
@@ -157,7 +158,7 @@ public class AdminCustomers extends JFrame {
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminAppointment admAppointment = new AdminAppointment(conex, frame);
+				AdminAppointment admAppointment = new AdminAppointment(userHi, frame);
 				admAppointment.setVisible(true);
 			}
 		});
@@ -165,7 +166,7 @@ public class AdminCustomers extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers(conex, frame);
+				AdminUsers admUsers = new AdminUsers( frame);
 				admUsers.setVisible(true);
 				// Agregar tiempos de carga
 			}

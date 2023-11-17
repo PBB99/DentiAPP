@@ -45,7 +45,7 @@ public class AdminPayments extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminPayments(ConexionMySQL conex, JFrame parent) {
+	public AdminPayments( JFrame parent) {
 		this.conex = conex;
 
 		// -------------------- JFrame --------------------

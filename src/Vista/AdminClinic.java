@@ -63,8 +63,8 @@ public class AdminClinic extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminClinic(ConexionMySQL conex, JFrame parent) {
-		this.conex = conex;
+	public AdminClinic( JFrame parent) {
+	
 
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")

@@ -227,40 +227,45 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers(conex, frame);
+				AdminUsers admUsers = new AdminUsers( frame);
 				admUsers.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo de pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminCustomers admCustomers = new AdminCustomers(conex, frame);
+				AdminCustomers admCustomers = new AdminCustomers(userHi, frame);
 				admCustomers.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock(conex, frame);
+				AdminStock admStock = new AdminStock( frame);
 				admStock.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic(conex, frame);
+				AdminClinic admClinic = new AdminClinic( frame);
 				admClinic.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments(conex, frame);
+				AdminPayments admPayments = new AdminPayments( frame);
 				admPayments.setVisible(true);
+				session.close();
 			}
 		});
 
@@ -273,6 +278,7 @@ public class AdminAppointment extends JFrame {
 				System.out.println("funciona");
 				Login login = new Login(frame);
 				login.setVisible(true);
+				session.close();
 
 			}
 		});

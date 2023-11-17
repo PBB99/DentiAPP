@@ -45,7 +45,7 @@ public class AdminStock extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminStock(ConexionMySQL conex, JFrame parent) {
+	public AdminStock( JFrame parent) {
 		this.conex = conex;
 
 		// -------------------- JFrame --------------------

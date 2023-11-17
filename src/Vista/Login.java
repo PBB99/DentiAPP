@@ -319,6 +319,7 @@ public class Login extends JFrame {
 							} else {
 								DoctorAppointment pd = new DoctorAppointment(conex, frame);
 								pd.setVisible(true);
+								session.close();
 							}
 							try {
 

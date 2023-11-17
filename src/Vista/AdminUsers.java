@@ -51,7 +51,7 @@ public class AdminUsers extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminUsers(ConexionMySQL conex, JFrame parent) {
+	public AdminUsers( JFrame parent) {
 		this.conex = conex;
 		this.frame = this;
 		this.parent = parent;
