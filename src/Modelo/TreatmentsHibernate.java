@@ -62,4 +62,6 @@ public class TreatmentsHibernate {
     public void setEspecialidad(SpecialityHibernate especialidad_tratamiento) {
         this.especialidad = especialidad_tratamiento;
     }
+    
+    
 }

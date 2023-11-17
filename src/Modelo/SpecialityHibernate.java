@@ -58,5 +58,23 @@ public class SpecialityHibernate  implements Serializable{
         th.setEspecialidad(this);
     }
 
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "especialista",
+        joinColumns = {@JoinColumn(name = "id_especialidad")},
+        inverseJoinColumns = {@JoinColumn(name = "dni")}
+    )
+    private List<UserHibernate> users = new ArrayList<UserHibernate>();
+    
+    public List<UserHibernate> getUser() {
+    	return users;
+    }
+    public void addUser(UserHibernate p)
+    {
+        this.users.add(p);
+        p.getSpeciality().add(this);
+    }
+    public void setClientes(List<UserHibernate> users) {
+        this.users = users;
+    }
 	
 }
