@@ -69,7 +69,7 @@ public class AdminInsertUser extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AdminInsertUser(ConexionMySQL conex, AdminUsers parent, boolean modal) {
+	public AdminInsertUser( AdminUsers parent, boolean modal) {
 		this.conex=conex;
 		setModal(modal);
 		

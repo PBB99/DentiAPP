@@ -26,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import Controlador.ConexionMySQL;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
+import Modelo.UserHibernate;
 import btndentiapp.ButtonDentiApp;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -43,28 +44,28 @@ public class AdminClinic extends JFrame {
 	private JFrame parent, frame;
 	private int lastIdSpeciality;
 	private String selectedSpeciality = null;
-
+	private UserHibernate userHi;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AdminClinic frame = new AdminClinic(null, null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					AdminClinic frame = new AdminClinic(null, null);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public AdminClinic(ConexionMySQL conex, JFrame parent) {
-		this.conex = conex;
+	public AdminClinic( UserHibernate userHi,JFrame parent) {
+		this.userHi=userHi;
 
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
@@ -232,7 +233,7 @@ public class AdminClinic extends JFrame {
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminAppointment admAppointment = new AdminAppointment(conex, frame);
+				AdminAppointment admAppointment = new AdminAppointment( userHi,frame);
 				admAppointment.setVisible(true);
 			}
 		});
@@ -240,7 +241,7 @@ public class AdminClinic extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers(conex, frame);
+				AdminUsers admUsers = new AdminUsers( userHi,frame);
 				admUsers.setVisible(true);
 			}
 		});
@@ -248,7 +249,7 @@ public class AdminClinic extends JFrame {
 		// Acción del Módulo de pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminCustomers admCustomers = new AdminCustomers(conex, frame);
+				AdminCustomers admCustomers = new AdminCustomers(userHi,frame);
 				admCustomers.setVisible(true);
 			}
 		});
@@ -256,7 +257,7 @@ public class AdminClinic extends JFrame {
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock(conex, frame);
+				AdminStock admStock = new AdminStock(userHi,frame);
 				admStock.setVisible(true);
 			}
 		});
@@ -264,7 +265,7 @@ public class AdminClinic extends JFrame {
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments(conex, frame);
+				AdminPayments admPayments = new AdminPayments(userHi, frame);
 				admPayments.setVisible(true);
 			}
 		});

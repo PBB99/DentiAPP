@@ -60,8 +60,8 @@ public class SpecialityHibernate  implements Serializable{
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "especialista",
-        joinColumns = {@JoinColumn(name = "id_especialidad")},
-        inverseJoinColumns = {@JoinColumn(name = "dni")}
+        joinColumns = {@JoinColumn(name = "especialidad")},
+        inverseJoinColumns = {@JoinColumn(name = "dni_usuario")}
     )
     private List<UserHibernate> users = new ArrayList<UserHibernate>();
     

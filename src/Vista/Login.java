@@ -59,7 +59,7 @@ public class Login extends JFrame {
 	private JTextField tfDNI;
 	private JTextField tfPassword;
 
-	private ArrayList<UserHibernate> userList;
+	private List<UserHibernate> userList;
 
 	private JFrame parent, frame;
 	private SessionFactory instancia;
@@ -101,9 +101,9 @@ public class Login extends JFrame {
 		try {
 //			speciaList = sp.getAllSpecialist();
 //			userList = us.getAllUsers();
-			String hql = "FROM usuario";
+			String hql = "FROM UserHibernate";
 			Query<UserHibernate> consulta = session.createQuery(hql, UserHibernate.class);
-			List<UserHibernate> userList = consulta.getResultList();
+			userList = consulta.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -319,6 +319,7 @@ public class Login extends JFrame {
 							} else {
 								DoctorAppointment pd = new DoctorAppointment(conex, frame);
 								pd.setVisible(true);
+								session.close();
 							}
 							try {
 
