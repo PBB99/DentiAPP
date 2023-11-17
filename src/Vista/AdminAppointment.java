@@ -21,7 +21,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import Controlador.ConexionMySQL;
+import Modelo.UserHibernate;
 
 import javax.swing.JMenuBar;
 import java.awt.Point;
@@ -34,31 +40,32 @@ import java.awt.event.MouseAdapter;
 
 import btndentiapp.ButtonDentiApp;
 
-
 public class AdminAppointment extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private ConexionMySQL conex;
+	// private ConexionMySQL conex;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private JFrame parent, frame;
-
+	private SessionFactory instancia;
+	private Session session;
+	private UserHibernate userHi;
 	/**
 	 * Launch the application.
 	 */
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-			try {
-					AdminAppointment frame = new AdminAppointment(null,null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//			try {
+//					AdminAppointment frame = new AdminAppointment(null,null);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -73,19 +80,17 @@ public class AdminAppointment extends JFrame {
 //		});
 //	}
 
-
 	/**
 	 * Create the frame.
 	 */
-	public AdminAppointment(ConexionMySQL conex, JFrame parent) {
-
+	public AdminAppointment(UserHibernate userHi, JFrame parent) {
+		this.userHi=userHi;
 		setType(Type.POPUP);
 		setBounds(new Rectangle(10, 0, 0, 0));
-		this.conex = conex; 
-		
-
-		this.conex = conex;
-
+		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(UserHibernate.class).buildSessionFactory();
+		this.session = instancia.openSession();
+		this.session.beginTransaction();
 
 		// -------------------- JFrame --------------------
 		this.parent = parent;
@@ -105,32 +110,32 @@ public class AdminAppointment extends JFrame {
 		menuPane.setBounds(0, 0, 135, 1080);
 		contentPane.add(menuPane);
 		menuPane.setLayout(null);
-		
-		//barra oculat de arriba
+
+		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);
-		
+
 		menuBar.setMargin(new Insets(50, 0, 0, 25));
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
-		//item 
+		// item
 		JMenu mnNewMenu = new JMenu("");
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
 		mnNewMenu.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		
-		//nombre del doctor o admin
+
+		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem("");
 		ItemName.setText("name");
-		
-		//item cambio contraseña
+
+		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
 		ItemPass.setIcon(new ImageIcon(getClass().getResource("/Resources/images/keypass.png")));
-		
-		//item cerrar sesion
+
+		// item cerrar sesion
 		JMenuItem ItemOut = new JMenuItem("Cerrar Sesión");
 		ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-		
+
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -222,57 +227,77 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers(conex, frame);
+				AdminUsers admUsers = new AdminUsers(userHi, frame);
 				admUsers.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo de pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminCustomers admCustomers = new AdminCustomers(conex, frame);
+				AdminCustomers admCustomers = new AdminCustomers(userHi, frame);
 				admCustomers.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock(conex, frame);
+				AdminStock admStock = new AdminStock( userHi,frame);
 				admStock.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic(conex, frame);
+				AdminClinic admClinic = new AdminClinic( userHi,frame);
 				admClinic.setVisible(true);
+				session.close();
 			}
 		});
 
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments(conex, frame);
+				AdminPayments admPayments = new AdminPayments(userHi, frame);
 				admPayments.setVisible(true);
+				session.close();
 			}
 		});
-		
-		//logica click item salir
+
+		// logica click item salir
 		ItemOut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("funciona");
-				Login login=new Login(frame);
+				Login login = new Login(frame);
 				login.setVisible(true);
-			
+				session.close();
+
 			}
 		});
-		
-		
+
+		// logica click cambiar contraseña
+
+		ItemPass.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DChangePass cP = new DChangePass(userHi);
+				cP.setVisible(true);
+				cP.setModal(true);
+				System.out.println("PINCHADO");
+				session.close();
+
+			}
+		});
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
@@ -284,18 +309,12 @@ public class AdminAppointment extends JFrame {
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
 
-		//menuPane.add(btnClose);
+		// menuPane.add(btnClose);
 		contentPane.add(menuBar);
 		menuBar.add(mnNewMenu);
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-		
-		
-		
-		
-
-
 
 	}
 }

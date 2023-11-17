@@ -9,28 +9,29 @@ import javax.persistence.*;
 @Entity
 @Table(name = "usuario")
 
-public class UserHibernate implements Serializable {
 
+public class UserHibernate  implements Serializable{
+	
 	@Id
 	@Column(name = "dni", nullable = false)
 	private String dni;
-
+	
 	@Column(name = "nombre", nullable = false)
 	private String nombre;
-
+	
 	@Column(name = "apellido", nullable = false)
 	private String apellido;
-
+	
 	@Column(name = "contraseña", nullable = false)
 	private String contraseña;
-
+	
 	@Column(name = "estado", nullable = false)
 	private int estado;
-
+	
 	public UserHibernate() {
 		super();
 	}
-
+	
 	public UserHibernate(String dni, String nombre, String apellido, String contraseña, int estado) {
 		super();
 		this.dni = dni;
@@ -40,6 +41,8 @@ public class UserHibernate implements Serializable {
 		this.estado = estado;
 	}
 
+	
+	
 	public String getDni() {
 		return dni;
 	}
@@ -80,33 +83,21 @@ public class UserHibernate implements Serializable {
 		this.estado = estado;
 	}
 
-	@ManyToMany(mappedBy = "users")
-	private List<SpecialityHibernate> clientes = new ArrayList<SpecialityHibernate>();
+    @ManyToMany(mappedBy = "users")
+    private List<SpecialityHibernate> clientes = new ArrayList<SpecialityHibernate>();
 
-	public List<SpecialityHibernate> getSpeciality() {
-		return clientes;
-	}
+    public List<SpecialityHibernate> getSpeciality() {
+        return clientes;
+    }
 
-	public void setEspeciality(List<SpecialityHibernate> clientes) {
-		this.clientes = clientes;
-	}
+    public void setEspeciality(List<SpecialityHibernate> clientes) {
+        this.clientes = clientes;
+    }
+    
+    public void addEspeciality(SpecialityHibernate c)
+    {
+        this.clientes.add(c);
+        c.getUser().add(this);
+    }
 
-	public void addEspeciality(SpecialityHibernate c) {
-		this.clientes.add(c);
-		c.getUser().add(this);
-	}
-
-	@OneToMany(mappedBy = "userHiber", cascade = CascadeType.ALL)
-	private List<CitaHibernate> citas;
-
-	public List<CitaHibernate> getCitas() {
-		return citas;
-	}
-
-	public void addAlumno(CitaHibernate d) {
-		if (citas == null)
-			citas = new ArrayList<>();
-		citas.add(d);
-		d.setUser(this);
-	}
 }

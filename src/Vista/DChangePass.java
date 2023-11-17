@@ -12,11 +12,19 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import Controlador.ConexionMySQL;
 import Controlador.UserController;
+import Modelo.SpecialityHibernate;
+import Modelo.UserHibernate;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
@@ -34,25 +42,32 @@ public class DChangePass extends JDialog {
 	private ConexionMySQL conexion;
 	private String usuario;
 	private UserController userController;
-
+	private SessionFactory instancia;
+	private Session session;
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		try {
-		DChangePass dialog = new DChangePass();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//		DChangePass dialog = new DChangePass();
+//		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//		dialog.setVisible(true);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	/**
 	 * Create the dialog.
 	 */
-	public DChangePass() {
-		this.conexion=conexion;
+	public DChangePass(UserHibernate userHi) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		//conexion HIbernate
+		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(UserHibernate.class).buildSessionFactory();
+		this.session = instancia.openSession();
+		this.session.beginTransaction();
 		userController=new UserController(conexion);
 		//aparece en x:1360 y y:0, se extiende 560 pixeles  a la derecha y 1080 hacia abajo
 		setBounds(1360, 0, 560, 1080);
@@ -71,7 +86,26 @@ public class DChangePass extends JDialog {
 				JButton okButton = new JButton("CAMBIAR CONTRASEÑA");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//String conttra=conexion.ejecutarSelect("Select contraseña from usuario a join specialista b on ")
+					//para cambiar la contraseña primero deben coindicir la contraseña del usuario que esta en la app en ese momento que entra por parametro
+						if(userHi.getContraseña().equals(TFoldPass.getText())) {
+							//si coinciden debe comprobar que la contraseña nueva es la misma ambos JPasswordField
+							if(TFnewPass1.getText().equals(TFnewPass2.getText())) {
+								//modifica la contraseña a nivel local
+								userHi.setContraseña(TFnewPass1.getText());
+								//actualiza el usuario en la base de datos
+								session.update(userHi);
+								//confirma los cambios en la base de datos
+								session.getTransaction().commit();
+								session.close();
+								JOptionPane.showMessageDialog(okButton, "Contrseña cambiada correctamene","Contraseña Actualizada",JOptionPane.INFORMATION_MESSAGE);
+								dispose();
+							}else {
+								JOptionPane.showMessageDialog(okButton, "Las contraseñas nuevas no coinciden ","Error contraseña nueva",JOptionPane.WARNING_MESSAGE);
+							}
+						}else {
+							JOptionPane.showMessageDialog(okButton, "La contraseña introducida no coincide con la de este usuario","Error contraseña antigua",JOptionPane.WARNING_MESSAGE);
+						}
+						
 					}
 				});
 				okButton.setBounds(243, 0, 281, 37);
