@@ -166,7 +166,7 @@ public class AdminCustomers extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers( frame);
+				AdminUsers admUsers = new AdminUsers( userHi,frame);
 				admUsers.setVisible(true);
 				// Agregar tiempos de carga
 			}
@@ -175,7 +175,7 @@ public class AdminCustomers extends JFrame {
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock(conex, frame);
+				AdminStock admStock = new AdminStock(userHi, frame);
 				admStock.setVisible(true);
 			}
 		});
@@ -183,7 +183,7 @@ public class AdminCustomers extends JFrame {
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic(conex, frame);
+				AdminClinic admClinic = new AdminClinic( userHi,frame);
 				admClinic.setVisible(true);
 			}
 		});
@@ -191,7 +191,7 @@ public class AdminCustomers extends JFrame {
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments(conex, frame);
+				AdminPayments admPayments = new AdminPayments(userHi, frame);
 				admPayments.setVisible(true);
 			}
 		});

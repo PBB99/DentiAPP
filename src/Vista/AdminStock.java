@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.ConexionMySQL;
+import Modelo.UserHibernate;
 import btndentiapp.ButtonDentiApp;
 
 public class AdminStock extends JFrame {
@@ -25,7 +26,7 @@ public class AdminStock extends JFrame {
 	private JPanel contentPane;
 	private ConexionMySQL conex;
 	private JFrame parent, frame;
-
+	private UserHibernate userHi;
 	/**
 	 * Launch the application.
 	 */
@@ -45,8 +46,8 @@ public class AdminStock extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminStock( JFrame parent) {
-		this.conex = conex;
+	public AdminStock( UserHibernate userHi,JFrame parent) {
+		this.userHi=userHi;
 
 		// -------------------- JFrame --------------------
 		this.frame = this;
@@ -157,7 +158,7 @@ public class AdminStock extends JFrame {
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminAppointment admAppointment = new AdminAppointment(conex, frame);
+				AdminAppointment admAppointment = new AdminAppointment(userHi, frame);
 				admAppointment.setVisible(true);
 			}
 		});
@@ -165,7 +166,7 @@ public class AdminStock extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers(conex, frame);
+				AdminUsers admUsers = new AdminUsers(userHi, frame);
 				admUsers.setVisible(true);
 			}
 		});
@@ -173,7 +174,7 @@ public class AdminStock extends JFrame {
 		// Acción del Módulo de pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminCustomers admCustomers = new AdminCustomers(conex, frame);
+				AdminCustomers admCustomers = new AdminCustomers(userHi, frame);
 				admCustomers.setVisible(true);
 			}
 		});
@@ -181,7 +182,7 @@ public class AdminStock extends JFrame {
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic(conex, frame);
+				AdminClinic admClinic = new AdminClinic(userHi, frame);
 				admClinic.setVisible(true);
 			}
 		});
@@ -189,7 +190,7 @@ public class AdminStock extends JFrame {
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments(conex, frame);
+				AdminPayments admPayments = new AdminPayments(userHi, frame);
 				admPayments.setVisible(true);
 			}
 		});

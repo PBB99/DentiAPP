@@ -49,7 +49,7 @@ public class AdminAppointment extends JFrame {
 	private JFrame parent, frame;
 	private SessionFactory instancia;
 	private Session session;
-
+	private UserHibernate userHi;
 	/**
 	 * Launch the application.
 	 */
@@ -84,7 +84,7 @@ public class AdminAppointment extends JFrame {
 	 * Create the frame.
 	 */
 	public AdminAppointment(UserHibernate userHi, JFrame parent) {
-
+		this.userHi=userHi;
 		setType(Type.POPUP);
 		setBounds(new Rectangle(10, 0, 0, 0));
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
@@ -227,7 +227,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de usuarios
 		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminUsers admUsers = new AdminUsers( frame);
+				AdminUsers admUsers = new AdminUsers(userHi, frame);
 				admUsers.setVisible(true);
 				session.close();
 			}
@@ -245,7 +245,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock( frame);
+				AdminStock admStock = new AdminStock( userHi,frame);
 				admStock.setVisible(true);
 				session.close();
 			}
@@ -254,7 +254,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic( frame);
+				AdminClinic admClinic = new AdminClinic( userHi,frame);
 				admClinic.setVisible(true);
 				session.close();
 			}
@@ -263,7 +263,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo económico
 		btnPayments.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminPayments admPayments = new AdminPayments( frame);
+				AdminPayments admPayments = new AdminPayments(userHi, frame);
 				admPayments.setVisible(true);
 				session.close();
 			}
