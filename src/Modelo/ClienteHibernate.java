@@ -68,7 +68,7 @@ public class ClienteHibernate implements Serializable {
 		this.edad = edad;
 	}
 	
-	@OneToMany(mappedBy = "cita", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "clienteHiber", cascade = CascadeType.ALL)
     
     private List<CitaHibernate> citas;
     

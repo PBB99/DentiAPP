@@ -1,6 +1,9 @@
 package Modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -75,5 +78,18 @@ public class TreatmentsHibernate {
         this.especialidad_tratamiento = especialidad_tratamiento;
     }
     
+@OneToMany(mappedBy = "tratamientoHiber", cascade = CascadeType.ALL)
+    
+    private List<CitaHibernate> citas;
+    
+    public List<CitaHibernate> getCitas(){
+        return citas;
+    }
+    
+    public void addPedido(CitaHibernate cita){
+        if (citas == null) citas=new ArrayList<>();
+        citas.add(cita);
+        cita.setTratamiento(this);
+    }
     
 }

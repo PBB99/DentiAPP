@@ -62,7 +62,7 @@ public class CitaHibernate {
 
 
 	@ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "usuario")
+    @JoinColumn(name = "dni")
     private UserHibernate userHiber; //Este atributo va a @OneToMany en Cliente
 
     public UserHibernate getUser() {
@@ -74,7 +74,7 @@ public class CitaHibernate {
     }
     
     @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "cliente")
+    @JoinColumn(name = "dni_cliente")
     private ClienteHibernate clienteHiber; //Este atributo va a @OneToMany en Cliente
 
     public ClienteHibernate getCliente() {
@@ -86,7 +86,7 @@ public class CitaHibernate {
     }
     
     @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "tratamientos")
+    @JoinColumn(name = "codigo_tratamiento")
     private TreatmentsHibernate tratamientoHiber; //Este atributo va a @OneToMany en Cliente
 
     public ClienteHibernate getTratamiento() {

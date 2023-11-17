@@ -38,8 +38,6 @@ public class PruebasCalendario extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
 	private JTable table;
 	private ConexionMySQL conexion;
 	
@@ -64,6 +62,7 @@ public class PruebasCalendario extends JFrame {
 	 * Create the frame.
 	 */
 	public PruebasCalendario() {
+		
 		conexion = new ConexionMySQL();
 		conexion.conectar();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,27 +77,9 @@ public class PruebasCalendario extends JFrame {
 		calendar.setBounds(23, 77, 184, 153);
 		contentPane.add(calendar);
 		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(221, 12, 70, 20);
-		contentPane.add(dateChooser);
-		
-		textField = new JTextField();
-		textField.setBounds(10, 12, 31, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(47, 12, 31, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel(":");
-		lblNewLabel.setBounds(42, 15, 11, 14);
-		contentPane.add(lblNewLabel);
-		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"a.m", "p.m"}));
-		comboBox.setBounds(82, 11, 48, 22);
+		comboBox.setBounds(364, 10, 48, 22);
 		contentPane.add(comboBox);
 		
 		DefaultTableModel modelo = new DefaultTableModel();
