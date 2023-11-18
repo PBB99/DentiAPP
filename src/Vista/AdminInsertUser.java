@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import java.awt.EventQueue;
 
@@ -17,6 +18,9 @@ import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import Controlador.ConexionMySQL;
 import Controlador.SpecialistController;
@@ -52,6 +56,8 @@ public class AdminInsertUser extends JDialog {
 	private ConexionMySQL conex;
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private SessionFactory instancia;
+	private Session miSesion;
 
 	/**
 	 * Launch the application.
@@ -224,5 +230,5 @@ public class AdminInsertUser extends JDialog {
 		}
 		
 	}
-
+	
 }

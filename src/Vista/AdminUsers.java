@@ -1,7 +1,9 @@
 package Vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -10,22 +12,37 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import Controlador.ConexionMySQL;
+import Modelo.SpecialityHibernate;
 import Modelo.UserHibernate;
 import btndentiapp.ButtonDentiApp;
-
+import javax.persistence.*;
 public class AdminUsers extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -33,6 +50,9 @@ public class AdminUsers extends JFrame {
 	private ConexionMySQL conex;
 	private JFrame parent, frame;
 	private UserHibernate userHi;
+	private SessionFactory instancia;
+	private Session miSesion;
+	private JTable tabla;
 	/**
 	 * Launch the application.
 	 */
@@ -56,6 +76,9 @@ public class AdminUsers extends JFrame {
 		this.userHi=userHi;
 		this.frame = this;
 		this.parent = parent;
+		this.instancia = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserHibernate.class)
+				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
+		this.miSesion=instancia.openSession();
 
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,7 +95,28 @@ public class AdminUsers extends JFrame {
 		menuPane.setBackground(new Color(148, 220, 219));
 		menuPane.setBounds(0, 0, 135, 1080);
 		menuPane.setLayout(null);
-
+		//panel donde colcare la tabla
+		JScrollPane menuUsers = new JScrollPane();
+		menuUsers.setBounds(1137, 270, 500, 675);
+		menuUsers.setBorder(BorderFactory.createEmptyBorder());
+		menuUsers.setBackground(new Color(148, 220, 219));
+		
+		//La tabla
+		tabla = new JTable();
+		tabla.setShowVerticalLines(false);
+		tabla.setShowHorizontalLines(false);
+		tabla.setCellSelectionEnabled(true);
+		tabla.setBounds(0, 0, 500, 675);
+		tabla.setBackground(new Color(250, 250, 250));
+		tabla.setSelectionBackground(new Color(148, 220, 219));
+		tabla.setShowGrid(false);
+		tabla.setBorder(null);
+		tabla.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tabla.setRowHeight(35);
+		tabla.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tabla.getTableHeader().setBackground(new Color(148, 220, 219));
+		tabla.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -203,6 +247,7 @@ public class AdminUsers extends JFrame {
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
+		contentPane.add(menuUsers);
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -210,6 +255,7 @@ public class AdminUsers extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
+		menuUsers.add(tabla);
 
 		JButton btnNewButton = new JButton("PRUEBA");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -229,4 +275,100 @@ public class AdminUsers extends JFrame {
 		 * contentPane.add(internalFrame); internalFrame.setVisible(true);
 		 */
 	}
+	public void cargarTabla(String nombreTabla,JTable tablaDoctores) {
+		// Relaiza la consulta de todos los usuarios y los extrae
+		String hql = "FROM UserHibernate ";
+		Query<UserHibernate> consulta =miSesion.createQuery(hql, UserHibernate.class);
+		List<UserHibernate>userList=consulta.getResultList();
+		List<UserHibernate>admin=new ArrayList<UserHibernate>();
+		//preparacion de la tabla
+		
+				DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Especialidad" }) {
+					@Override
+					public boolean isCellEditable(int row, int column) {
+						// all cells false
+						return false;
+					}
+				};
+		//este string entrará por parametro y sera elegido en función de si pulsa el boron Doctor o Administrador
+				if(nombreTabla.equalsIgnoreCase("Admin")) {
+					for(UserHibernate x:userList) {
+						//dentro de los admin solo puede tener una espcialidad, pero en el caso de que se le haya metido en varias ocasiones la especialidad admin tenemos en cuenta que pueda tener mas especialidades
+						if(x.getSpeciality().size()>=1 && x.getSpeciality().get(0).getId_especialidad()==0) {
+						admin.add(x);
+						}
+						
+					}
+					tablaDoctores.setModel(model);
+					JTableHeader header = tablaDoctores.getTableHeader();
+					model.setRowCount(admin.size());
+					int fila = 0; 
+					
+					for(UserHibernate y:admin) {
+						model.setValueAt(y.getDni(), fila, 0);
+						model.setValueAt(y.getNombre(), fila, 1);
+						model.setValueAt(y.getApellido(), fila, 2);
+						model.setValueAt(y.getSpeciality().toString(), fila, 3);
+						fila++;
+					}
+					
+					// Se alinea el texto de las columnas
+					Renderer tcr = new Renderer();
+					tcr.setHorizontalAlignment(SwingConstants.CENTER);
+					tablaDoctores.getColumnModel().getColumn(0).setCellRenderer(tcr);
+					tablaDoctores.setDefaultRenderer(Object.class, tcr);
+				}else {
+					for(UserHibernate x:userList) {
+						//los doctores tienen al menos una especialidad con posbilidad de tener mas y distintas de cero
+						if(x.getSpeciality().size()>=1 && x.getSpeciality().get(0).getId_especialidad()!=0) {
+						admin.add(x);
+						}
+						
+					}
+					tablaDoctores.setModel(model);
+					JTableHeader header = tablaDoctores.getTableHeader();
+					model.setRowCount(admin.size());
+					int fila = 0; 
+					
+					for(UserHibernate y:admin) {
+						model.setValueAt(y.getDni(), fila, 0);
+						model.setValueAt(y.getNombre(), fila, 1);
+						model.setValueAt(y.getApellido(), fila, 2);
+						model.setValueAt(y.getSpeciality().toString(), fila, 3);
+						fila++;
+					}
+					
+					// Se alinea el texto de las columnas
+					Renderer tcr = new Renderer();
+					tcr.setHorizontalAlignment(SwingConstants.CENTER);
+					tablaDoctores.getColumnModel().getColumn(0).setCellRenderer(tcr);
+					tablaDoctores.setDefaultRenderer(Object.class, tcr);
+				}
+
+	}
+	
+	//clase Render
+	public class Renderer extends DefaultTableCellRenderer {
+
+		
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			// Evalua en que fila esta
+			if (row % 2 == 0) {
+				setBackground(new Color(220, 220, 220));
+			} else {
+				setBackground(new Color(250, 250, 250));
+			}
+
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		}
+
+	}
 }
+
+
+
