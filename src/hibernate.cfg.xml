@@ -4,9 +4,9 @@
     <session-factory>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <!--Hibernate utiliza JDBC. Solo traduce -->
-        <property name="connection.url">jdbc:mysql://byprip7xk9sybmhhq0jf-mysql.services.clever-cloud.com:3306/byprip7xk9sybmhhq0jf?useSSL=false</property>
-        <property name="connection.username">uqtcrrg2q5csusyf</property>
-        <property name="connection.password">dONGT5r9C4UPYGtaPXPD</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/mydb?useSSL=false</property>
+        <property name="connection.username">roor</property>
+        <property name="connection.password">1234</property>
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
         <!--Muestra las sentencias sql al ejecutarse hibernate -->
         <property name="hibernate.show_sql">true</property>
