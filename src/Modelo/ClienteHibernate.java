@@ -6,9 +6,13 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "cliente")
 public class ClienteHibernate implements Serializable {
 
 	@Id
@@ -69,7 +73,6 @@ public class ClienteHibernate implements Serializable {
 	}
 	
 	@OneToMany(mappedBy = "clienteHiber", cascade = CascadeType.ALL)
-    
     private List<CitaHibernate> citas;
     
     public List<CitaHibernate> getCitas(){

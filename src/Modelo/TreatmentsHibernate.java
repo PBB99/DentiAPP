@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tratamientos")
-
 public class TreatmentsHibernate {
 	
 	@Id
@@ -78,18 +77,16 @@ public class TreatmentsHibernate {
         this.especialidad_tratamiento = especialidad_tratamiento;
     }
     
-@OneToMany(mappedBy = "tratamientoHiber", cascade = CascadeType.ALL)
-    
+    @OneToMany(mappedBy = "tratamientoHiber", cascade = CascadeType.ALL)
     private List<CitaHibernate> citas;
     
     public List<CitaHibernate> getCitas(){
         return citas;
     }
     
-    public void addPedido(CitaHibernate cita){
+    public void addCita(CitaHibernate cita){
         if (citas == null) citas=new ArrayList<>();
         citas.add(cita);
         cita.setTratamiento(this);
     }
-    
 }
