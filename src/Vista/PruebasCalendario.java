@@ -41,6 +41,7 @@ import Modelo.UserHibernate;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ListSelectionModel;
@@ -122,10 +123,11 @@ public class PruebasCalendario extends JFrame {
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
 		java.util.Date fech = fechaCalen.getTime();
-		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id",
+		System.out.println(fech);
+		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech",
 				CitaHibernate.class);
-		consultaCitas.setParameter("fech", fech);
-		consultaCitas.setParameter("id", comboBox.getSelectedItem());
+		consultaCitas.setParameter("fech", fechaCalen.getTime());
+		// consultaCitas.setParameter("id", comboBox.getSelectedItem());
 		System.out.println(comboBox.getSelectedItem());
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 		System.out.println(formateador.format(fechaCalen.getTime()));
@@ -136,7 +138,7 @@ public class PruebasCalendario extends JFrame {
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
 		}
 
-
+		System.out.println(allCitas.size());
 		for (int i = 0; i < allCitas.size(); i++) {
 			System.out.println("saddasdas");
 			java.util.Date dia = allCitas.get(i).getFecha();
@@ -164,12 +166,16 @@ public class PruebasCalendario extends JFrame {
 				}
 
 				Calendar fechaCal = (Calendar) evt.getNewValue();
-				Query<CitaHibernate> consulta = session.createQuery("FROM CitaHibernate where fecha=:fech",
-						CitaHibernate.class);
+				Query<CitaHibernate> consulta = session
+						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
 				consulta.setParameter("fech", fechaCal.getTime());
+				consulta.setParameter("id", comboBox.getSelectedItem());
 				List<CitaHibernate> allCitas = consulta.getResultList();
+
+				System.out.println(allCitas.size());
+
 				for (int i = 0; i < allCitas.size(); i++) {
-					Date dia = allCitas.get(i).getFecha();
+					Date dia = (Date) allCitas.get(i).getFecha();
 
 					System.out.println(formateador.format(fechaCal.getTime()) + "------");
 					if (formateador.format(fechaCal.getTime()).equals(formateador.format(dia))) {
@@ -194,14 +200,16 @@ public class PruebasCalendario extends JFrame {
 					table.getModel().setValueAt("", j, 1);
 				}
 
-				Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id",
-						CitaHibernate.class);
+				Query<CitaHibernate> consultaCitas = session
+						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
 				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
 				consultaCitas.setParameter("id", comboBox.getSelectedItem());
 				List<CitaHibernate> allCitas = consultaCitas.getResultList();
-				for (int i = 0; i < allCitas.size(); i++) {
-					Date dia = allCitas.get(i).getFecha();
 
+				System.out.println(allCitas.size());
+
+				for (int i = 0; i < allCitas.size(); i++) {
+					Date dia = (Date) allCitas.get(i).getFecha();
 					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
 					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
 						System.out.println("saddasdas");
@@ -215,25 +223,50 @@ public class PruebasCalendario extends JFrame {
 
 			}
 		});
-		
+
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-		    @Override
-		    public void valueChanged(ListSelectionEvent event) {
-		    	if (!event.getValueIsAdjusting()) {//This line prevents double events
-		    		System.out.println("--");
-		    		AdminInsertUser us = new AdminInsertUser(null, rootPaneCheckingEnabled);
-		    		us.setVisible(true);
-		        }
-		      
+			@Override
+			public void valueChanged(ListSelectionEvent event) {
+				String a = (table.getValueAt(table.getSelectedRow(), 0).toString());
+				if (!event.getValueIsAdjusting()) {// This line prevents double events
+					String[] opc = { "ELIMINAR CITA", "ACTUALIZAR/INSERTAR CITA" };
+					System.out.println("--");
+					if (fechaCalen.getTime().before(calendar.getCalendar().getTime())
+							|| (fechaCalen.getTime().getDay() == calendar.getCalendar().getTime().getDay())
+									&& (fechaCalen.getTime().getMonth() == calendar.getCalendar().getTime().getMonth())
+									&& (fechaCalen.getTime().getYear() == calendar.getCalendar().getTime().getYear())) {
+						int opcionDml = JOptionPane.showOptionDialog(null, "¿Qué quieres hacer?", "Elige",
+								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opc, opc[0]);
+						if (opcionDml == 0) {
+							session.beginTransaction();
+							Query<CitaHibernate> consultaCitas = session.createQuery(
+									"FROM CitaHibernate where fecha=:fech and hora=:hora and dni_doc=:id",
+									CitaHibernate.class);
+							consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
+							consultaCitas.setParameter("hora", a);
+							consultaCitas.setParameter("id", comboBox.getSelectedItem());
+							CitaHibernate h3 = consultaCitas.getSingleResult();
+							session.delete(h3);
+							session.getTransaction().commit();
+						} else if (opcionDml == 1) {
+							AdminInsertCita us = new AdminInsertCita(comboBox.getSelectedItem().toString(),
+									calendar.getCalendar().getTime(),
+									(table.getValueAt(table.getSelectedRow(), 0).toString()));
+							us.setVisible(true);
+						}
+					}
+
+				}
+				// table.clearSelection();
 //		        if (table.getSelectedRow() > -1) {
 //		            // print first column value from selected row
 //		            //System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
 //		            System.out.println("---");
 //
 //		        }
-		    }
+			}
 
 		});
-		
+
 	}
 }

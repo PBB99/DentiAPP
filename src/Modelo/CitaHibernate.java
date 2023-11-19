@@ -60,7 +60,7 @@ public class CitaHibernate implements Serializable{
 
 
 
-	@ManyToOne(cascade={CascadeType.ALL})
+	@ManyToOne
     @JoinColumn(name = "dni_doc")
     private UserHibernate userHiber; //Este atributo va a @OneToMany en Cliente
 
@@ -72,7 +72,7 @@ public class CitaHibernate implements Serializable{
         this.userHiber = userHiber;
     }
     
-    @ManyToOne(cascade={CascadeType.ALL})
+    @ManyToOne
     @JoinColumn(name = "dni_paciente")
     private ClienteHibernate clienteHiber; //Este atributo va a @OneToMany en Cliente
 
@@ -84,7 +84,7 @@ public class CitaHibernate implements Serializable{
         this.clienteHiber = clienteHiber;
     }
     
-    @ManyToOne(cascade={CascadeType.ALL})
+    @ManyToOne
     @JoinColumn(name = "codigo_trata")
     private TreatmentsHibernate tratamientoHiber; //Este atributo va a @OneToMany en Cliente
 

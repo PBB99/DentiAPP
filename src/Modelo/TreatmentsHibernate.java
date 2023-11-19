@@ -65,6 +65,15 @@ public class TreatmentsHibernate {
 		this.precio = precio;
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return nombre;
+	}
+
+
+
 	@ManyToOne(cascade={CascadeType.ALL})
     @JoinColumn(name = "especialidad")
     private SpecialityHibernate especialidad_tratamiento; //Este atributo va a @OneToMany en Cliente

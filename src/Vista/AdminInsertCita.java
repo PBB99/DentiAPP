@@ -18,11 +18,22 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import Controlador.ConexionMySQL;
 import Controlador.SpecialistController;
 import Controlador.SpecialityController;
+import Modelo.Cita;
+import Modelo.CitaHibernate;
+import Modelo.ClienteHibernate;
 import Modelo.Specialist;
 import Modelo.Speciality;
+import Modelo.SpecialityHibernate;
+import Modelo.TreatmentsHibernate;
+import Modelo.UserHibernate;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -33,8 +44,10 @@ import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -44,14 +57,13 @@ public class AdminInsertCita extends JDialog {
 	//-------------------------------VARIABLES------------------------
 
 	private JPanel contentPane;
-	private JTextField tfDNI;
-	private JTextField tfNombre;
-	private JTextField tfContraseña;
-	private JTextField tfApellido;
 	private Connection cn;
 	private ConexionMySQL conex;
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	
+	private SessionFactory instancia;
+	private Session session;
 
 	/**
 	 * Launch the application.
@@ -69,9 +81,12 @@ public class AdminInsertCita extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AdminInsertCita( AdminUsers parent, boolean modal) {
-		this.conex=conex;
-		setModal(modal);
+	public AdminInsertCita(String dniDoctor, Date fecha, String hora) {
+		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
+				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.buildSessionFactory();
+		this.session = instancia.openSession();
 		
 		//-----------------------COMPONENTES-------------------
 		setBounds(100, 100, 450, 300);
@@ -79,44 +94,12 @@ public class AdminInsertCita extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
 		
-		JLabel lblDNI = new JLabel("DNI");
-		lblDNI.setBounds(20, 13, 18, 14);
+		JLabel lblDNI = new JLabel("Paciente");
+		lblDNI.setBounds(128, 94, 61, 14);
 		
 		
-		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(20, 82, 37, 14);
-		contentPanel.add(lblNombre);
-		
-		tfDNI = new JTextField();
-		tfDNI.setColumns(10);
-		tfDNI.setBounds(67, 10, 86, 20);
-		
-		
-		tfNombre = new JTextField();
-		tfNombre.setColumns(10);
-		tfNombre.setBounds(67, 79, 86, 20);
-		
-		
-		JLabel lblContraseña = new JLabel("Contraseña");
-		lblContraseña.setBounds(218, 13, 56, 14);
-		
-		
-		tfContraseña = new JTextField();
-		tfContraseña.setColumns(10);
-		tfContraseña.setBounds(311, 10, 86, 20);
-		
-		
-		JLabel lblApellido = new JLabel("Apellido");
-		lblApellido.setBounds(218, 82, 37, 14);
-		
-		
-		tfApellido = new JTextField();
-		tfApellido.setColumns(10);
-		tfApellido.setBounds(311, 79, 86, 20);
-		
-		
-		JLabel lblEspecialidad = new JLabel("Especialidad");
-		lblEspecialidad.setBounds(136, 155, 58, 14);
+		JLabel lblContraseña = new JLabel("Tratamiento");
+		lblContraseña.setBounds(128, 136, 61, 14);
 		
 		
 		JButton okButton = new JButton("OK");
@@ -134,11 +117,33 @@ public class AdminInsertCita extends JDialog {
 		});
 		cancelButton.setActionCommand("Cancel");
 		
-		JComboBox cbEspecialidad = new JComboBox();
-		cbEspecialidad.setBounds(218, 152, 86, 20);
+		JComboBox cbPaciente = new JComboBox();
+		cbPaciente.setBounds(199, 91, 86, 20);
+		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
+		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
+
+		for (int i = 0; i < allClientes.size(); i++) {
+			cbPaciente.addItem(allClientes.get(i));
+		}
 		
-		cbEspecialidad.addItem("");
+		JComboBox cbTratamiento = new JComboBox();
+		cbTratamiento.setBounds(199, 132, 86, 20);
+		contentPanel.add(cbTratamiento);
 		
+		
+		
+		Query<UserHibernate> consultaUsuarios = session.createQuery("FROM UserHibernate where dni=:dni", UserHibernate.class);
+		consultaUsuarios.setParameter("dni", dniDoctor);
+		UserHibernate usuario = consultaUsuarios.getSingleResult();
+		List<SpecialityHibernate> allEspecialidades = usuario.getSpeciality();
+		
+		for (int i = 0; i < allEspecialidades.size(); i++) {
+			List<TreatmentsHibernate> allTratamientos = allEspecialidades.get(i).getTratamientos();
+			for (int j = 0; j < allTratamientos.size(); j++) {
+				cbTratamiento.addItem(allTratamientos.get(j));
+			}
+		}
+				
 		//------------------------------------------LOGICA-----------------------------------------------
 		ResultSet resSet = null;
 		try {//CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
@@ -146,7 +151,7 @@ public class AdminInsertCita extends JDialog {
 			resSet = conex.ejecutarSelect("Select * from especialidades");
 			//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
 			while (resSet.next()) {
-				cbEspecialidad.addItem(resSet.getString("especialidad"));
+				cbPaciente.addItem(resSet.getString("especialidad"));
             }
 		} catch (Exception e2) {
 			// TODO: handle exception
@@ -162,47 +167,37 @@ public class AdminInsertCita extends JDialog {
 				
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						String dni = tfDNI.getText();
-						String nom = tfNombre.getText();
-						String ape = tfApellido.getText();
-						String contra = tfContraseña.getText();
-						String especialidad = cbEspecialidad.getSelectedItem().toString();
-						boolean encontrado = false;
-						int nEsp = 0;
-						SpecialityController spe = new SpecialityController(conex);
+						java.sql.Date dia = new java.sql.Date(fecha.getTime());
+						Query<CitaHibernate> consultaCitaExiste = session.createQuery("FROM CitaHibernate where fecha=:fech and hora=:hora and dni_doc=:id",
+		    					CitaHibernate.class);
+						consultaCitaExiste.setParameter("fech",dia);
+						consultaCitaExiste.setParameter("hora", hora);
+						consultaCitaExiste.setParameter("id",dniDoctor);
+						List<CitaHibernate> check = consultaCitaExiste.getResultList();
 						
-						ArrayList<Speciality> arSpe = null;
-						try {
-							if(dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
-								JOptionPane.showMessageDialog(null,"Debes rellenar todos los campos", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
-							}else {
-								//arSpe = new SpecialistController(conex).getAllSpecialist();
-								//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
-								//numIdEspecialista = arSpe.get(arSpe.size()).getId_specialist();
-								conex.ejecutarInsertUpdateDelete("insert into usuario values ('" + dni + "', '" + nom + "', '" + ape + "', '" + contra + "', true)");
-								arSpe = spe.getAllSpecialist();
-								System.out.println(especialidad);
-								for (int i = 0; i < arSpe.size() && encontrado == false; i++) {
-									System.out.println(i);
-					                if(especialidad.equalsIgnoreCase(arSpe.get(i).getSpeciality())) {
-					                	encontrado = true;
-					                	nEsp = arSpe.get(i).getId_speciality();
-					                }
-					            }
-								//conex.ejecutarInsertUpdateDelete("insert into especialista values ('"+ dni + "', '" + nEsp + "')");
-								new SpecialistController(conex).insert(new Specialist(dni, nEsp));
-								System.out.println("fuera");
-								JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
-								setModal(false);
-								setVisible(false);
-								dispose();
-//								AdminInsertUser.this.dispatchEvent(new WindowEvent(
-//										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
-							}
-							
-						} catch (Exception e2) {
-							// TODO: handle exception
+						if(check.isEmpty()) {
+							Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate", CitaHibernate.class);
+							List<CitaHibernate> allCitas = consultaCitas.getResultList();
+							CitaHibernate cita = new CitaHibernate(allCitas.get(allCitas.size() - 1).getIdcita() + 1, dia, hora);
+							cita.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
+							cita.setUser(usuario);
+							cita.setTratamiento((TreatmentsHibernate) cbTratamiento.getSelectedItem());
+							session.beginTransaction();
+							session.save(cita);
+							session.getTransaction().commit();
+						}else {
+							CitaHibernate citaEx = consultaCitaExiste.getSingleResult();
+							citaEx.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
+							citaEx.setUser(usuario);
+							citaEx.setTratamiento((TreatmentsHibernate) cbTratamiento.getSelectedItem());
+							session.beginTransaction();
+							session.update(citaEx);
+							session.getTransaction().commit();
 						}
+						setModal(false);
+						setVisible(false);
+						AdminInsertCita.this.dispatchEvent(new WindowEvent(
+								AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
 					}
 				});
 				
@@ -211,18 +206,11 @@ public class AdminInsertCita extends JDialog {
 			{//-------------------ADICIONES DE LOS COMPONENTES---------------
 				buttonPane.add(okButton);
 				buttonPane.add(cancelButton);
-				contentPanel.add(cbEspecialidad);
-				contentPanel.add(lblEspecialidad);
-				contentPanel.add(tfApellido);
-				contentPanel.add(tfContraseña);
+				contentPanel.add(cbPaciente);
 				contentPanel.add(lblContraseña);
-				contentPanel.add(lblApellido);
-				contentPanel.add(tfNombre);
-				contentPanel.add(tfDNI);
 				contentPanel.add(lblDNI);
 			}
 		}
 		
 	}
-
 }
