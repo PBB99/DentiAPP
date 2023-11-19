@@ -61,6 +61,8 @@ public class AdminClinic extends JFrame {
 	private UserHibernate userHi;
 	private JTable tableSpeciality;
 	private JTable tableTreatments;
+	private TreatmentsHibernate th;
+	private SpecialityHibernate sh;
 
 	/**
 	 * Launch the application.
@@ -324,8 +326,8 @@ public class AdminClinic extends JFrame {
 		});
 
 		// Mostrar las tablas
-		cargarEspecialidades(tableSpeciality);
-		cargarTratamientos(tableTreatments, null);
+		loadSpecialities(tableSpeciality);
+		loadTreatments(tableTreatments, null);
 
 		// Acción de seleccionar elemento de la tabla especialidad
 		tableSpeciality.addMouseListener(new MouseAdapter() {
@@ -352,7 +354,7 @@ public class AdminClinic extends JFrame {
 					SpecialityHibernate result = consulta.getSingleResult();
 
 					// Carga los resultados
-					cargarTratamientos(tableTreatments, result);
+					loadTreatments(tableTreatments, result);
 				}
 			}
 		});
@@ -362,6 +364,9 @@ public class AdminClinic extends JFrame {
 			public void mouseClicked(MouseEvent evnt) {
 				if (evnt.getClickCount() == 1) {
 
+					// Seleccionar row
+					tableTreatments.addColumnSelectionInterval(0, 1);
+
 					// Cambios en la selección
 					tableSpeciality.setColumnSelectionAllowed(false);
 					tableSpeciality.setCellSelectionEnabled(false);
@@ -370,9 +375,7 @@ public class AdminClinic extends JFrame {
 					selectedSpeciality = null;
 
 					// selección del tratamiento
-					selectedTreatment = tableTreatments
-							.getValueAt(tableTreatments.getSelectedRow(), tableTreatments.getSelectedColumn())
-							.toString();
+					selectedTreatment = tableTreatments.getValueAt(tableTreatments.getSelectedRow(), 0).toString();
 
 				}
 			}
@@ -400,48 +403,131 @@ public class AdminClinic extends JFrame {
 				String especialidad = JOptionPane.showInputDialog("Introduzca el nombre de la especialidad");
 				if (especialidad != null) {
 					// Inserta la especialidad
-					SpecialityHibernate sh = new SpecialityHibernate((lastIdSpeciality + 1), especialidad);
+					sh = new SpecialityHibernate((lastIdSpeciality + 1), especialidad);
 					session.beginTransaction();
 					session.save(sh);
 					session.getTransaction().commit();
 
 					// Recarga la tabla
-					cargarEspecialidades(tableSpeciality);
+					loadSpecialities(tableSpeciality);
 
-					// Feedback al usuario
-					JOptionPane.showMessageDialog(contentPane, "Se ha insertado la especiaidad correctamente",
-							"Insertado", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
 
-		// Acción de Borrar en especialidades
+		// Acción de insertar en tratamientos
+		btnInsertTreatment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Variable de control
+				boolean hasSpeciality = false;
+
+				// Dialog de insertar
+				DInsertTratamiento it = null;
+
+				// Comprueba si hay una especialidad seleccionada
+				if (selectedSpeciality != null) {
+					// Busca la especialidad
+					String hql = "FROM SpecialityHibernate WHERE especialidad=:especialidad";
+					Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
+					consulta.setParameter("especialidad", selectedSpeciality);
+					sh = consulta.getSingleResult();
+
+					// Crea el Dialog de insertar
+					it = new DInsertTratamiento(instancia, sh, lastlastIdTreatements + 1);
+					it.setTextSpeciality(sh.getEspecialidad());
+
+					hasSpeciality = true;
+				} else if (selectedTreatment != null) {
+					// Busca el tratmiento
+					String hql = "FROM TreatmentsHibernate WHERE nombre=:nombre";
+					Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
+					consulta.setParameter("nombre", selectedTreatment);
+					th = consulta.getSingleResult();
+
+					// Busca saca la especialidad
+					sh = th.getEspecialidad();
+
+					// Crea el Dialog de insertar
+					it = new DInsertTratamiento(instancia, sh, lastlastIdTreatements + 1);
+					it.setTextSpeciality(sh.getEspecialidad());
+
+					hasSpeciality = true;
+				} else {
+					JOptionPane.showMessageDialog(contentPane, "No se ha sleccionado ninguna especialidad", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+
+				if (hasSpeciality) {
+					it.setModal(true);
+					it.setVisible(hasSpeciality);
+					it.addWindowListener(new WindowListener() {
+
+						@Override
+						public void windowOpened(WindowEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void windowIconified(WindowEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void windowDeiconified(WindowEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void windowDeactivated(WindowEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void windowClosing(WindowEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void windowClosed(WindowEvent e) {
+							loadTreatments(tableTreatments, sh);
+						}
+
+						@Override
+						public void windowActivated(WindowEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+					});
+				}
+			}
+		});
+
+		// Acción de Modificar en especialidades
 		btnUpadateSpeciality.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				// Comprueba si hay una especialidad a borrar
 				if (selectedSpeciality != null) {
 					// Busca la especialidad
-					String hql = "FROM SpecialityHibernate";
+					String hql = "FROM SpecialityHibernate WHERE especialidad=:especialidad";
 					Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
-					SpecialityHibernate sh = new SpecialityHibernate();
-					List<SpecialityHibernate> results = consulta.getResultList();
-					for (SpecialityHibernate spec : results) {
-						if (spec.getEspecialidad().equalsIgnoreCase(selectedSpeciality)) {
-							sh = spec;
-							continue;
-						}
-					}
+					consulta.setParameter("especialidad", selectedSpeciality);
+					sh = consulta.getSingleResult();
 
 					// Feedback al usuario
 					if (sh.getId_especialidad() == null) {
 						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado la especialidad", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					} else {
-						//Solicita la nueva especialidad
-						String newSpeciality=null;
+						// Solicita la nueva especialidad
+						String newSpeciality = null;
 						newSpeciality = JOptionPane.showInputDialog("Introduzca la nueva especialidad");
-						
+
 						if (newSpeciality != null) {
 							// Modificar la especialidad
 							session.beginTransaction();
@@ -450,8 +536,84 @@ public class AdminClinic extends JFrame {
 							session.getTransaction().commit();
 
 							// Recargamos la tabla
-							cargarEspecialidades(tableSpeciality);
+							loadSpecialities(tableSpeciality);
 						}
+					}
+				}
+			}
+		});
+
+		// Acción de Modificar en tratamientos
+		btnUpadateTreatment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Comprueba si hay un tratamiento seleccionado
+				if (selectedTreatment != null) {
+					// Busca el tratmiento
+					String hql = "FROM TreatmentsHibernate WHERE nombre=:nombre";
+					Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
+					consulta.setParameter("nombre", selectedTreatment);
+					th = consulta.getSingleResult();
+
+					// Feedback al usuario
+					if (th.getCodigo_tratamiento() == null) {
+						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado el tratamiento", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					} else {
+						// Crea el JDialog para modificar el tratamiento
+						DUpdateTratamiento ut = new DUpdateTratamiento(instancia, th);
+						ut.setModal(true);
+						ut.setTextSpeciality(th.getEspecialidad().getEspecialidad());
+						ut.setTextName(th.getNombre());
+						ut.setTextPrice(th.getPrecio());
+						ut.setVisible(true);
+
+						// Cargar la tabla tratamientos
+						ut.addWindowListener(new WindowListener() {
+
+							@Override
+							public void windowOpened(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowIconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeiconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeactivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowClosing(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowClosed(WindowEvent e) {
+								loadTreatments(tableTreatments, th.getEspecialidad());
+
+							}
+
+							@Override
+							public void windowActivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
 					}
 				}
 			}
@@ -464,16 +626,10 @@ public class AdminClinic extends JFrame {
 				// Comprueba si hay una especialidad a borrar
 				if (selectedSpeciality != null) {
 					// Busca la especialidad
-					String hql = "FROM SpecialityHibernate";
+					String hql = "FROM SpecialityHibernate WHERE especialidad=:especialidad";
 					Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
-					SpecialityHibernate sh = new SpecialityHibernate();
-					List<SpecialityHibernate> results = consulta.getResultList();
-					for (SpecialityHibernate spec : results) {
-						if (spec.getEspecialidad().equalsIgnoreCase(selectedSpeciality)) {
-							sh = spec;
-							continue;
-						}
-					}
+					consulta.setParameter("especialidad", selectedSpeciality);
+					sh = consulta.getSingleResult();
 
 					// Feedback al usuario
 					if (sh.getId_especialidad() == null) {
@@ -492,12 +648,52 @@ public class AdminClinic extends JFrame {
 							session.getTransaction().commit();
 							selectedSpeciality = null;
 
-							// Recargamos la tabla
-							cargarEspecialidades(tableSpeciality);
+							// Recargamos las tablas
+							loadSpecialities(tableSpeciality);
+							loadTreatments(tableTreatments, null);
+						}
+					}
+				}
+			}
+		});
 
-							// Feedback al usuario
-							JOptionPane.showMessageDialog(contentPane, "Se ha borrardo la especiaidad correctamente",
-									"Borrar", JOptionPane.INFORMATION_MESSAGE);
+		// Acción de borrar tratamientos
+		btnDeleteTreatment.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Comprueba si hay un tratamiento a borrar
+				if (selectedTreatment != null) {
+					// Busca el tratamiento
+					String hql = "FROM TreatmentsHibernate";
+					Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
+					th = new TreatmentsHibernate();
+					List<TreatmentsHibernate> results = consulta.getResultList();
+					for (TreatmentsHibernate treat : results) {
+						if (treat.getNombre().equalsIgnoreCase(selectedTreatment)) {
+							th = treat;
+							continue;
+						}
+					}
+
+					// Feedback al usuario
+					if (th.getCodigo_tratamiento() == null) {
+						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado la especialidad", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					} else {
+						// Confirmación
+						int resp = JOptionPane.showConfirmDialog(contentPane,
+								"¿Esta seguro de que desea eliminar el tratamiento " + selectedTreatment + "?",
+								"Eliminar", JOptionPane.YES_NO_OPTION);
+
+						if (resp == 0) {
+							// Borrar la especialidad
+							session.beginTransaction();
+							session.delete(th);
+							session.getTransaction().commit();
+							selectedTreatment = null;
+
+							// Recargamos la tabla
+							loadTreatments(tableTreatments, th.getEspecialidad());
 						}
 					}
 				}
@@ -528,7 +724,7 @@ public class AdminClinic extends JFrame {
 	}
 
 	// -------------------- Métodos y funciones --------------------
-	public void cargarEspecialidades(JTable tableSpeciality) {
+	public void loadSpecialities(JTable tableSpeciality) {
 		// Relaiza la consulta
 		String hql = "FROM SpecialityHibernate";
 		Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
@@ -562,10 +758,15 @@ public class AdminClinic extends JFrame {
 		tableSpeciality.setDefaultRenderer(Object.class, tcr);
 
 		// Guarda el último id de las especialidades
-		lastIdSpeciality = results.getLast().getId_especialidad();
+		if (!results.isEmpty()) {
+			lastIdSpeciality = results.getLast().getId_especialidad();
+		} else {
+			lastIdSpeciality = 0;
+		}
+
 	}
 
-	public void cargarTratamientos(JTable tableTreatments, SpecialityHibernate especialidad) {
+	public void loadTreatments(JTable tableTreatments, SpecialityHibernate especialidad) {
 		if (especialidad == null) {
 			// Prepara la tabla
 			DefaultTableModel model = new DefaultTableModel(new Object[][] {},
@@ -619,10 +820,22 @@ public class AdminClinic extends JFrame {
 			tableTreatments.getColumnModel().getColumn(0).setCellRenderer(tcr2);
 			tableTreatments.getColumnModel().getColumn(1).setCellRenderer(tcr2);
 			tableTreatments.setDefaultRenderer(Object.class, tcr2);
-
-			// Guarda el último id de los tratamientos
-			lastlastIdTreatements = results.getLast().getCodigo_tratamiento();
 		}
+
+		// Guarda el último id de los tratamientos
+		String hql2 = "FROM TreatmentsHibernate";
+		Query<TreatmentsHibernate> consulta2 = session.createQuery(hql2, TreatmentsHibernate.class);
+		List<TreatmentsHibernate> results2 = consulta2.getResultList();
+		if (!results2.isEmpty()) {
+			lastlastIdTreatements = results2.getLast().getCodigo_tratamiento();
+		} else {
+			lastlastIdTreatements = 0;
+		}
+
+	}
+
+	public JTable getTableTreatments() {
+		return tableTreatments;
 	}
 
 	// Clase para cambiar el color de las filas
