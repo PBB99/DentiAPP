@@ -57,8 +57,6 @@ public class AdminInsertUser extends JDialog {
 	private JTextField tfNombre;
 	private JTextField tfContraseña;
 	private JTextField tfApellido;
-	private Connection cn;
-	private ConexionMySQL conex;
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private SessionFactory instancia;
