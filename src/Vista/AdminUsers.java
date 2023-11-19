@@ -2,10 +2,12 @@ package Vista;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,11 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -62,6 +68,7 @@ public class AdminUsers extends JFrame {
 				try {
 					AdminUsers frame = new AdminUsers(null, null);
 					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -73,13 +80,14 @@ public class AdminUsers extends JFrame {
 	 * Create the frame.
 	 */
 	public AdminUsers( UserHibernate userHi,JFrame parent) {
+		
 		this.userHi=userHi;
 		this.frame = this;
 		this.parent = parent;
 		this.instancia = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.miSesion=instancia.openSession();
-
+		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -90,6 +98,31 @@ public class AdminUsers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
+		// barra oculat de arriba
+				JMenuBar menuBar = new JMenuBar();
+				menuBar.setBounds(0, 0, 1900, 50);
+
+				menuBar.setMargin(new Insets(50, 0, 0, 25));
+				menuBar.setOpaque(false);
+				menuBar.setBorderPainted(false);
+				menuBar.add(Box.createHorizontalGlue());
+				// item
+				JMenu mnNewMenu = new JMenu("");
+				mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
+				mnNewMenu.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+
+				// nombre del doctor o admin
+				JMenuItem ItemName = new JMenuItem("");
+				ItemName.setText(userHi.getNombre());
+
+				// item cambio contraseña
+				JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
+				ItemPass.setIcon(new ImageIcon(getClass().getResource("/Resources/images/keypass.png")));
+
+				// item cerrar sesion
+				JMenuItem ItemOut = new JMenuItem("Cerrar Sesión");
+				ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
+
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
 		menuPane.setBackground(new Color(148, 220, 219));
@@ -100,7 +133,14 @@ public class AdminUsers extends JFrame {
 		menuUsers.setBounds(1137, 270, 500, 675);
 		menuUsers.setBorder(BorderFactory.createEmptyBorder());
 		menuUsers.setBackground(new Color(148, 220, 219));
-		
+		//Boton Doctores
+		JButton bDoctor =new JButton();
+		bDoctor.setBounds(1137, 280, 20, 20);
+		bDoctor.setText("Doctor");
+		//Boton admins
+		JButton bAdmin =new JButton();
+		bDoctor.setBounds(1158, 280, 20, 20);
+		bDoctor.setText("Admin");
 		//La tabla
 		tabla = new JTable();
 		tabla.setShowVerticalLines(false);
@@ -244,10 +284,61 @@ public class AdminUsers extends JFrame {
 				admPayments.setVisible(true);
 			}
 		});
+		
+		//Accion boton Doctor
+		bDoctor.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cargarTabla("Doctor", tabla);
+				
+			}
+		});
+		//Accion boton Admin
+				bAdmin.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						cargarTabla("Admin", tabla);
+						
+					}
+				});
+				
+				// logica click item salir
+				ItemOut.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println("funciona");
+						Login login = new Login(frame);
+						login.setVisible(true);
+						miSesion.close();
+
+					}
+				});
+
+				// logica click cambiar contraseña
+
+				ItemPass.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						DChangePass cP = new DChangePass(userHi);
+						cP.setVisible(true);
+						cP.setModal(true);
+						System.out.println("PINCHADO");
+						miSesion.close();
+
+					}
+				});
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		contentPane.add(menuUsers);
+		contentPane.add(bDoctor);
+		contentPane.add(bAdmin);
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -257,16 +348,16 @@ public class AdminUsers extends JFrame {
 		menuPane.add(btnPayments);
 		menuUsers.add(tabla);
 
-		JButton btnNewButton = new JButton("PRUEBA");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			//	AdminInsertUser us = new AdminInsertUser(userHi,  frame);
-				//us.setVisible(true);
-
-			}
-		});
-		btnNewButton.setBounds(524, 525, 89, 23);
-		contentPane.add(btnNewButton);
+//		JButton btnNewButton = new JButton("PRUEBA");
+//		btnNewButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//			//	AdminInsertUser us = new AdminInsertUser(userHi,  frame);
+//				//us.setVisible(true);
+//
+//			}
+//		});
+//		btnNewButton.setBounds(524, 525, 89, 23);
+//		contentPane.add(btnNewButton);
 
 		/*
 		 * JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");
@@ -283,7 +374,7 @@ public class AdminUsers extends JFrame {
 		List<UserHibernate>admin=new ArrayList<UserHibernate>();
 		//preparacion de la tabla
 		
-				DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Especialidad" }) {
+				DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { nombreTabla }) {
 					@Override
 					public boolean isCellEditable(int row, int column) {
 						// all cells false
@@ -294,7 +385,7 @@ public class AdminUsers extends JFrame {
 				if(nombreTabla.equalsIgnoreCase("Admin")) {
 					for(UserHibernate x:userList) {
 						//dentro de los admin solo puede tener una espcialidad, pero en el caso de que se le haya metido en varias ocasiones la especialidad admin tenemos en cuenta que pueda tener mas especialidades
-						if(x.getSpeciality().size()>=1 && x.getSpeciality().get(0).getId_especialidad()==0) {
+						if( x.getSpeciality().get(0).getId_especialidad()==0) {
 						admin.add(x);
 						}
 						
@@ -320,7 +411,7 @@ public class AdminUsers extends JFrame {
 				}else {
 					for(UserHibernate x:userList) {
 						//los doctores tienen al menos una especialidad con posbilidad de tener mas y distintas de cero
-						if(x.getSpeciality().size()>=1 && x.getSpeciality().get(0).getId_especialidad()!=0) {
+						if(x.getSpeciality().get(0).getId_especialidad()!=0) {
 						admin.add(x);
 						}
 						

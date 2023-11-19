@@ -19,14 +19,18 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import Controlador.ConexionMySQL;
 import Controlador.SpecialistController;
 import Controlador.SpecialityController;
 import Modelo.Specialist;
 import Modelo.Speciality;
+import Modelo.SpecialityHibernate;
+import Modelo.UserHibernate;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -39,6 +43,7 @@ import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -76,7 +81,11 @@ public class AdminInsertUser extends JDialog {
 	 * Create the dialog.
 	 */
 	public AdminInsertUser( AdminUsers parent, boolean modal) {
-		this.conex=conex;
+		
+		this.instancia = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserHibernate.class)
+				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
+		this.miSesion=instancia.openSession();
+		miSesion.beginTransaction();
 		setModal(modal);
 		
 		//-----------------------COMPONENTES-------------------
@@ -146,14 +155,16 @@ public class AdminInsertUser extends JDialog {
 		cbEspecialidad.addItem("");
 		
 		//------------------------------------------LOGICA-----------------------------------------------
-		ResultSet resSet = null;
-		try {//CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
 		
-			resSet = conex.ejecutarSelect("Select * from especialidades");
-			//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
-			while (resSet.next()) {
-				cbEspecialidad.addItem(resSet.getString("especialidad"));
-            }
+		try {//CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
+			String hql="From SpecialityHibernate";
+		Query<SpecialityHibernate>consultaEspe=miSesion.createQuery(hql,SpecialityHibernate.class);
+		List<SpecialityHibernate>lista=consultaEspe.getResultList();	
+		for(SpecialityHibernate x:lista) {
+			cbEspecialidad.addItem(x);
+			
+		}
+            
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
@@ -174,37 +185,34 @@ public class AdminInsertUser extends JDialog {
 						String contra = tfContraseña.getText();
 						String especialidad = cbEspecialidad.getSelectedItem().toString();
 						boolean encontrado = false;
-						int nEsp = 0;
-						SpecialityController spe = new SpecialityController(conex);
+						String hql2="From UserHibernate where dni=:dni";
+					
+						Query<UserHibernate>consultaDni=miSesion.createQuery(hql2,UserHibernate.class);
+						consultaDni.setParameter("dni", dni);
 						
-						ArrayList<Speciality> arSpe = null;
 						try {
 							if(dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
 								JOptionPane.showMessageDialog(null,"Debes rellenar todos los campos", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
-							}else {
-								//arSpe = new SpecialistController(conex).getAllSpecialist();
-								//conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido, contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)", cn);
-								//numIdEspecialista = arSpe.get(arSpe.size()).getId_specialist();
-								conex.ejecutarInsertUpdateDelete("insert into usuario values ('" + dni + "', '" + nom + "', '" + ape + "', '" + contra + "', true)");
-								arSpe = spe.getAllSpecialist();
-								System.out.println(especialidad);
-								for (int i = 0; i < arSpe.size() && encontrado == false; i++) {
-									System.out.println(i);
-					                if(especialidad.equalsIgnoreCase(arSpe.get(i).getSpeciality())) {
-					                	encontrado = true;
-					                	nEsp = arSpe.get(i).getId_speciality();
+							}else if(consultaDni==null) {
+								
+								JOptionPane.showMessageDialog(null,"Ese DNI ya esta ligado a un usuari/a", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
+					                }else {
+					                	UserHibernate usuario=new UserHibernate(dni,nom,ape,contra,1);
+					                	miSesion.save(usuario);
+					                	JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
+					                	miSesion.getTransaction().commit();
+					                	miSesion.close();
 					                }
-					            }
-								//conex.ejecutarInsertUpdateDelete("insert into especialista values ('"+ dni + "', '" + nEsp + "')");
-								new SpecialistController(conex).insert(new Specialist(dni, nEsp));
-								System.out.println("fuera");
-								JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
+					            
+								
+							
+								
 								setModal(false);
 								setVisible(false);
 								dispose();
 //								AdminInsertUser.this.dispatchEvent(new WindowEvent(
 //										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
-							}
+							
 							
 						} catch (Exception e2) {
 							// TODO: handle exception
