@@ -742,7 +742,11 @@ public class AdminClinic extends JFrame {
 		};
 		tableSpeciality.setModel(model);
 		JTableHeader header = tableSpeciality.getTableHeader();
-		model.setRowCount(results.size());
+		if(results.size()<19) {
+			model.setRowCount(18);
+		}else {
+			model.setRowCount(results.size());
+		}
 		int fila = 0, columna = 0;
 
 		// Carga los datos
@@ -779,9 +783,10 @@ public class AdminClinic extends JFrame {
 				}
 			};
 			tableTreatments.setModel(model);
+			model.setRowCount(18);
 			JTableHeader header = tableTreatments.getTableHeader();
-			model.setRowCount(0);
-
+			Renderer tcr2 = new Renderer();
+			tableTreatments.setDefaultRenderer(Object.class, tcr2);
 		} else {
 			// Busca en la tabla los tratamientos cuyo atributo objeto especialidad es igual
 			// al que sacamos de la consulta anterior
@@ -804,7 +809,11 @@ public class AdminClinic extends JFrame {
 			};
 			tableTreatments.setModel(model);
 			JTableHeader header = tableTreatments.getTableHeader();
-			model.setRowCount(results.size());
+			if(results.size()<19) {
+				model.setRowCount(18);
+			}else {
+				model.setRowCount(results.size());
+			}
 			int fila = 0, columna = 0;
 
 			// Carga los datos
