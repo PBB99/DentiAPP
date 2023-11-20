@@ -44,7 +44,7 @@ public class SpecialityHibernate  implements Serializable{
 		this.especialidad = especialidad;
 	}
 	
-	@OneToMany(mappedBy = "especialidad_tratamiento", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "especialidad", cascade = CascadeType.REMOVE)
     
     private List<TreatmentsHibernate> tratamientos;
     
@@ -58,7 +58,7 @@ public class SpecialityHibernate  implements Serializable{
         th.setEspecialidad(this);
     }
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.REMOVE})
     @JoinTable(name = "especialista",
         joinColumns = {@JoinColumn(name = "especialidad")},
         inverseJoinColumns = {@JoinColumn(name = "dni_usuario")}
