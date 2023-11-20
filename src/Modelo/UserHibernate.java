@@ -83,20 +83,20 @@ public class UserHibernate  implements Serializable{
 		this.estado = estado;
 	}
 
-    @ManyToMany(mappedBy = "users")
-    private List<SpecialityHibernate> clientes = new ArrayList<SpecialityHibernate>();
+    @ManyToMany(mappedBy = "users",cascade = {CascadeType.ALL})
+    private List<SpecialityHibernate> especialidades = new ArrayList<SpecialityHibernate>();
 
     public List<SpecialityHibernate> getSpeciality() {
-        return clientes;
+        return especialidades;
     }
 
-    public void setEspeciality(List<SpecialityHibernate> clientes) {
-        this.clientes = clientes;
+    public void setEspeciality(List<SpecialityHibernate> especialidades) {
+        this.especialidades = especialidades;
     }
     
     public void addEspeciality(SpecialityHibernate c)
     {
-        this.clientes.add(c);
+        this.especialidades.add(c);
         c.getUser().add(this);
     }
 

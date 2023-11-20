@@ -113,7 +113,7 @@ public class AdminAppointment extends JFrame {
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem("");
-		ItemName.setText("name");
+		ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
