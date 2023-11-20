@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -76,18 +77,20 @@ public class DoctorCustomers extends JFrame {
 		// Botón de citas
 		ButtonDentiApp btnAppointment = new ButtonDentiApp(0, 135, false,
 				new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
-		btnAppointment.setToolTipText("Módulo de citas");
-
+		btnAppointment.setToolTipText("Módulo de citas (Alt+C)");
+		btnAppointment.setMnemonic(KeyEvent.VK_C); 
+		
 		// Botón de Pacientes
 		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 270, true,
 				new ImageIcon(getClass().getResource("/Resources/images/customers.png")));
-		btnCustomers.setToolTipText("Módulo de pacientes");
+		btnCustomers.setToolTipText("Módulo de pacientes (Alt+P)");
 
 		// Botón de Inventario
 		ButtonDentiApp btnStock = new ButtonDentiApp(0, 405, false,
 				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
-		btnStock.setToolTipText("Módulo de materiales");
-
+		btnStock.setToolTipText("Módulo de materiales (Alt+I)");
+		btnStock.setMnemonic(KeyEvent.VK_I);
+		
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {

@@ -526,6 +526,40 @@ public class Login extends JFrame {
 				}
 			}
 		});
+		
+		//Easter egg
+		ArrayList<Integer> combo = new ArrayList<>();
+		btnLogin.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				combo.add(e.getKeyCode());
+				if (combo.size() > 1) {
+					if (combo.contains(77) && combo.contains(83)) {
+						combo.clear();
+						Pedro p = new Pedro(756,318,2);
+						p.setVisible(true);
+					}
+				}
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if (combo != null) {
+					if (combo.contains(77) || combo.contains(83)) {
+						combo.remove(e.getKeyCode());
+					}
+				}
+
+			}
+		});
 // -------------------------------------ADICIONES AL PANEL Y AL LOGIN
 // PANEL-----------------
 		contentPane.add(loginPane);

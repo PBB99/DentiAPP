@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -120,32 +121,37 @@ public class AdminClinic extends JFrame {
 		// Botón de citas
 		ButtonDentiApp btnAppointment = new ButtonDentiApp(0, 135, false,
 				new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
-		btnAppointment.setToolTipText("Módulo de citas");
-
+		btnAppointment.setToolTipText("Módulo de citas (Alt+C)");
+		btnAppointment.setMnemonic(KeyEvent.VK_C);
+		
 		// Botón de usuarios
 		ButtonDentiApp btnUsers = new ButtonDentiApp(0, 270, false,
 				new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
-		btnAppointment.setToolTipText("Módulo de Usuarios");
-
+		btnUsers.setToolTipText("Módulo de Usuarios (Alt+U)");
+		btnUsers.setMnemonic(KeyEvent.VK_U);
+		
 		// Botón de Pacientes
 		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 405, false,
 				new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
-		btnCustomers.setToolTipText("Módulo de pacientes");
-
+		btnCustomers.setToolTipText("Módulo de pacientes (Alt+P)");
+		btnCustomers.setMnemonic(KeyEvent.VK_P);
+		
 		// Botón de Inventario
 		ButtonDentiApp btnStock = new ButtonDentiApp(0, 540, false,
 				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
-		btnStock.setToolTipText("Módulo de materiales");
-
+		btnStock.setToolTipText("Módulo de materiales (Alt+I)");
+		btnStock.setMnemonic(KeyEvent.VK_I);
+		
 		// Botón de Tratamientos y Especialidades
 		ButtonDentiApp btnClinic = new ButtonDentiApp(0, 675, true,
 				new ImageIcon(getClass().getResource("/Resources/images/clinic.png")));
-		btnClinic.setToolTipText("Módulo clínico");
+		btnClinic.setToolTipText("Módulo clínico (Alt+L)");
 
 		// Botón del Módulo economico
 		ButtonDentiApp btnPayments = new ButtonDentiApp(0, 810, false,
 				new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
-		btnPayments.setToolTipText("Módulo Económico");
+		btnPayments.setToolTipText("Módulo Económico (Alt+E)");
+		btnPayments.setMnemonic(KeyEvent.VK_E);
 
 		// Botón de insertar especialidad
 		JButton btnInsertSpeciality = new JButton();
@@ -841,10 +847,6 @@ public class AdminClinic extends JFrame {
 			lastlastIdTreatements = 0;
 		}
 
-	}
-
-	public JTable getTableTreatments() {
-		return tableTreatments;
 	}
 
 	// Clase para cambiar el color de las filas

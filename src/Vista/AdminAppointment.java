@@ -7,6 +7,8 @@ import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -34,6 +36,8 @@ import java.awt.Point;
 import javax.swing.JMenu;
 import java.awt.Insets;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.Rectangle;
 import java.awt.Window.Type;
 import java.awt.event.MouseAdapter;
@@ -71,7 +75,7 @@ public class AdminAppointment extends JFrame {
 	 * Create the frame.
 	 */
 	public AdminAppointment(UserHibernate userHi, JFrame parent) {
-		this.userHi=userHi;
+		this.userHi = userHi;
 		setType(Type.POPUP);
 		setBounds(new Rectangle(10, 0, 0, 0));
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
@@ -132,33 +136,38 @@ public class AdminAppointment extends JFrame {
 		// Botón de citas
 		ButtonDentiApp btnAppointment = new ButtonDentiApp(0, 135, true,
 				new ImageIcon(getClass().getResource("/Resources/images/calendar.png")));
-		btnAppointment.setToolTipText("Módulo de citas");
+		btnAppointment.setToolTipText("Módulo de citas (Alt+C)");
 
 		// Botón de usuarios
 		ButtonDentiApp btnUsers = new ButtonDentiApp(0, 270, false,
 				new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
-		btnAppointment.setToolTipText("Módulo de Usuarios");
-
+		btnUsers.setToolTipText("Módulo de Usuarios (Alt+U)");
+		btnUsers.setMnemonic(KeyEvent.VK_U);
+		
 		// Botón de Pacientes
 		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 405, false,
 				new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
-		btnCustomers.setToolTipText("Módulo de pacientes");
-
+		btnCustomers.setToolTipText("Módulo de pacientes (Alt+P)");
+		btnCustomers.setMnemonic(KeyEvent.VK_P);
+		
 		// Botón de Inventario
 		ButtonDentiApp btnStock = new ButtonDentiApp(0, 540, false,
 				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
-		btnStock.setToolTipText("Módulo de materiales");
-
+		btnStock.setToolTipText("Módulo de materiales (Alt+I)");
+		btnStock.setMnemonic(KeyEvent.VK_I);
+		
 		// Botón de Tratamientos y Especialidades
 		ButtonDentiApp btnClinic = new ButtonDentiApp(0, 675, false,
 				new ImageIcon(getClass().getResource("/Resources/images/clinicGrey.png")));
-		btnClinic.setToolTipText("Módulo clínico");
-
+		btnClinic.setToolTipText("Módulo clínico (Alt+L)");
+		btnClinic.setMnemonic(KeyEvent.VK_L);
+		
 		// Botón del Módulo economico
 		ButtonDentiApp btnPayments = new ButtonDentiApp(0, 810, false,
 				new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
-		btnPayments.setToolTipText("Módulo Económico");
-
+		btnPayments.setToolTipText("Módulo Económico (Alt+E)");
+		btnPayments.setMnemonic(KeyEvent.VK_E);
+		
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
@@ -232,7 +241,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de inventario
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminStock admStock = new AdminStock( userHi,frame);
+				AdminStock admStock = new AdminStock(userHi, frame);
 				admStock.setVisible(true);
 				session.close();
 			}
@@ -241,7 +250,7 @@ public class AdminAppointment extends JFrame {
 		// Acción del Módulo de la clínica
 		btnClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdminClinic admClinic = new AdminClinic( userHi,frame);
+				AdminClinic admClinic = new AdminClinic(userHi, frame);
 				admClinic.setVisible(true);
 				session.close();
 			}
@@ -271,7 +280,6 @@ public class AdminAppointment extends JFrame {
 		});
 
 		// logica click cambiar contraseña
-
 		ItemPass.addActionListener(new ActionListener() {
 
 			@Override
