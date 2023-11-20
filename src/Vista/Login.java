@@ -28,6 +28,9 @@ import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -45,9 +48,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.w3c.dom.events.EventTarget;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 	// declaracion de variables
@@ -167,9 +172,10 @@ public class Login extends JFrame {
 
 		// Botón de Login
 		JButton btnLogin = new JButton("Iniciar sesión");
+		btnLogin.setMnemonic(KeyEvent.VK_ENTER);
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
-
+		
 		// ----------------------------------------------LOGICA----------------------------------------------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
@@ -285,8 +291,6 @@ public class Login extends JFrame {
 
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				AdminAppointment pa=new AdminAppointment(conex, frame);
-//				pa.setVisible(true);
 				String username = tfDNI.getText();
 				String password = tfPassword.getText();
 				boolean aux2 = true;
@@ -328,32 +332,6 @@ public class Login extends JFrame {
 							} catch (Exception ex) {
 								System.out.println(ex);
 							}
-
-							// VERSION OBSOLETA
-//							for (Specialist s : speciaList) {// interactua por todos los especistas existentes
-//								if (x.getDni().toString().equalsIgnoreCase(s.getDni().toString())) {
-//									// en el caso de que el usuario este dentro de los especialistas del centro
-//									// dental
-//									if (s.getId_specialist() == 0) {
-//										
-//										}
-//
-//									} else {// si no es admin es doctor
-//											// declaracion de la pantalla doctor
-//										
-//
-//											// Ponemos a "Dormir" el programa para que cargue
-//											try {
-//												Thread.sleep(500);
-//											} catch (InterruptedException e1) {
-//												// TODO Auto-generated catch block
-//												e1.printStackTrace();
-//											}
-//										}
-//
-//									}
-//								}
-//							}
 						} else {// esta dado de baja
 							JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
 									JOptionPane.WARNING_MESSAGE);
@@ -367,7 +345,223 @@ public class Login extends JFrame {
 				}
 			}
 		});
+		
+		//Acción de atajo de teclado para iniciar sesion
+		tfDNI.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+					String username = tfDNI.getText();
+					String password = tfPassword.getText();
+					boolean aux2 = true;
 
+					for (UserHibernate x : userList) {
+						// si coinciden nombre y contraseña con alguno de los usuarios
+						if ((x.getDni().toString().equals(username)) && (x.getContraseña().toString().equals(password)) && aux2) {
+							// esta dado de alta
+							aux2 = false;
+							if (x.getEstado()==1) {
+								if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+									// se abre la pantalla de admin
+									AdminAppointment pa = new AdminAppointment(x, frame);
+									pa.setVisible(true);
+									session.close();
+									try {
+
+										// Ponemos a "Dormir" el programa para que cargue
+										Thread.sleep(500);
+									} catch (Exception ex) {
+										System.out.println(ex);
+									}
+									// Ponemos a "Dormir" el programa para que cargue
+									try {
+										Thread.sleep(500);
+									} catch (InterruptedException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+								} else {
+									DoctorAppointment pd = new DoctorAppointment(conex, frame);
+									pd.setVisible(true);
+									session.close();
+								}
+								try {
+
+									// Ponemos a "Dormir" el programa para que cargue
+									Thread.sleep(500);
+								} catch (Exception ex) {
+									System.out.println(ex);
+								}
+							} else {// esta dado de baja
+								JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
+										JOptionPane.WARNING_MESSAGE);
+								break;
+							}
+						}
+					}
+					if (aux2 == true) {
+						JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		//Acción de atajo de teclado para iniciar sesion
+		tfPassword.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+					String username = tfDNI.getText();
+					String password = tfPassword.getText();
+					boolean aux2 = true;
+
+					for (UserHibernate x : userList) {
+						// si coinciden nombre y contraseña con alguno de los usuarios
+						if ((x.getDni().toString().equals(username)) && (x.getContraseña().toString().equals(password)) && aux2) {
+							// esta dado de alta
+							aux2 = false;
+							if (x.getEstado()==1) {
+								if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+									// se abre la pantalla de admin
+									AdminAppointment pa = new AdminAppointment(x, frame);
+									pa.setVisible(true);
+									session.close();
+									try {
+
+										// Ponemos a "Dormir" el programa para que cargue
+										Thread.sleep(500);
+									} catch (Exception ex) {
+										System.out.println(ex);
+									}
+									// Ponemos a "Dormir" el programa para que cargue
+									try {
+										Thread.sleep(500);
+									} catch (InterruptedException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+								} else {
+									DoctorAppointment pd = new DoctorAppointment(conex, frame);
+									pd.setVisible(true);
+									session.close();
+								}
+								try {
+
+									// Ponemos a "Dormir" el programa para que cargue
+									Thread.sleep(500);
+								} catch (Exception ex) {
+									System.out.println(ex);
+								}
+							} else {// esta dado de baja
+								JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
+										JOptionPane.WARNING_MESSAGE);
+								break;
+							}
+						}
+					}
+					if (aux2 == true) {
+						JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		//Acción de atajo de teclado para iniciar sesion
+		btnLogin.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+					String username = tfDNI.getText();
+					String password = tfPassword.getText();
+					boolean aux2 = true;
+
+					for (UserHibernate x : userList) {
+						// si coinciden nombre y contraseña con alguno de los usuarios
+						if ((x.getDni().toString().equals(username)) && (x.getContraseña().toString().equals(password)) && aux2) {
+							// esta dado de alta
+							aux2 = false;
+							if (x.getEstado()==1) {
+								if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+									// se abre la pantalla de admin
+									AdminAppointment pa = new AdminAppointment(x, frame);
+									pa.setVisible(true);
+									session.close();
+									try {
+
+										// Ponemos a "Dormir" el programa para que cargue
+										Thread.sleep(500);
+									} catch (Exception ex) {
+										System.out.println(ex);
+									}
+									// Ponemos a "Dormir" el programa para que cargue
+									try {
+										Thread.sleep(500);
+									} catch (InterruptedException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+								} else {
+									DoctorAppointment pd = new DoctorAppointment(conex, frame);
+									pd.setVisible(true);
+									session.close();
+								}
+								try {
+
+									// Ponemos a "Dormir" el programa para que cargue
+									Thread.sleep(500);
+								} catch (Exception ex) {
+									System.out.println(ex);
+								}
+							} else {// esta dado de baja
+								JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
+										JOptionPane.WARNING_MESSAGE);
+								break;
+							}
+						}
+					}
+					if (aux2 == true) {
+						JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		//Easter egg
+		ArrayList<Integer> combo = new ArrayList<>();
+		btnLogin.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				combo.add(e.getKeyCode());
+				if (combo.size() > 1) {
+					if (combo.contains(77) && combo.contains(83)) {
+						combo.clear();
+						Pedro p = new Pedro(756,318,2);
+						p.setVisible(true);
+					}
+				}
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if (combo != null) {
+					if (combo.contains(77) || combo.contains(83)) {
+						combo.remove(e.getKeyCode());
+					}
+				}
+
+			}
+		});
 // -------------------------------------ADICIONES AL PANEL Y AL LOGIN
 // PANEL-----------------
 		contentPane.add(loginPane);

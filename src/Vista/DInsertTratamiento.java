@@ -118,8 +118,8 @@ public class DInsertTratamiento extends JDialog {
 		// Acción de cancelar
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
 				session.close();
+				dispose();
 			}
 		});
 
@@ -168,8 +168,8 @@ public class DInsertTratamiento extends JDialog {
 					session.getTransaction().commit();
 
 					// Cerramos
-					dispose();
 					session.close();
+					dispose();
 				}
 			}
 		});
