@@ -63,6 +63,7 @@ public class AdminUsers extends JFrame {
 	private SessionFactory instancia;
 	private Session miSesion;
 	private JTable tabla;
+	private int control=0;
 
 	/**
 	 * Launch the application.
@@ -92,7 +93,7 @@ public class AdminUsers extends JFrame {
 		this.instancia = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.miSesion = instancia.openSession();
-
+		
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -218,6 +219,7 @@ public class AdminUsers extends JFrame {
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+		cargarTabla("Admin", tabla);
 		this.addWindowListener(new WindowListener() {
 
 			@Override
@@ -267,129 +269,227 @@ public class AdminUsers extends JFrame {
 
 			}
 		});
-		
-		//Logica de lables
+
+		// Logica de lables
 		lAdd.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				AdminInsertUser u=new AdminInsertUser(instancia,frame, true);
+				AdminInsertUser u = new AdminInsertUser(instancia, frame, true);
 				u.setVisible(true);
-				
+				u.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						if(control==0) {
+							cargarTabla("admin", tabla);
+						}else {
+							cargarTabla("doctor", tabla);
+						}
+					}
+				});
+
 			}
 		});
-	lMod.addMouseListener(new MouseListener() {
-			
+		lMod.addMouseListener(new MouseListener() {
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				ChangeUser c=new ChangeUser(instancia,frame, true);
+				ChangeUser c = new ChangeUser(instancia, frame, true);
 				c.setVisible(true);
-				
+				c.addWindowListener(new WindowListener() {
+					
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+						if(control==0) {
+							cargarTabla("admin", tabla);
+							System.out.println("CARGA");
+						}else {
+							
+							cargarTabla("doctor", tabla);
+							System.out.println("SIGUE CARGANDO");
+						}
+						
+						
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+
 			}
 		});
-	lDel.addMouseListener(new MouseListener() {
-		
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			Query<UserHibernate> consulta2 = miSesion.createQuery("FROM UserHibernate",UserHibernate.class);
-			List<UserHibernate>listaUsers=consulta2.getResultList();
-			List<String>listaDnis=new ArrayList<String>();
-			for(UserHibernate x:listaUsers) {
-				listaDnis.add(x.getDni());
+		lDel.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
 			}
-			String resultado = (String) JOptionPane.showInputDialog(null, "Usuarios", "Elegir",
-					JOptionPane.QUESTION_MESSAGE, null, listaDnis.toArray(), listaDnis.toArray()[0]);
-			
-			UserHibernate user = new UserHibernate();
-			user.setDni(resultado);
-			user.setEstado(0);
-			
-		
-			miSesion.update(user);
-			miSesion.getTransaction().commit();
-			miSesion.close();
-		}
-			
-		
-	});
-		
-		
-		
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				Query<UserHibernate> consulta2 = miSesion.createQuery("FROM UserHibernate", UserHibernate.class);
+				List<UserHibernate> listaUsers = consulta2.getResultList();
+				List<String> listaDnis = new ArrayList<String>();
+				for (UserHibernate x : listaUsers) {
+					listaDnis.add(x.getDni());
+				}
+				String resultado = (String) JOptionPane.showInputDialog(null, "Usuarios", "Elegir",
+						JOptionPane.QUESTION_MESSAGE, null, listaDnis.toArray(), listaDnis.toArray()[0]);
+				System.out.println(resultado);
+				UserHibernate user = miSesion.get(UserHibernate.class, resultado);
+				user.setDni(resultado);
+				user.setEstado(0);
+				System.out.println(user.getEstado());
+				miSesion.beginTransaction();
+				miSesion.update(user);
+				miSesion.getTransaction().commit();
+				
+			}
+
+		});
 
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
@@ -437,6 +537,7 @@ public class AdminUsers extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cargarTabla("Doctor", tabla);
+				control=1;
 
 			}
 		});
@@ -447,6 +548,7 @@ public class AdminUsers extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				cargarTabla("Admin", tabla);
+				control=0;
 
 			}
 		});
@@ -476,7 +578,7 @@ public class AdminUsers extends JFrame {
 				cP.setVisible(true);
 				cP.setModal(true);
 				System.out.println("PINCHADO");
-				miSesion.close();
+				
 
 			}
 		});
@@ -534,6 +636,7 @@ public class AdminUsers extends JFrame {
 
 	public void cargarTabla(String nombreTabla, JTable tablaDoctores) {
 		// Relaiza la consulta de todos los usuarios y los extrae
+		miSesion=instancia.openSession();
 		String hql = "FROM UserHibernate ";
 		Query<UserHibernate> consulta = miSesion.createQuery(hql, UserHibernate.class);
 		List<UserHibernate> userList = consulta.getResultList();
@@ -600,8 +703,13 @@ public class AdminUsers extends JFrame {
 
 			}
 			tablaDoctores.setModel(model);
+			if (admin.size() < 18) {
+				model.setRowCount(19);
+			} else {
+				model.setRowCount(admin.size());
+			}
 			JTableHeader header = tablaDoctores.getTableHeader();
-			model.setRowCount(admin.size());
+			
 			int fila = 0;
 
 			for (UserHibernate y : admin) {

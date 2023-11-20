@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -28,13 +30,15 @@ import Modelo.UserHibernate;
 public class ChangeUser extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
-	private JPanel contentPane;
+
+	
 	private JTextField tfNombre;
 	private JTextField tfContraseña;
 	private JTextField tfApellido;
 	private SessionFactory instancia;
 	private Session miSesion;
+	private final JPanel contentPanel = new JPanel();
+	private List<SpecialityHibernate> lista;
 
 	/**
 	 * Launch the application.
@@ -50,20 +54,29 @@ public class ChangeUser extends JDialog {
 
 		this.instancia = instancia;
 		this.miSesion = instancia.openSession();
-		miSesion.beginTransaction();
+	
 		setModal(modal);
-		this.setContentPane(contentPanel);
+		setContentPane(contentPanel);
+	
+
+		
 	
 		// -----------------------COMPONENTES-------------------
 
 		setBounds(960, 540, 650, 400);
-		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
-
+		
+		JLabel lEspeAct = new JLabel("");
+		lEspeAct.setBounds(130, 155, 144, 14);
+		
+		
+		JLabel lNuevaEsp = new JLabel("Nueva Especialidad");
+		lNuevaEsp.setBounds(311, 155, 122, 14);
 		
 		JLabel lblDNI = new JLabel("DNI");
 		lblDNI.setBounds(20, 13, 18, 14);
+		contentPanel.setLayout(null);
 
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(20, 82, 37, 14);
@@ -87,14 +100,17 @@ public class ChangeUser extends JDialog {
 		tfApellido.setColumns(10);
 		tfApellido.setBounds(311, 79, 86, 20);
 
-		JLabel lblEspecialidad = new JLabel("Especialidad");
-		lblEspecialidad.setBounds(136, 155, 58, 14);
+		JLabel lblEspecialidad = new JLabel("Especialidad Act:");
+		lblEspecialidad.setBounds(22, 155, 86, 14);
 
 		JButton okButton = new JButton("OK");
+		okButton.setBounds(87, 254, 124, 20);
 		okButton.setActionCommand("OK");
 		getRootPane().setDefaultButton(okButton);
+		okButton.setMnemonic(KeyEvent.VK_ENTER);
 		
 		JButton cancelButton = new JButton("Cancel");
+		cancelButton.setBounds(232, 254, 124, 20);
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setModal(false);
@@ -107,9 +123,9 @@ public class ChangeUser extends JDialog {
 		
 		// comboboxes de Especialidad y DNIS
 		JComboBox cbEspecialidad = new JComboBox();
-		cbEspecialidad.setBounds(218, 152, 86, 20);
+		cbEspecialidad.setBounds(453, 152, 86, 20);
 
-		cbEspecialidad.addItem("");
+		
 
 		JComboBox cbDni = new JComboBox();
 		cbDni.setBounds(67, 10, 86, 20);
@@ -122,12 +138,12 @@ public class ChangeUser extends JDialog {
 		try {// CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
 			String hql = "From SpecialityHibernate";
 			Query<SpecialityHibernate> consultaEspe = miSesion.createQuery(hql, SpecialityHibernate.class);
-			List<SpecialityHibernate> lista = consultaEspe.getResultList();
+			lista = consultaEspe.getResultList();
 			// se borra el primer elemento para evitar que al admin se le quite el permiso
 			// del admin al modificar
 			lista.removeFirst();
 			for (SpecialityHibernate x : lista) {
-				cbEspecialidad.addItem(x);
+				cbEspecialidad.addItem(x.getEspecialidad());
 
 			}
 		} catch (Exception e2) {
@@ -146,10 +162,8 @@ public class ChangeUser extends JDialog {
 		}
 		
 		//BUtton panel
-		JPanel buttonPane = new JPanel();
-		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		getContentPane().add(buttonPane, BorderLayout.SOUTH);
-		{
+		
+		
 			
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -160,16 +174,26 @@ public class ChangeUser extends JDialog {
 					String especialidad = cbEspecialidad.getSelectedItem().toString();
 					
 					
-				
-					try {
-						if(dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
+						if( nom.isEmpty() || ape.isEmpty() || contra.isEmpty() || cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("") ) {
 							JOptionPane.showMessageDialog(null,"Debes rellenar todos los campos", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
 						}else {
-				                	UserHibernate usuario=new UserHibernate(dni,nom,ape,contra,1);
-				                	miSesion.save(usuario);
+									
+									UserHibernate usuario1=miSesion.get(UserHibernate.class,dni);
+									//especialidad que elijo el mas uno es por que no aparece admin (admin sera 0, medico 1) pero en el combobox  seria la eleccion 0
+									SpecialityHibernate especialidadO=miSesion.get(SpecialityHibernate.class,cbEspecialidad.getSelectedIndex()+1 );
+									usuario1.setNombre(nom);
+									usuario1.setApellido(ape);
+									usuario1.setContraseña(contra);
+									usuario1.getSpeciality().remove(0);
+									usuario1.getSpeciality().add(especialidadO);
+									
+									miSesion.beginTransaction();
+									
+				                	System.out.println("cambiado");
+				                	miSesion.update(usuario1);
 				                	JOptionPane.showMessageDialog(null," USUARIO MODIFICADO");
 				                	miSesion.getTransaction().commit();
-				                	miSesion.close();
+				                	
 				                }
 				            
 							
@@ -182,9 +206,7 @@ public class ChangeUser extends JDialog {
 //									AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
 						
 						
-					} catch (Exception e2) {
-						// TODO: handle exception
-					}
+				
 				}
 			});
 			
@@ -193,11 +215,11 @@ public class ChangeUser extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
-					
+					cargarDatos(cbDni.getSelectedItem().toString(), miSesion, tfNombre, tfApellido,lEspeAct);
 					
 				}
 			});
-		}
+		
 		// ----------------------------ADICIONES-----------------------------
 		
 		
@@ -210,16 +232,28 @@ public class ChangeUser extends JDialog {
 		contentPanel.add(lblApellido);
 		contentPanel.add(tfNombre);
 		contentPanel.add(lblDNI);
+		contentPanel.add(okButton);
+		contentPanel.add(cancelButton);
+		contentPanel.add(lEspeAct);
+		contentPanel.add(lNuevaEsp);
+		
+		
 	}
 
 	//método para poner los datos de las especialidades en los textField
-	public static void cargarDatos(String Dni,Session miSesion,JTextField nombre,JTextField apell) {
+	public static void cargarDatos(String Dni,Session miSesion,JTextField nombre,JTextField apell,JLabel espeActu) {
 		String hql="From UserHibernate where dni=:Dni";
 		Query<UserHibernate>consulta=miSesion.createQuery(hql,UserHibernate.class);
 		consulta.setParameter("Dni", Dni);
+		UserHibernate x=miSesion.get(UserHibernate.class,Dni );
 		UserHibernate u=consulta.getSingleResult();
 		nombre.setText(u.getNombre());
 		apell.setText(u.getApellido());
+		espeActu.setText(u.getSpeciality().get(0).getEspecialidad());
+		
+		
+		
+		
 		
 	}
 }

@@ -150,7 +150,7 @@ public class AdminInsertUser extends JDialog {
 		JComboBox cbEspecialidad = new JComboBox();
 		cbEspecialidad.setBounds(218, 152, 86, 20);
 		
-		cbEspecialidad.addItem("");
+		
 		
 		//------------------------------------------LOGICA-----------------------------------------------
 		
@@ -159,7 +159,7 @@ public class AdminInsertUser extends JDialog {
 		Query<SpecialityHibernate>consultaEspe=miSesion.createQuery(hql,SpecialityHibernate.class);
 		List<SpecialityHibernate>lista=consultaEspe.getResultList();	
 		for(SpecialityHibernate x:lista) {
-			cbEspecialidad.addItem(x);
+			cbEspecialidad.addItem(x.getEspecialidad());
 			
 		}
             
@@ -196,7 +196,11 @@ public class AdminInsertUser extends JDialog {
 								JOptionPane.showMessageDialog(null,"Ese DNI ya esta ligado a un usuari/a", "WARNING_MESSAGE",JOptionPane.WARNING_MESSAGE);
 					                }else {
 					                	UserHibernate usuario=new UserHibernate(dni,nom,ape,contra,1);
+					                	SpecialityHibernate sp=miSesion.get(SpecialityHibernate.class, cbEspecialidad.getSelectedIndex());
+					                	usuario.addEspeciality(sp);
+					                	sp.addUser(usuario);
 					                	miSesion.save(usuario);
+					                	miSesion.update(sp);
 					                	JOptionPane.showMessageDialog(null,"Nuevo usuario creado");
 					                	miSesion.getTransaction().commit();
 					                	miSesion.close();
@@ -208,7 +212,7 @@ public class AdminInsertUser extends JDialog {
 								setModal(false);
 								setVisible(false);
 								dispose();
-								miSesion.close();
+								
 //								AdminInsertUser.this.dispatchEvent(new WindowEvent(
 //										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
 							
