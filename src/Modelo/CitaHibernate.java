@@ -1,14 +1,13 @@
 package Modelo;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "cita")
-
-public class CitaHibernate {
+public class CitaHibernate implements Serializable{
 	
 	@Id
 	@Column(name = "idcita", nullable = false)
@@ -61,8 +60,8 @@ public class CitaHibernate {
 
 
 
-	@ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "usuario")
+	@ManyToOne
+    @JoinColumn(name = "dni_doc")
     private UserHibernate userHiber; //Este atributo va a @OneToMany en Cliente
 
     public UserHibernate getUser() {
@@ -73,8 +72,8 @@ public class CitaHibernate {
         this.userHiber = userHiber;
     }
     
-    @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "cliente")
+    @ManyToOne
+    @JoinColumn(name = "dni_paciente")
     private ClienteHibernate clienteHiber; //Este atributo va a @OneToMany en Cliente
 
     public ClienteHibernate getCliente() {
@@ -85,12 +84,12 @@ public class CitaHibernate {
         this.clienteHiber = clienteHiber;
     }
     
-    @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "tratamientos")
+    @ManyToOne
+    @JoinColumn(name = "codigo_trata")
     private TreatmentsHibernate tratamientoHiber; //Este atributo va a @OneToMany en Cliente
 
-    public ClienteHibernate getTratamiento() {
-        return clienteHiber;
+    public TreatmentsHibernate getTratamiento() {
+        return tratamientoHiber;
     }
 
     public void setTratamiento(TreatmentsHibernate tratamientoHiber) {
