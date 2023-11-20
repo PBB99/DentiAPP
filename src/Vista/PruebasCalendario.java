@@ -326,8 +326,6 @@ public class PruebasCalendario extends JFrame {
 				consultaCitas.setParameter("id", (UserHibernate) comboBox.getSelectedItem());
 				List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
-				System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
-
 				for (int i = 0; i < allCitas.size(); i++) {
 					Date dia = (Date) allCitas.get(i).getFecha();
 					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
