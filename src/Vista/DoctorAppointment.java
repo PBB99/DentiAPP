@@ -90,8 +90,7 @@ public class DoctorAppointment extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DoctorAppointment(ConexionMySQL conex, JFrame parent) {
-		this.conex = conex;
+	public DoctorAppointment(UserHibernate mainUser, JFrame parent) {
 		// -------------------- JFrame --------------------
 		this.frame = this;
 		this.parent = parent;
@@ -193,7 +192,7 @@ public class DoctorAppointment extends JFrame {
 		// Acción de ir a Módulo pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DoctorCustomers docCustomers = new DoctorCustomers(conex, frame);
+				DoctorCustomers docCustomers = new DoctorCustomers(mainUser, frame);
 				docCustomers.setVisible(true);
 			}
 		});
@@ -201,7 +200,7 @@ public class DoctorAppointment extends JFrame {
 		// Acción de ir a Módulo Stock
 		btnStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DoctorStock docStock = new DoctorStock(conex, frame);
+				DoctorStock docStock = new DoctorStock(mainUser, frame);
 				docStock.setVisible(true);
 			}
 		});
@@ -217,24 +216,6 @@ public class DoctorAppointment extends JFrame {
 		calendar.setBounds(180, 180, 184, 153);
 		contentPane.add(calendar);
 		
-		JComboBox cbUsuarios = new JComboBox();
-		cbUsuarios.setBounds(180, 120, 96, 22);
-		contentPane.add(cbUsuarios);
-		Query<UserHibernate> consultaUsers = session.createQuery("FROM UserHibernate", UserHibernate.class);
-		List<UserHibernate> allUsers = consultaUsers.getResultList();
-		int x = 0;
-		for (int i = 0; i < allUsers.size(); i++) {
-			List<SpecialityHibernate> allSpecialities = allUsers.get(i).getSpeciality();
-			for (int j = 0; j < allSpecialities.size(); j++) {
-				if(allSpecialities.get(j).getId_especialidad() == 0)
-					x++;
-			}
-			if(x==0) {
-				cbUsuarios.addItem(allUsers.get(i));
-			}
-			x = 0;
-		}
-
 		DefaultTableModel modelo = new DefaultTableModel();
 		JTable table = new JTable();
 		table.setBounds(420, 180, 199, 196);
@@ -249,7 +230,7 @@ public class DoctorAppointment extends JFrame {
 		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id",
 				CitaHibernate.class);
 		consultaCitas.setParameter("fech", fechaCalen.getTime());
-		consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
+		consultaCitas.setParameter("id", mainUser);
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 		
 		System.out.println(formateador.format(fechaCalen.getTime()));
@@ -289,7 +270,7 @@ public class DoctorAppointment extends JFrame {
 				Query<CitaHibernate> consulta = session
 						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
 				consulta.setParameter("fech", fechaCal.getTime());
-				consulta.setParameter("id",(UserHibernate) cbUsuarios.getSelectedItem());
+				consulta.setParameter("id",mainUser);
 				List<CitaHibernate> allCitas = consulta.getResultList();
 
 				System.out.println(allCitas.size());
@@ -310,156 +291,6 @@ public class DoctorAppointment extends JFrame {
 			}
 		});
 		
-		cbUsuarios.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				// TODO Auto-generated method stub
-				for (int j = 1; j < table.getModel().getRowCount(); j++) {
-					table.getModel().setValueAt("", j, 1);
-				}
-
-				Query<CitaHibernate> consultaCitas = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
-				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-				consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-				List<CitaHibernate> allCitas = consultaCitas.getResultList();
-
-				System.out.println(allCitas.size());
-
-				for (int i = 0; i < allCitas.size(); i++) {
-					Date dia = (Date) allCitas.get(i).getFecha();
-					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
-					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
-						System.out.println("saddasdas");
-						for (int j = 0; j < table.getModel().getRowCount(); j++) {
-							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
-								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
-							}
-						}
-					}
-				}
-
-			}
-		});
-
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent event) {
-				String a = (table.getValueAt(table.getSelectedRow(), 0).toString());
-				if (!event.getValueIsAdjusting()) {// This line prevents double events
-					String[] opc = { "ELIMINAR CITA", "ACTUALIZAR/INSERTAR CITA" };
-					System.out.println("--");
-					if (fechaCalen.getTime().before(calendar.getCalendar().getTime())
-							|| (fechaCalen.getTime().getDay() == calendar.getCalendar().getTime().getDay())
-									&& (fechaCalen.getTime().getMonth() == calendar.getCalendar().getTime().getMonth())
-									&& (fechaCalen.getTime().getYear() == calendar.getCalendar().getTime().getYear())) {
-						int opcionDml = JOptionPane.showOptionDialog(null, "¿Qué quieres hacer?", "Elige",
-								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opc, opc[0]);
-						if (opcionDml == 0) {
-							session.beginTransaction();
-							Query<CitaHibernate> consultaCitas = session.createQuery(
-									"FROM CitaHibernate where fecha=:fech and hora=:hora and dni_doc=:id",
-									CitaHibernate.class);
-							consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-							consultaCitas.setParameter("hora", a);
-							consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-							CitaHibernate h3 = consultaCitas.getSingleResult();
-							session.delete(h3);
-							session.getTransaction().commit();
-							actualizarTabla();
-						} else if (opcionDml == 1) {
-							UserHibernate u = (UserHibernate) cbUsuarios.getSelectedItem();
-							AdminInsertCita us = new AdminInsertCita(u.getDni(),
-									calendar.getCalendar().getTime(),
-									(table.getValueAt(table.getSelectedRow(), 0).toString()));
-							us.setVisible(true);
-							us.addWindowListener(new WindowListener() {
-								
-								@Override
-								public void windowClosed(WindowEvent e) {
-									// TODO Auto-generated method stub
-									actualizarTabla();
-								}
-
-								@Override
-								public void windowOpened(WindowEvent e) {
-									// TODO Auto-generated method stub
-									
-								}
-
-								@Override
-								public void windowClosing(WindowEvent e) {
-									// TODO Auto-generated method stub
-									
-								}
-
-								@Override
-								public void windowIconified(WindowEvent e) {
-									// TODO Auto-generated method stub
-									
-								}
-
-								@Override
-								public void windowDeiconified(WindowEvent e) {
-									// TODO Auto-generated method stub
-									
-								}
-
-								@Override
-								public void windowActivated(WindowEvent e) {
-									// TODO Auto-generated method stub
-									
-								}
-
-								@Override
-								public void windowDeactivated(WindowEvent e) {
-									// TODO Auto-generated method stub
-									
-								}
-								
-							});
-						}
-						
-					}
-
-				}
-				// table.clearSelection();
-//		        if (table.getSelectedRow() > -1) {
-//		            // print first column value from selected row
-//		            //System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
-//		            System.out.println("---");
-//
-//		        }
-			}
-			
-			
-			public void actualizarTabla() {
-				for (int j = 1; j < table.getModel().getRowCount(); j++) {
-					table.getModel().setValueAt("", j, 1);
-				}
-
-				Query<CitaHibernate> consultaCitas = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
-				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-				consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-				List<CitaHibernate> allCitas = consultaCitas.getResultList();
-
-				for (int i = 0; i < allCitas.size(); i++) {
-					Date dia = (Date) allCitas.get(i).getFecha();
-					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
-					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
-						System.out.println("saddasdas");
-						for (int j = 0; j < table.getModel().getRowCount(); j++) {
-							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
-								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
-							}
-						}
-					}
-				}
-			}
-		});
 	
 	}
 

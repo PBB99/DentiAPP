@@ -185,6 +185,7 @@ public class AdminInsertCita extends JDialog {
 							session.beginTransaction();
 							session.save(cita);
 							session.getTransaction().commit();
+							System.out.println("------------------------------------------------------------------------------------------------------------------------------------------");
 						}else {
 							CitaHibernate citaEx = consultaCitaExiste.getSingleResult();
 							citaEx.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
@@ -193,12 +194,13 @@ public class AdminInsertCita extends JDialog {
 							session.beginTransaction();
 							session.update(citaEx);
 							session.getTransaction().commit();
+							System.out.println("------------------------------------------------------------------------------------------------------------------------------------------");
 						}
 						setModal(false);
+						dispose();
 						setVisible(false);
 						AdminInsertCita.this.dispatchEvent(new WindowEvent(
 								AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
-						dispose();
 					}
 				});
 				

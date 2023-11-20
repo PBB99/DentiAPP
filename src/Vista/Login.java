@@ -317,7 +317,7 @@ public class Login extends JFrame {
 									e1.printStackTrace();
 								}
 							} else {
-								DoctorAppointment pd = new DoctorAppointment(conex, frame);
+								DoctorAppointment pd = new DoctorAppointment(x, frame);
 								pd.setVisible(true);
 								session.close();
 							}

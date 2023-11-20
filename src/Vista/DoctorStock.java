@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.ConexionMySQL;
+import Modelo.UserHibernate;
 import btndentiapp.ButtonDentiApp;
 
 public class DoctorStock extends JFrame {
@@ -45,9 +46,7 @@ public class DoctorStock extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DoctorStock(ConexionMySQL conex, JFrame parent) {
-		this.conex = conex;
-
+	public DoctorStock(UserHibernate mainUser, JFrame parent) {
 		// -------------------- JFrame --------------------
 		this.frame = this;
 		this.parent = parent;
@@ -143,7 +142,7 @@ public class DoctorStock extends JFrame {
 		// Acción de ir a Módulo Citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DoctorAppointment docAppointment = new DoctorAppointment(conex, frame);
+				DoctorAppointment docAppointment = new DoctorAppointment(mainUser, frame);
 				docAppointment.setVisible(true);
 			}
 		});
@@ -151,7 +150,7 @@ public class DoctorStock extends JFrame {
 		// Acción de ir a Módulo pacientes
 		btnCustomers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DoctorCustomers docCustomers = new DoctorCustomers(conex, frame);
+				DoctorCustomers docCustomers = new DoctorCustomers(mainUser, frame);
 				docCustomers.setVisible(true);
 			}
 		});
