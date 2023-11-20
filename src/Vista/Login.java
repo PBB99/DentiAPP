@@ -52,6 +52,7 @@ import org.w3c.dom.events.EventTarget;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 	// declaracion de variables
@@ -171,6 +172,7 @@ public class Login extends JFrame {
 
 		// Botón de Login
 		JButton btnLogin = new JButton("Iniciar sesión");
+		btnLogin.setMnemonic(KeyEvent.VK_ENTER);
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		btnLogin.setBounds(200, 675, 150, 50);
 		

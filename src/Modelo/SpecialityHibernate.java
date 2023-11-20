@@ -73,7 +73,7 @@ public class SpecialityHibernate  implements Serializable{
         this.users.add(p);
         p.getSpeciality().add(this);
     }
-    public void setClientes(List<UserHibernate> users) {
+    public void setUser(List<UserHibernate> users) {
         this.users = users;
     }
 	
