@@ -198,6 +198,7 @@ public class AdminInsertCita extends JDialog {
 						setVisible(false);
 						AdminInsertCita.this.dispatchEvent(new WindowEvent(
 								AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
+						dispose();
 					}
 				});
 				

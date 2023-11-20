@@ -3,6 +3,8 @@ package Vista;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.GregorianCalendar;
@@ -58,6 +60,7 @@ public class PruebasCalendario extends JFrame {
 	private SessionFactory instancia;
 	private Session session;
 	private JTable table_1;
+	private AdminInsertCita us;
 
 	/**
 	 * Launch the application.
@@ -108,7 +111,7 @@ public class PruebasCalendario extends JFrame {
 		List<UserHibernate> allUsers = consultaUsers.getResultList();
 
 		for (int i = 0; i < allUsers.size(); i++) {
-			comboBox.addItem(allUsers.get(i).getDni());
+			comboBox.addItem(allUsers.get(i));
 		}
 
 		DefaultTableModel modelo = new DefaultTableModel();
@@ -122,14 +125,12 @@ public class PruebasCalendario extends JFrame {
 		modelo.insertRow(0, new Object[] { "Hora", "Cita" });
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
-		java.util.Date fech = fechaCalen.getTime();
-		System.out.println(fech);
-		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech",
+		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id",
 				CitaHibernate.class);
 		consultaCitas.setParameter("fech", fechaCalen.getTime());
-		// consultaCitas.setParameter("id", comboBox.getSelectedItem());
-		System.out.println(comboBox.getSelectedItem());
+		consultaCitas.setParameter("id", (UserHibernate) comboBox.getSelectedItem());
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
+		
 		System.out.println(formateador.format(fechaCalen.getTime()));
 		for (int i = 9; i < 15; i++) {
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
@@ -169,7 +170,7 @@ public class PruebasCalendario extends JFrame {
 				Query<CitaHibernate> consulta = session
 						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
 				consulta.setParameter("fech", fechaCal.getTime());
-				consulta.setParameter("id", comboBox.getSelectedItem());
+				consulta.setParameter("id",(UserHibernate) comboBox.getSelectedItem());
 				List<CitaHibernate> allCitas = consulta.getResultList();
 
 				System.out.println(allCitas.size());
@@ -203,7 +204,7 @@ public class PruebasCalendario extends JFrame {
 				Query<CitaHibernate> consultaCitas = session
 						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
 				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-				consultaCitas.setParameter("id", comboBox.getSelectedItem());
+				consultaCitas.setParameter("id", (UserHibernate) comboBox.getSelectedItem());
 				List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
 				System.out.println(allCitas.size());
@@ -244,16 +245,63 @@ public class PruebasCalendario extends JFrame {
 									CitaHibernate.class);
 							consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
 							consultaCitas.setParameter("hora", a);
-							consultaCitas.setParameter("id", comboBox.getSelectedItem());
+							consultaCitas.setParameter("id", (UserHibernate) comboBox.getSelectedItem());
 							CitaHibernate h3 = consultaCitas.getSingleResult();
 							session.delete(h3);
 							session.getTransaction().commit();
+							actualizarTabla();
 						} else if (opcionDml == 1) {
-							AdminInsertCita us = new AdminInsertCita(comboBox.getSelectedItem().toString(),
+							UserHibernate u = (UserHibernate) comboBox.getSelectedItem();
+							us = new AdminInsertCita(u.getDni(),
 									calendar.getCalendar().getTime(),
 									(table.getValueAt(table.getSelectedRow(), 0).toString()));
 							us.setVisible(true);
+							us.addWindowListener(new WindowListener() {
+								
+								@Override
+								public void windowOpened(WindowEvent e) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void windowIconified(WindowEvent e) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void windowDeiconified(WindowEvent e) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void windowDeactivated(WindowEvent e) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void windowClosing(WindowEvent e) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void windowClosed(WindowEvent e) {
+									// TODO Auto-generated method stub
+									actualizarTabla();
+								}
+								
+								@Override
+								public void windowActivated(WindowEvent e) {
+									// TODO Auto-generated method stub
+									
+								}
+							});
 						}
+						
 					}
 
 				}
@@ -265,8 +313,36 @@ public class PruebasCalendario extends JFrame {
 //
 //		        }
 			}
+			
+			
+			public void actualizarTabla() {
+				for (int j = 1; j < table.getModel().getRowCount(); j++) {
+					table.getModel().setValueAt("", j, 1);
+				}
 
+				Query<CitaHibernate> consultaCitas = session
+						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
+				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
+				consultaCitas.setParameter("id", (UserHibernate) comboBox.getSelectedItem());
+				List<CitaHibernate> allCitas = consultaCitas.getResultList();
+
+				System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+				for (int i = 0; i < allCitas.size(); i++) {
+					Date dia = (Date) allCitas.get(i).getFecha();
+					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
+					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
+						System.out.println("saddasdas");
+						for (int j = 0; j < table.getModel().getRowCount(); j++) {
+							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
+								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
+							}
+						}
+					}
+				}
+			}
 		});
+		
 
 	}
 }

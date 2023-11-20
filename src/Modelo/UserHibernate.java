@@ -82,8 +82,17 @@ public class UserHibernate  implements Serializable{
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
+	
+	
 
-    @ManyToMany(mappedBy = "users")
+    @Override
+	public String toString() {
+		return nombre;
+	}
+
+
+
+	@ManyToMany(mappedBy = "users")
     private List<SpecialityHibernate> clientes = new ArrayList<SpecialityHibernate>();
 
     public List<SpecialityHibernate> getSpeciality() {
