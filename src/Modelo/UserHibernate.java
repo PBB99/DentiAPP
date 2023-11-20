@@ -93,7 +93,7 @@ public class UserHibernate  implements Serializable{
 
 
 	@ManyToMany(mappedBy = "users")
-    private List<SpecialityHibernate> clientes = new ArrayList<SpecialityHibernate>();
+    private List<SpecialityHibernate> especialidades = new ArrayList<SpecialityHibernate>();
 
     public List<SpecialityHibernate> getSpeciality() {
         return especialidades;
