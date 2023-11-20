@@ -1,7 +1,10 @@
 package Vista;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -18,15 +21,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -37,15 +38,29 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import com.toedter.calendar.JCalendar;
-
 import Controlador.ConexionMySQL;
 import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
+
+import javax.swing.JMenuBar;
+import java.awt.Point;
+import javax.swing.JMenu;
+import java.awt.Insets;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
+import java.awt.Rectangle;
+import java.awt.Window.Type;
+import java.awt.event.MouseAdapter;
+
 import btndentiapp.ButtonDentiApp;
+import com.toedter.calendar.JCalendar;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 public class DoctorAppointment extends JFrame {
 
