@@ -12,21 +12,17 @@ public class TreatmentsHibernate {
 	@Column(name = "codigo_tratamiento", nullable = false)
 	private Integer codigo_tratamiento;
 	
-//	@Column(name = "especialidad", nullable = false)
-//	private Integer especialidad;
-	
 	@Column(name = "nombre", nullable = false)
 	private String nombre;
 	
 	@Column(name = "precio", nullable = false)
-	private String precio;
+	private int precio;
 	
 	public TreatmentsHibernate() {}
 	
-	public TreatmentsHibernate(Integer codigo_tratamiento, String nombre, String precio) {
+	public TreatmentsHibernate(Integer codigo_tratamiento, String nombre, int precio) {
 		super();
 		this.codigo_tratamiento = codigo_tratamiento;
-//		this.especialidad = especialidad;
 		this.nombre = nombre;
 		this.precio = precio;
 	}
@@ -39,14 +35,6 @@ public class TreatmentsHibernate {
 		this.codigo_tratamiento = codigo_tratamiento;
 	}
 
-//	public Integer getEspecialidad() {
-//		return especialidad;
-//	}
-//
-//	public void setEspecialidad(Integer especialidad) {
-//		this.especialidad = especialidad;
-//	}
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -55,24 +43,24 @@ public class TreatmentsHibernate {
 		this.nombre = nombre;
 	}
 
-	public String getPrecio() {
+	public int getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(String precio) {
+	public void setPrecio(int precio) {
 		this.precio = precio;
 	}
 	
-	@ManyToOne(cascade={CascadeType.ALL})
+	@ManyToOne() 
     @JoinColumn(name = "especialidad")
-    private SpecialityHibernate especialidad_tratamiento; //Este atributo va a @OneToMany en Cliente
+    private SpecialityHibernate especialidad; //Este atributo va a @OneToMany en Cliente
 
     public SpecialityHibernate getEspecialidad() {
-        return especialidad_tratamiento;
+        return especialidad;
     }
 
     public void setEspecialidad(SpecialityHibernate especialidad_tratamiento) {
-        this.especialidad_tratamiento = especialidad_tratamiento;
+        this.especialidad = especialidad_tratamiento;
     }
     
     
