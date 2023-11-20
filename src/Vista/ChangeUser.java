@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -45,16 +46,17 @@ public class ChangeUser extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ChangeUser(AdminUsers parent, boolean modal) {
+	public ChangeUser(SessionFactory instancia,JFrame parent, boolean modal) {
 
-		this.instancia = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserHibernate.class)
-				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
+		this.instancia = instancia;
 		this.miSesion = instancia.openSession();
 		miSesion.beginTransaction();
 		setModal(modal);
+		this.setContentPane(contentPanel);
+	
 		// -----------------------COMPONENTES-------------------
 
-		setBounds(100, 100, 450, 300);
+		setBounds(960, 540, 650, 400);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
@@ -186,7 +188,15 @@ public class ChangeUser extends JDialog {
 				}
 			});
 			
-		
+			cbDni.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					
+					
+				}
+			});
 		}
 		// ----------------------------ADICIONES-----------------------------
 		

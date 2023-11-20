@@ -78,26 +78,25 @@ public class AdminInsertUser extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AdminInsertUser( AdminUsers parent, boolean modal) {
+	public AdminInsertUser( SessionFactory instancia,JFrame parent, boolean modal) {
 		
-		this.instancia = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserHibernate.class)
-				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
-		this.miSesion=instancia.openSession();
+		this.instancia = instancia;
+		this.miSesion = instancia.openSession();
 		miSesion.beginTransaction();
 		setModal(modal);
 		
 		//-----------------------COMPONENTES-------------------
-		setBounds(100, 100, 450, 300);
+		setBounds(960, 540, 650, 400);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
 		
 		JLabel lblDNI = new JLabel("DNI");
-		lblDNI.setBounds(20, 13, 18, 14);
+		lblDNI.setBounds(20, 13, 37, 14);
 		
 		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(20, 82, 37, 14);
+		lblNombre.setBounds(20, 82, 49, 14);
 		contentPanel.add(lblNombre);
 		
 		tfDNI = new JTextField();
@@ -111,21 +110,21 @@ public class AdminInsertUser extends JDialog {
 		
 		
 		JLabel lblContraseña = new JLabel("Contraseña");
-		lblContraseña.setBounds(218, 13, 56, 14);
+		lblContraseña.setBounds(266, 13, 86, 14);
 		
 		
 		tfContraseña = new JTextField();
 		tfContraseña.setColumns(10);
-		tfContraseña.setBounds(311, 10, 86, 20);
+		tfContraseña.setBounds(395, 10, 86, 20);
 		
 		
 		JLabel lblApellido = new JLabel("Apellido");
-		lblApellido.setBounds(218, 82, 37, 14);
+		lblApellido.setBounds(266, 82, 86, 14);
 		
 		
 		tfApellido = new JTextField();
 		tfApellido.setColumns(10);
-		tfApellido.setBounds(311, 79, 86, 20);
+		tfApellido.setBounds(395, 79, 86, 20);
 		
 		
 		JLabel lblEspecialidad = new JLabel("Especialidad");
@@ -143,6 +142,7 @@ public class AdminInsertUser extends JDialog {
 				setVisible(false);
 				AdminInsertUser.this.dispatchEvent(new WindowEvent(
 						AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
+				miSesion.close();
 			}
 		});
 		cancelButton.setActionCommand("Cancel");
@@ -208,6 +208,7 @@ public class AdminInsertUser extends JDialog {
 								setModal(false);
 								setVisible(false);
 								dispose();
+								miSesion.close();
 //								AdminInsertUser.this.dispatchEvent(new WindowEvent(
 //										AdminInsertUser.this, WindowEvent.WINDOW_CLOSING));
 							
