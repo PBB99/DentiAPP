@@ -95,11 +95,11 @@ public class AdminInsertCita extends JDialog {
 		contentPanel.setLayout(null);
 		
 		JLabel lblDNI = new JLabel("Paciente");
-		lblDNI.setBounds(128, 94, 61, 14);
+		lblDNI.setBounds(105, 94, 84, 14);
 		
 		
 		JLabel lblContraseña = new JLabel("Tratamiento");
-		lblContraseña.setBounds(128, 136, 61, 14);
+		lblContraseña.setBounds(105, 136, 84, 14);
 		
 		
 		JButton okButton = new JButton("OK");
@@ -118,7 +118,7 @@ public class AdminInsertCita extends JDialog {
 		cancelButton.setActionCommand("Cancel");
 		
 		JComboBox cbPaciente = new JComboBox();
-		cbPaciente.setBounds(199, 91, 86, 20);
+		cbPaciente.setBounds(199, 91, 129, 20);
 		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
 		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
 
@@ -127,7 +127,7 @@ public class AdminInsertCita extends JDialog {
 		}
 		
 		JComboBox cbTratamiento = new JComboBox();
-		cbTratamiento.setBounds(199, 132, 86, 20);
+		cbTratamiento.setBounds(199, 132, 129, 20);
 		contentPanel.add(cbTratamiento);
 		
 		

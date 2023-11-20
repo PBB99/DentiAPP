@@ -51,6 +51,15 @@ public class TreatmentsHibernate {
 		this.precio = precio;
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return nombre;
+	}
+
+
+
 	@ManyToOne() 
     @JoinColumn(name = "especialidad")
     private SpecialityHibernate especialidad; //Este atributo va a @OneToMany en Cliente
