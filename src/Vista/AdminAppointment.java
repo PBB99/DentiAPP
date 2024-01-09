@@ -40,7 +40,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import Controlador.ConexionMySQL;
 import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
 import Modelo.SpecialityHibernate;

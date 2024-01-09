@@ -32,7 +32,6 @@ import org.hibernate.cfg.Configuration;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
-import Controlador.CitasController;
 import Controlador.ConexionMySQL;
 import Modelo.Cita;
 import Modelo.CitaHibernate;
