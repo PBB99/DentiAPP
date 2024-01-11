@@ -29,6 +29,8 @@ import Modelo.UserHibernate;
 import Vista.AdminClinic.Renderer;
 
 import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class PruebaOdonto extends JFrame {
 
@@ -75,18 +77,10 @@ public class PruebaOdonto extends JFrame {
 		contentPane.setLayout(null);
 		
 		table = new JTable();
-
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(56, 17, 30, 22);
-		contentPane.add(comboBox);
 		
 		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
 		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
 		
-		for (int i = 0; i < allClientes.size(); i++) {
-			comboBox.addItem(allClientes.get(i));
-		}
 		table = new JTable();
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
@@ -102,12 +96,19 @@ public class PruebaOdonto extends JFrame {
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 		
 		loadSpecialities(table);
-		table.setBounds(376, 102, 149, 100);
+		table.setBounds(0, 29, 500, 675);
 		contentPane.add(table);
+		
+		JButton btnInsert = new JButton();
+		btnInsert.setBorderPainted(false);
+		btnInsert.setBackground(new Color(148, 220, 219));
+		btnInsert.setBounds(0, 0, 40, 30);
+		btnInsert.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
+		contentPane.add(btnInsert);
 		
 	}
 	
-	public void loadSpecialities(JTable tableSpeciality) {
+	public void loadSpecialities(JTable tabla) {
 		// Relaiza la consulta
 		String hql = "FROM ClienteHibernate";
 		Query<ClienteHibernate> consulta = session.createQuery(hql, ClienteHibernate.class);
@@ -116,39 +117,46 @@ public class PruebaOdonto extends JFrame {
 		List<ClienteHibernate> results = consulta.getResultList();
 
 		// Prepara la tabla
-		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Nombre" , "Apellido" }) {
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "DNI" ,"Nombre" , "Apellido" , "Años" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
 				return false;
 			}
 		};
-		tableSpeciality.setModel(model);
-		JTableHeader header = tableSpeciality.getTableHeader();
+		tabla.setModel(model);
+		JTableHeader header = tabla.getTableHeader();
 		if(results.size()<19) {
 			model.setRowCount(18);
 		}else {
 			model.setRowCount(results.size());
 		}
-		int fila = 0, columna = 0;
-
+		int fila = 1, columna = 0;
+		
+		model.setValueAt("DNI", 0, 0);
+		model.setValueAt("Nombre", 0, 1);
+		model.setValueAt("Apellido", 0, 2);
+		model.setValueAt("Años", 0, 3);
+		
 		// Carga los datos
 		for (ClienteHibernate especialidad : results) {
 			System.out.println("aa");
-			model.setValueAt(especialidad.getNombre(), fila, columna);
-			model.setValueAt(especialidad.getApellidos(), fila, columna+1);
+			model.setValueAt(especialidad.getDni_cliente(), fila, 0);
+			model.setValueAt(especialidad.getNombre(), fila, 1);
+			model.setValueAt(especialidad.getApellidos(), fila, 2);
+			model.setValueAt(especialidad.getEdad(), fila, 3);
 			fila++;
 		}
 
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
-		tableSpeciality.getColumnModel().getColumn(0).setCellRenderer(tcr);
-		tableSpeciality.setDefaultRenderer(Object.class, tcr);
+		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tabla.setDefaultRenderer(Object.class, tcr);
 
 		// Guarda el último id de las especialidades
 		if (!results.isEmpty()) {
-			lastCLiente = results.size()+1;
+			lastCLiente = results.size();
 			System.out.println("kkkkk");
 		} else {
 			lastCLiente = 0;
@@ -163,7 +171,12 @@ public class PruebaOdonto extends JFrame {
 				int row, int column) {
 
 			// Evalua en que fila esta
-			if (row % 2 == 0) {
+			
+			if (row == 0) {
+				setBackground(new Color(148, 220, 219));
+			}
+			else if (row % 2 == 0) {
+				 System.out.println(row);
 				setBackground(new Color(220, 220, 220));
 			} else {
 				setBackground(new Color(250, 250, 250));
@@ -173,5 +186,4 @@ public class PruebaOdonto extends JFrame {
 		}
 
 	}
-
 }
