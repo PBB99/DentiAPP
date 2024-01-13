@@ -75,16 +75,16 @@ public class CustommerOdont extends JDialog {
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblLogo.setBounds(0, 0, 135, 135);
 		lblLogo.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/logoMenu.png")));
+		//Panel odontograma
+		JPanel panelOdonto = new JPanel();
+		panelOdonto.setBounds(174, 70, 579, 608);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(174, 70, 579, 608);
-
-		panel.setLayout(null);
-
+		panelOdonto.setLayout(null);
+		//fondo del panel de odontograma
 		JLabel lFondo = new JLabel("");
 		lFondo.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/odontograma.png")));
 		lFondo.setBounds(-161, 0, 718, 603);
-
+		//----------------DIENTES-----------------------
 		JButton bDiente17 = new JButton("");
 		bDiente17.setBorderPainted(false);
 		bDiente17.setBackground(new Color(128, 64, 0));
@@ -136,13 +136,6 @@ public class CustommerOdont extends JDialog {
 		bDiente27.setContentAreaFilled(false);
 		bDiente27.setFocusPainted(false);
 		bDiente27.setOpaque(false);
-
-		JPanel Historial_Insertar = new JPanel();
-		Historial_Insertar.setBounds(883, 70, 506, 608);
-
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-
-		tabbedPane.setBounds(0, 0, 506, 608);
 		
 
 		JButton bDiente35 = new JButton("");
@@ -181,6 +174,15 @@ public class CustommerOdont extends JDialog {
 		bDiente41.setContentAreaFilled(false);
 		bDiente41.setFocusPainted(false);
 		bDiente41.setOpaque(false);
+		
+		//panel donde iran los tabs de historial e inserccion de tratamiento
+		JPanel Historial_Insertar = new JPanel();
+		Historial_Insertar.setBounds(883, 70, 506, 608);
+		//elemento para tener dos pestañas en el panel
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(0, 0, 506, 608);
+		
+
 
 		// ----------------Logica-------------
 		
@@ -657,22 +659,22 @@ public class CustommerOdont extends JDialog {
 		
 
 		// ---------------ADICIONES-----------------
-		panel.add(bDiente11);
-		panel.add(bDiente27);
-		panel.add(bDiente15);
-		panel.add(bDiente47);
-		panel.add(bDiente25);
-		panel.add(bDiente17);
-		contentPane.add(panel);
-		panel.add(lFondo);
+		panelOdonto.add(bDiente11);
+		panelOdonto.add(bDiente27);
+		panelOdonto.add(bDiente15);
+		panelOdonto.add(bDiente47);
+		panelOdonto.add(bDiente25);
+		panelOdonto.add(bDiente17);
+		contentPane.add(panelOdonto);
+		panelOdonto.add(lFondo);
 		contentPane.add(menuPane);
 		menuPane.add(lblLogo);
 		Historial_Insertar.add(tabbedPane);
 		contentPane.add(Historial_Insertar);
-		panel.add(bDiente41);
-		panel.add(bDiente45);
-		panel.add(bDiente37);
-		panel.add(bDiente35);
+		panelOdonto.add(bDiente41);
+		panelOdonto.add(bDiente45);
+		panelOdonto.add(bDiente37);
+		panelOdonto.add(bDiente35);
 
 	}
 }
