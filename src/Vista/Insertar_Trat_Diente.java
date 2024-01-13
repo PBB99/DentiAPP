@@ -5,15 +5,18 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -22,28 +25,19 @@ import Modelo.ClienteHibernate;
 import Modelo.OdontogramaHibernate;
 import Modelo.UserHibernate;
 
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JTextArea;
-
-public class Internal_Historial extends JDialog {
+public class Insertar_Trat_Diente extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	/*
-	 * id_odontograma id_cliente observaciones fecha clientes_dni_clientes
-	 */
-
 	private SessionFactory instancia;
 	private Session session;
-	private List<OdontogramaHibernate> odonList;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 //		try {
-//			Internal_Historial dialog = new Internal_Historial();
+//			Insertar_Trat_Diente dialog = new Insertar_Trat_Diente();
 //			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 //			dialog.setVisible(true);
 //		} catch (Exception e) {
@@ -54,57 +48,36 @@ public class Internal_Historial extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Internal_Historial(int id_diente, ClienteHibernate cliente) {
+	public Insertar_Trat_Diente(int id_diente, ClienteHibernate cliente) {
 
+		// fecha del dia actual
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		LocalDate localDate = LocalDate.now();
+		System.out.println(dtf.format(localDate));
+		setUndecorated(true);
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(OdontogramaHibernate.class)
 				.addAnnotatedClass(ClienteHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 		this.session.beginTransaction();
-
-		// sacamos toda la info del diente que queramos teniendo en cuenta el paciente
-		// que tenemos
-		String hql = "From odontogramas where id_diente=" + id_diente + " & clientes_dni_clientes="
-				+ cliente.getDni_cliente();
-		Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
-		odonList = consulta.getResultList();
-		// esto no sirve, ida de olla pero estructura comentada por si acaso es util en
-		// otro contexto
-//		String consultaNombre = " from clientes where dni_cliente=" + cliente.getDni_cliente();
-//		Query<ClienteHibernate> resultadoConsultaNombre = session.createQuery(consultaNombre, ClienteHibernate.class);
-//		ClienteHibernate nombreCliente = resultadoConsultaNombre.getSingleResult();
-		setUndecorated(true);
 		setBounds(0, 0, 506, 680);
-		getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(null);
+		contentPanel.setBounds(0, 0, 506, 647);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setBackground(new Color(238,238,238));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
-		{
+		// ------------COMPONENTES GRAFICOS------------
 
-		}
-		// ---------------componentes gráficos-----------------
-		JLabel lblFecha = new JLabel("Fecha");
-		lblFecha.setBounds(272, 125, 46, 14);
+		JLabel lblFecha = new JLabel("Fecha:   " + dtf.format(localDate));
+		lblFecha.setBounds(272, 125, 168, 14);
 
-		JLabel lblidDiente = new JLabel("Diente:");
+		JLabel lblidDiente = new JLabel("Diente: " + id_diente);
 		lblidDiente.setBounds(31, 125, 46, 14);
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(328, 121, 30, 22);
-		// mostrar las fechas en las que ese diente de ese cliente han tenido registros
-		// de tratamiento
-		for (OdontogramaHibernate x : odonList) {
-			comboBox.addItem(x.getFecha());
-
-		}
 
 		JLabel lblObservaciones = new JLabel("Tratamiento: ");
 		lblObservaciones.setBounds(29, 224, 79, 14);
 
 		JTextArea taObservaciones = new JTextArea();
 		taObservaciones.setBounds(29, 249, 436, 288);
-		taObservaciones.setEditable(false);
 
 		JLabel lblNombrePaciente = new JLabel("");
 		lblNombrePaciente.setText(cliente.getNombre());
@@ -112,73 +85,61 @@ public class Internal_Historial extends JDialog {
 
 		JLabel lblimagenDiente = new JLabel("");
 		lblimagenDiente.setBounds(304, 34, 66, 54);
-
-		JPanel bpBotonera = new JPanel();
-		bpBotonera.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		getContentPane().add(bpBotonera, BorderLayout.SOUTH);
-
-		JButton bImprimir = new JButton("Imprimir");
-
-		// aqui en teoria deberia imprimirse el informe que aun no hemos realizado
-		bImprimir.setActionCommand("OK");
-
-		JButton bSalir = new JButton("Salir");
-		// aqui se cierra la ventana
-		bSalir.setActionCommand("Cancel");
-		getRootPane().setDefaultButton(bImprimir);
-
-		// --------LOGICA-------------------
-
 		imagenDiente(id_diente, lblimagenDiente);
+		JPanel buttonPane = new JPanel();
+		buttonPane.setBounds(0, 647, 506, 33);
+		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(buttonPane);
 
-		comboBox.addActionListener(new ActionListener() {
+		JButton bCancelar = new JButton("Cancelar");
+		bCancelar.setActionCommand("Cancel");
+
+		
+
+		JButton bInsertar = new JButton("Insertar");
+		bInsertar.setActionCommand("OK");
+		getRootPane().setDefaultButton(bInsertar);
+		contentPanel.setLayout(null);
+
+		// -------------------LOGICA------------------
+
+		bInsertar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String eleccion = (String) comboBox.getSelectedItem();
-				String hql2 = "FROM odontogramas where id_diente=" + id_diente + " & fecha=" + eleccion;
-				Query<OdontogramaHibernate> consultaDatos = session.createQuery(hql2, OdontogramaHibernate.class);
-				OdontogramaHibernate dienteCargado = consultaDatos.getSingleResult();
-				lblidDiente.setText(Integer.toString(dienteCargado.getId_diente()));
-				lblObservaciones.setText(dienteCargado.getObservaciones());
-
-			}
-		});
-
-		bImprimir.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				// aqui el metodo para imprimir el informe
-			}
-		});
-
-		bSalir.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// salir
+				OdontogramaHibernate odonto = new OdontogramaHibernate(null, id_diente, taObservaciones.getText(),
+						Date.valueOf(localDate));
+				session.beginTransaction();
+				session.save(odonto);
+				session.close();
 				dispose();
 			}
 		});
-		// -----------------------------ADICIONES----------------------------
-		contentPanel.add(comboBox);
+		
+		bCancelar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dispose();
+			}
+		});
+
+		// -------------------Adicciones----------------
+
+		getContentPane().add(contentPanel);
 		contentPanel.add(lblFecha);
 		contentPanel.add(lblObservaciones);
 		contentPanel.add(taObservaciones);
 		contentPanel.add(lblNombrePaciente);
 		contentPanel.add(lblimagenDiente);
 		contentPanel.add(lblidDiente);
-		bpBotonera.add(bImprimir);
-		bpBotonera.add(bSalir);
-
+		buttonPane.add(bInsertar);
+		buttonPane.add(bCancelar);
 	}
 
-//--------METODOS Y FUNCIONES--------------------
-
-	// metodo para poner la imagen correspondiente al diente seleccionado
+	// metodo
 	public static void imagenDiente(int id_diente, JLabel imagen) {
 		switch (id_diente) {
 		case 11:

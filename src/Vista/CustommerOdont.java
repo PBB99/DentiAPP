@@ -52,6 +52,7 @@ public class CustommerOdont extends JDialog {
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(238,238,238));
 	
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
