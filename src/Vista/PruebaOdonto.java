@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
@@ -29,6 +31,7 @@ import org.hibernate.cfg.Configuration;
 
 import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
+import Modelo.OdontogramaHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
@@ -46,6 +49,7 @@ public class PruebaOdonto extends JFrame {
 	private Session session;
 	private int lastCLiente;
 	private JTable table;
+	private String selected;
 
 	/**
 	 * Launch the application.
@@ -67,23 +71,18 @@ public class PruebaOdonto extends JFrame {
 	 * Create the frame.
 	 */
 	public PruebaOdonto() {
+		selected = null;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 799, 544);
+		setBounds(100, 100, 1327, 1002);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
-				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
-				.buildSessionFactory();
-		this.session = instancia.openSession();
+				.addAnnotatedClass(ClienteHibernate.class).addAnnotatedClass(OdontogramaHibernate.class).buildSessionFactory();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		table = new JTable();
-
-		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
-		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
 
 		table = new JTable();
 		table.setShowVerticalLines(false);
@@ -103,6 +102,32 @@ public class PruebaOdonto extends JFrame {
 		table.setBounds(0, 29, 500, 675);
 		contentPane.add(table);
 
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Seleccionar row
+					table.addColumnSelectionInterval(0, 3);
+
+					// Cambios en la selección
+					table.setColumnSelectionAllowed(true);
+					table.setCellSelectionEnabled(true);
+					if (table.getSelectedRow() != 0) {
+						// selección del tratamiento
+						selected = table.getValueAt(table.getSelectedRow(), 0).toString() + " "
+								+ table.getValueAt(table.getSelectedRow(), 1).toString() + " "
+								+ table.getValueAt(table.getSelectedRow(), 2).toString() + " "
+								+ table.getValueAt(table.getSelectedRow(), 3).toString() + " ";
+
+						System.out.println(selected);
+					} else {
+						selected = null;
+					}
+
+				}
+			}
+		});
+
 		JButton btnInsert = new JButton();
 		btnInsert.setBorderPainted(false);
 		btnInsert.setBackground(new Color(148, 220, 219));
@@ -110,48 +135,77 @@ public class PruebaOdonto extends JFrame {
 		btnInsert.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Variable de control
-				boolean hasSpeciality = false;
+				DInsertCliente it = new DInsertCliente("", "", "", "", false);
+				it.setModal(true);
+				it.setVisible(true);
+				it.addWindowListener(new WindowListener() {
 
-				// Dialog de insertar
-				DInsertTratamiento it = null;
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
 
-				// Comprueba si hay una especialidad seleccionada
-				if (selectedSpeciality != null) {
-					// Busca la especialidad
-					String hql = "FROM SpecialityHibernate WHERE especialidad=:especialidad";
-					Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
-					consulta.setParameter("especialidad", selectedSpeciality);
-					sh = consulta.getSingleResult();
+					}
 
-					// Crea el Dialog de insertar
-					it = new DInsertTratamiento(instancia, sh, lastlastIdTreatements + 1);
-					it.setTextSpeciality(sh.getEspecialidad());
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
 
-					hasSpeciality = true;
-				} else if (selectedTreatment != null) {
-					// Busca el tratmiento
-					String hql = "FROM TreatmentsHibernate WHERE nombre=:nombre";
-					Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
-					consulta.setParameter("nombre", selectedTreatment);
-					th = consulta.getSingleResult();
+					}
 
-					// Busca saca la especialidad
-					sh = th.getEspecialidad();
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
 
-					// Crea el Dialog de insertar
-					it = new DInsertTratamiento(instancia, sh, lastlastIdTreatements + 1);
-					it.setTextSpeciality(sh.getEspecialidad());
+					}
 
-					hasSpeciality = true;
-				} else {
-					JOptionPane.showMessageDialog(contentPane, "No se ha sleccionado ninguna especialidad", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
 
-				if (hasSpeciality) {
+					}
+
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosed(WindowEvent e) {
+						loadSpecialities(table);
+					}
+
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
+			}
+		});
+		contentPane.add(btnInsert);
+
+		JTextField txt = new JTextField();
+		txt.setBounds(83, 0, 100, 30);
+		txt.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				loadSearch(table, txt.getText());
+
+			}
+		});
+		contentPane.add(txt);
+
+		JButton btnUpdateCliente = new JButton();
+		btnUpdateCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (selected != null) {
+					DInsertCliente it = new DInsertCliente(selected.split(" ")[0], selected.split(" ")[1],
+							selected.split(" ")[2], selected.split(" ")[3], true);
 					it.setModal(true);
-					it.setVisible(hasSpeciality);
+					it.setVisible(true);
 					it.addWindowListener(new WindowListener() {
 
 						@Override
@@ -175,18 +229,21 @@ public class PruebaOdonto extends JFrame {
 						@Override
 						public void windowDeactivated(WindowEvent e) {
 							// TODO Auto-generated method stub
-
+							loadSpecialities(table);
+							System.out.println("------");
 						}
 
 						@Override
 						public void windowClosing(WindowEvent e) {
 							// TODO Auto-generated method stub
-
+							loadSpecialities(table);
+							System.out.println("ola");
 						}
 
 						@Override
 						public void windowClosed(WindowEvent e) {
 							loadSpecialities(table);
+							System.out.println("adi");
 						}
 
 						@Override
@@ -198,24 +255,18 @@ public class PruebaOdonto extends JFrame {
 				}
 			}
 		});
-		contentPane.add(btnInsert);
 
-		JTextField txt = new JTextField();
-		txt.setBounds(40, 0, 100, 30);
-		txt.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-
-				loadSearch(table, txt.getText());
-
-			}
-		});
-		contentPane.add(txt);
+		btnUpdateCliente.setBorderPainted(false);
+		btnUpdateCliente.setBackground(new Color(148, 220, 219));
+		btnUpdateCliente.setBounds(41, 0, 40, 30);
+		btnUpdateCliente.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
+		contentPane.add(btnUpdateCliente);
 
 	}
 
 	public void loadSpecialities(JTable tabla) {
 		// Relaiza la consulta
+		this.session = instancia.openSession();
 		String hql = "FROM ClienteHibernate";
 		Query<ClienteHibernate> consulta = session.createQuery(hql, ClienteHibernate.class);
 
@@ -233,11 +284,13 @@ public class PruebaOdonto extends JFrame {
 			}
 		};
 		tabla.setModel(model);
+		model.setRowCount(1);
 		JTableHeader header = tabla.getTableHeader();
 		if (results.size() < 19) {
 			model.setRowCount(18);
 		} else {
-			model.setRowCount(results.size());
+			System.out.println("oooooooooooooooo");
+			model.setRowCount(results.size() + 1);
 		}
 		int fila = 1, columna = 0;
 
@@ -248,7 +301,6 @@ public class PruebaOdonto extends JFrame {
 
 		// Carga los datos
 		for (ClienteHibernate especialidad : results) {
-			System.out.println("aa");
 			model.setValueAt(especialidad.getDni_cliente(), fila, 0);
 			model.setValueAt(especialidad.getNombre(), fila, 1);
 			model.setValueAt(especialidad.getApellidos(), fila, 2);
@@ -274,6 +326,7 @@ public class PruebaOdonto extends JFrame {
 
 	public void loadSearch(JTable tabla, String busq) {
 		// Relaiza la consulta
+		this.session = instancia.openSession();
 		String hql = "FROM ClienteHibernate where nombre like :busq or apellidos like :busq or edad like :busq or dni_cliente like :busq";
 		Query<ClienteHibernate> consulta = session.createQuery(hql, ClienteHibernate.class);
 		consulta.setParameter("busq", "%" + busq + "%");
@@ -295,7 +348,7 @@ public class PruebaOdonto extends JFrame {
 		if (results.size() < 19) {
 			model.setRowCount(18);
 		} else {
-			model.setRowCount(results.size());
+			model.setRowCount(results.size()+1);
 		}
 		int fila = 1, columna = 0;
 

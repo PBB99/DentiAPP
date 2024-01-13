@@ -24,11 +24,8 @@
         -->
         <property name="hbm2ddl.auto">update</property>
         
-        <mapping class="Modelo.SpecialityHibernate" />
-        <mapping class="Modelo.TreatmentsHibernate" />
-        <mapping class="Modelo.UserHibernate"/>
-        <mapping class="Modelo.CitaHibernate"/>
         <mapping class="Modelo.ClienteHibernate"/>
+        <mapping class="Modelo.OdontogramaHibernate"/>
         
     </session-factory>
 </hibernate-configuration>

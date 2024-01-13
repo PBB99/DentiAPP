@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "cliente")
+@Table(name = "clientes")
 public class ClienteHibernate implements Serializable {
 
 	@Id
@@ -77,16 +77,16 @@ public class ClienteHibernate implements Serializable {
 		return dni_cliente;
 	}
 
-	@OneToMany(mappedBy = "clienteHiber", cascade = CascadeType.ALL)
-    private List<CitaHibernate> citas;
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<OdontogramaHibernate> odontos;
     
-    public List<CitaHibernate> getCitas(){
-        return citas;
+    public List<OdontogramaHibernate> getOdontos(){
+        return odontos;
     }
     
-    public void addPedido(CitaHibernate cita){
-        if (citas == null) citas=new ArrayList<>();
-        citas.add(cita);
-        cita.setCliente(this);
+    public void addOdonto(OdontogramaHibernate odonto){
+        if (odontos == null) odontos=new ArrayList<>();
+        odontos.add(odonto);
+        odonto.setCliente(this);
     }
 }
