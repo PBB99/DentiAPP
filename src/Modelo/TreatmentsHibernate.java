@@ -1,6 +1,9 @@
 package Modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,7 +12,7 @@ import javax.persistence.*;
 public class TreatmentsHibernate {
 	
 	@Id
-	@Column(name = "codigo_tratamiento", nullable = false)
+	@Column(name = "id_tratamiento", nullable = false)
 	private Integer codigo_tratamiento;
 	
 	@Column(name = "nombre", nullable = false)
@@ -61,16 +64,27 @@ public class TreatmentsHibernate {
 
 
 	@ManyToOne() 
-    @JoinColumn(name = "especialidad")
-    private SpecialityHibernate especialidad; //Este atributo va a @OneToMany en Cliente
+    @JoinColumn(name = "especialidades_id_especialidad")
+    private SpecialityHibernate especialidad_tratamiento; //Este atributo va a @OneToMany en Cliente
 
     public SpecialityHibernate getEspecialidad() {
-        return especialidad;
+        return especialidad_tratamiento;
     }
 
     public void setEspecialidad(SpecialityHibernate especialidad_tratamiento) {
-        this.especialidad = especialidad_tratamiento;
+        this.especialidad_tratamiento = especialidad_tratamiento;
     }
     
-    
+    @OneToMany(mappedBy = "tratamiento_cita", cascade = CascadeType.ALL)
+	private List<CitaHibernate> citas;
+	
+	public List<CitaHibernate> getCitas(){
+		return citas;
+	}
+	
+	public void addTratamiento(CitaHibernate c){
+        if (citas == null) citas=new ArrayList<>();
+        citas.add(c);
+        c.setTratamiento(this);
+    }
 }

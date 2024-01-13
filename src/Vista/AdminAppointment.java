@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -77,18 +78,18 @@ public class AdminAppointment extends JFrame {
 	 * Launch the application.
 	 */
 
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//			try {
-//					AdminAppointment frame = new AdminAppointment(null,null);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+			try {
+					AdminAppointment frame = new AdminAppointment(null,null);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
@@ -130,6 +131,7 @@ public class AdminAppointment extends JFrame {
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
+		
 		// item
 		JMenu mnNewMenu = new JMenu("");
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
@@ -137,7 +139,7 @@ public class AdminAppointment extends JFrame {
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem("");
-		ItemName.setText(userHi.getNombre());
+		//ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
@@ -330,32 +332,28 @@ public class AdminAppointment extends JFrame {
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-
+		
+		//Juan
 		JCalendar calendar = new JCalendar();
-		calendar.setBounds(180, 180, 184, 153);
+		calendar.setBounds(1370, 135, 400, 300);
+		calendar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		contentPane.add(calendar);
 
 		JComboBox cbUsuarios = new JComboBox();
-		cbUsuarios.setBounds(180, 120, 96, 22);
+		cbUsuarios.setBounds(1370, 450, 200, 25);
+		cbUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		contentPane.add(cbUsuarios);
 		Query<UserHibernate> consultaUsers = session.createQuery("FROM UserHibernate", UserHibernate.class);
 		List<UserHibernate> allUsers = consultaUsers.getResultList();
-		int x = 0;
 		for (int i = 0; i < allUsers.size(); i++) {
-			List<SpecialityHibernate> allSpecialities = allUsers.get(i).getSpeciality();
-			for (int j = 0; j < allSpecialities.size(); j++) {
-				if (allSpecialities.get(j).getId_especialidad() == 0)
-					x++;
-			}
-			if (x == 0) {
+			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
 				cbUsuarios.addItem(allUsers.get(i));
 			}
-			x = 0;
 		}
 
 		DefaultTableModel modelo = new DefaultTableModel();
 		JTable table = new JTable();
-		table.setBounds(420, 180, 199, 196);
+		table.setBounds(420, 180, 500, 500);
 		contentPane.add(table);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(modelo);
@@ -364,18 +362,20 @@ public class AdminAppointment extends JFrame {
 		modelo.insertRow(0, new Object[] { "Hora", "Cita" });
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
-		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id",
+		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id",
 				CitaHibernate.class);
 		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
 		consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
 		System.out.println(formateador.format(fechaCalen.getTime()));
-		for (int i = 9; i < 15; i++) {
+		for (int i = 8; i < 15; i++) {
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
+			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
 		}
 		for (int i = 17; i < 20; i++) {
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
+			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
 		}
 
 		System.out.println(allCitas.size());
@@ -405,7 +405,7 @@ public class AdminAppointment extends JFrame {
 
 				Calendar fechaCal = (Calendar) evt.getNewValue();
 				Query<CitaHibernate> consulta = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
+						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 				consulta.setParameter("fech", fechaCal.getTime());
 				consulta.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
 				List<CitaHibernate> allCitas = consulta.getResultList();
@@ -418,6 +418,8 @@ public class AdminAppointment extends JFrame {
 					System.out.println(formateador.format(fechaCal.getTime()) + "------");
 					if (formateador.format(fechaCal.getTime()).equals(formateador.format(dia))) {
 						System.out.println("saddasdas");
+						System.out.println(allCitas.isEmpty()+" Es el bueno");
+						System.out.println("Tamaño "+allCitas.size());
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
@@ -439,7 +441,7 @@ public class AdminAppointment extends JFrame {
 				}
 
 				Query<CitaHibernate> consultaCitas = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
+						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
 				consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
 				List<CitaHibernate> allCitas = consultaCitas.getResultList();
@@ -479,7 +481,7 @@ public class AdminAppointment extends JFrame {
 							if (!table.getValueAt(table.getSelectedRow(), 1).toString().equalsIgnoreCase("")) {
 								session.beginTransaction();
 								Query<CitaHibernate> consultaCitas = session.createQuery(
-										"FROM CitaHibernate where fecha=:fech and hora=:hora and dni_doc=:id",
+										"FROM CitaHibernate where fecha=:fech and hora=:hora and usuario_cita=:id",
 										CitaHibernate.class);
 								consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
 								consultaCitas.setParameter("hora", a);
@@ -543,14 +545,7 @@ public class AdminAppointment extends JFrame {
 					}
 
 				}
-
-				// table.clearSelection();
-//		        if (table.getSelectedRow() > -1) {
-//		            // print first column value from selected row
-//		            //System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
-//		            System.out.println("---");
-//
-//		        }
+				
 			}
 
 			public void actualizarTabla() {
@@ -558,7 +553,7 @@ public class AdminAppointment extends JFrame {
 					table.getModel().setValueAt("", j, 1);
 				}
 				Query<CitaHibernate> consultaCitas = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
+						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
 				consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
 				List<CitaHibernate> allCitas = consultaCitas.getResultList();
@@ -568,6 +563,7 @@ public class AdminAppointment extends JFrame {
 					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
 					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
 						System.out.println("saddasdas");
+						System.out.println(allCitas.isEmpty());
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);

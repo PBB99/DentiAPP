@@ -6,15 +6,12 @@ import java.sql.Date;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cita")
+@Table(name = "citas")
 public class CitaHibernate implements Serializable{
 	
 	@Id
-	@Column(name = "idcita", nullable = false)
+	@Column(name = "id_cita", nullable = false)
 	private Integer idcita;
-	
-//	@Column(name = "especialidad", nullable = false)
-//	private Integer especialidad;
 	
 	@Column(name = "fecha", nullable = false)
 	private Date fecha;
@@ -32,8 +29,6 @@ public class CitaHibernate implements Serializable{
 		this.hora = hora;
 	}
 
-
-	
 	public Integer getIdcita() {
 		return idcita;
 	}
@@ -61,38 +56,38 @@ public class CitaHibernate implements Serializable{
 
 
 	@ManyToOne
-    @JoinColumn(name = "dni_doc")
-    private UserHibernate userHiber; //Este atributo va a @OneToMany en Cliente
+    @JoinColumn(name = "usuarios_dni_usuario")
+    private UserHibernate usuario_cita; //Este atributo va a @OneToMany en Cliente
 
     public UserHibernate getUser() {
-        return userHiber;
+        return usuario_cita;
     }
 
-    public void setUser(UserHibernate userHiber) {
-        this.userHiber = userHiber;
+    public void setUser(UserHibernate usuario_cita) {
+        this.usuario_cita = usuario_cita;
     }
     
     @ManyToOne
-    @JoinColumn(name = "dni_paciente")
-    private ClienteHibernate clienteHiber; //Este atributo va a @OneToMany en Cliente
+    @JoinColumn(name = "clientes_dni_cliente")
+    private ClienteHibernate cliente_cita; //Este atributo va a @OneToMany en Cliente
 
     public ClienteHibernate getCliente() {
-        return clienteHiber;
+        return cliente_cita;
     }
 
-    public void setCliente(ClienteHibernate clienteHiber) {
-        this.clienteHiber = clienteHiber;
+    public void setCliente(ClienteHibernate cliente_cita) {
+        this.cliente_cita = cliente_cita;
     }
     
     @ManyToOne
-    @JoinColumn(name = "codigo_trata")
-    private TreatmentsHibernate tratamientoHiber; //Este atributo va a @OneToMany en Cliente
+    @JoinColumn(name = "tratamientos_id_tratamiento")
+    private TreatmentsHibernate tratamiento_cita; //Este atributo va a @OneToMany en Cliente
 
     public TreatmentsHibernate getTratamiento() {
-        return tratamientoHiber;
+        return tratamiento_cita;
     }
 
-    public void setTratamiento(TreatmentsHibernate tratamientoHiber) {
-        this.tratamientoHiber = tratamientoHiber;
+    public void setTratamiento(TreatmentsHibernate tratamiento_cita) {
+        this.tratamiento_cita = tratamiento_cita;
     }
 }
