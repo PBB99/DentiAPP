@@ -51,7 +51,7 @@ public class Insertar_Trat_Diente extends JDialog {
 	public Insertar_Trat_Diente(int id_diente, ClienteHibernate cliente) {
 
 		// fecha del dia actual
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
 		LocalDate localDate = LocalDate.now();
 		System.out.println(dtf.format(localDate));
 		setUndecorated(true);
