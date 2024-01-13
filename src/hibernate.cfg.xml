@@ -25,6 +25,5 @@
         <property name="hbm2ddl.auto">update</property>
         <mapping class="Modelo.ClienteHibernate"/>
         <mapping class="Modelo.OdontogramaHibernate"/>
-
     </session-factory>
 </hibernate-configuration>

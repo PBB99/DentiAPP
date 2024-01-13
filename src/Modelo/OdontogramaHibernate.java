@@ -26,6 +26,7 @@ public class OdontogramaHibernate implements Serializable{
 		super();
 	}
 	
+
 	public OdontogramaHibernate(Integer id_odontograma, Integer id_diente, String observaciones, Date fecha) {
 		super();
 		this.id_odontogramas = id_odontograma;
@@ -33,8 +34,6 @@ public class OdontogramaHibernate implements Serializable{
 		this.observaciones = observaciones;
 		this.fecha = fecha;
 	}
-	
-	
 
 	public Integer getId_odontogramas() {
 		return id_odontogramas;
@@ -67,9 +66,7 @@ public class OdontogramaHibernate implements Serializable{
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-
-
-
+  
 	@ManyToOne(cascade={CascadeType.ALL})
     @JoinColumn(name = "clientes_dni_cliente")
     private ClienteHibernate cliente;
