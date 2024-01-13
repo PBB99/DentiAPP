@@ -49,6 +49,7 @@ public class PruebaOdonto extends JFrame {
 	private Session session;
 	private int lastCLiente;
 	private JTable table;
+	private JTable tableHis;
 	private String selected;
 
 	/**
@@ -83,8 +84,6 @@ public class PruebaOdonto extends JFrame {
 		contentPane.setLayout(null);
 
 		table = new JTable();
-
-		table = new JTable();
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
 		table.setCellSelectionEnabled(true);
@@ -97,9 +96,26 @@ public class PruebaOdonto extends JFrame {
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-
-		loadSpecialities(table);
 		table.setBounds(0, 29, 500, 675);
+		
+		tableHis = new JTable();
+		tableHis.setShowVerticalLines(false);
+		tableHis.setShowHorizontalLines(false);
+		tableHis.setCellSelectionEnabled(true);
+		tableHis.setBackground(new Color(250, 250, 250));
+		tableHis.setSelectionBackground(new Color(148, 220, 219));
+		tableHis.setShowGrid(false);
+		tableHis.setBorder(null);
+		tableHis.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableHis.setRowHeight(35);
+		tableHis.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableHis.getTableHeader().setBackground(new Color(148, 220, 219));
+		tableHis.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		tableHis.setBounds(600, 29, 500, 675);
+		contentPane.add(tableHis);
+
+		loadClientes(table);
+		loadOdontoStart(tableHis);
 		contentPane.add(table);
 
 		table.addMouseListener(new MouseAdapter() {
@@ -118,7 +134,7 @@ public class PruebaOdonto extends JFrame {
 								+ table.getValueAt(table.getSelectedRow(), 1).toString() + " "
 								+ table.getValueAt(table.getSelectedRow(), 2).toString() + " "
 								+ table.getValueAt(table.getSelectedRow(), 3).toString() + " ";
-
+						loadOdonto(tableHis);
 						System.out.println(selected);
 					} else {
 						selected = null;
@@ -172,7 +188,7 @@ public class PruebaOdonto extends JFrame {
 
 					@Override
 					public void windowClosed(WindowEvent e) {
-						loadSpecialities(table);
+						loadClientes(table);
 					}
 
 					@Override
@@ -229,20 +245,20 @@ public class PruebaOdonto extends JFrame {
 						@Override
 						public void windowDeactivated(WindowEvent e) {
 							// TODO Auto-generated method stub
-							loadSpecialities(table);
+							loadClientes(table);
 							System.out.println("------");
 						}
 
 						@Override
 						public void windowClosing(WindowEvent e) {
 							// TODO Auto-generated method stub
-							loadSpecialities(table);
+							loadClientes(table);
 							System.out.println("ola");
 						}
 
 						@Override
 						public void windowClosed(WindowEvent e) {
-							loadSpecialities(table);
+							loadClientes(table);
 							System.out.println("adi");
 						}
 
@@ -261,10 +277,9 @@ public class PruebaOdonto extends JFrame {
 		btnUpdateCliente.setBounds(41, 0, 40, 30);
 		btnUpdateCliente.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		contentPane.add(btnUpdateCliente);
-
 	}
 
-	public void loadSpecialities(JTable tabla) {
+	public void loadClientes(JTable tabla) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
 		String hql = "FROM ClienteHibernate";
@@ -305,6 +320,102 @@ public class PruebaOdonto extends JFrame {
 			model.setValueAt(especialidad.getNombre(), fila, 1);
 			model.setValueAt(especialidad.getApellidos(), fila, 2);
 			model.setValueAt(especialidad.getEdad(), fila, 3);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tabla.setDefaultRenderer(Object.class, tcr);
+
+		// Guarda el último id de las especialidades
+		if (!results.isEmpty()) {
+			lastCLiente = results.size();
+			System.out.println("kkkkk");
+		} else {
+			lastCLiente = 0;
+		}
+
+	}
+	
+	public void loadOdontoStart(JTable tabla) {
+		// Relaiza la consulta
+		this.session = instancia.openSession();
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "ID Diente", "Fecha", "Observaciones"}) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tabla.setModel(model);
+		model.setRowCount(1);
+		JTableHeader header = tabla.getTableHeader();
+		model.setRowCount(30);
+		int fila = 1, columna = 0;
+
+		model.setValueAt("ID Diente", 0, 0);
+		model.setValueAt("Fecha", 0, 1);
+		model.setValueAt("Observaciones", 0, 2);
+
+		// Carga los datos
+//		for (ClienteHibernate especialidad : results) {
+//			model.setValueAt(especialidad.getDni_cliente(), fila, 0);
+//			model.setValueAt(especialidad.getNombre(), fila, 1);
+//			model.setValueAt(especialidad.getApellidos(), fila, 2);
+//			fila++;
+//		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tabla.setDefaultRenderer(Object.class, tcr);
+
+	}
+	
+	public void loadOdonto(JTable tabla) {
+		// Relaiza la consulta
+		this.session = instancia.openSession();
+		String hql = "FROM OdontogramaHibernate where clientes_dni_cliente=:dni";
+		Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
+		consulta.setParameter("dni", selected.split(" ")[0]);
+
+		// Guarda los datos en una lista
+		List<OdontogramaHibernate> results = consulta.getResultList();
+		System.out.println(results.size());
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "ID Diente", "Fecha", "Observaciones"}) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tabla.setModel(model);
+		model.setRowCount(1);
+		JTableHeader header = tabla.getTableHeader();
+		if (results.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			System.out.println("oooooooooooooooo");
+			model.setRowCount(results.size() + 1);
+		}
+		int fila = 1, columna = 0;
+
+		model.setValueAt("ID Diente", 0, 0);
+		model.setValueAt("Fecha", 0, 1);
+		model.setValueAt("Observaciones", 0, 2);
+
+		// Carga los datos
+		for (OdontogramaHibernate odonto : results) {
+			model.setValueAt(odonto.getId_diente(), fila, 0);
+			model.setValueAt(odonto.getFecha(), fila, 1);
+			model.setValueAt(odonto.getObservaciones(), fila, 2);
 			fila++;
 		}
 
