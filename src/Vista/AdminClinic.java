@@ -156,44 +156,30 @@ public class AdminClinic extends JFrame {
 		// Botón de insertar especialidad
 		JButton btnInsertSpeciality = new JButton();
 		btnInsertSpeciality.setBackground(new Color(148, 220, 219));
-		btnInsertSpeciality.setBounds(798, 240, 40, 30);
+		btnInsertSpeciality.setBounds(838, 240, 40, 30);
 		btnInsertSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertSpeciality.setBorderPainted(false);
 
 		// Botón de insertar tratamiento
 		JButton btnInsertTreatment = new JButton();
 		btnInsertTreatment.setBackground(new Color(148, 220, 219));
-		btnInsertTreatment.setBounds(1517, 240, 40, 30);
+		btnInsertTreatment.setBounds(1557, 240, 40, 30);
 		btnInsertTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertTreatment.setBorderPainted(false);
 
-		// Botón de modificar tratamiento
+		// Botón de modificar especialidad
 		JButton btnUpadateSpeciality = new JButton();
 		btnUpadateSpeciality.setBackground(new Color(148, 220, 219));
-		btnUpadateSpeciality.setBounds(838, 240, 40, 30);
+		btnUpadateSpeciality.setBounds(878, 240, 40, 30);
 		btnUpadateSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		btnUpadateSpeciality.setBorderPainted(false);
 
 		// Botón de modificar tratamiento
 		JButton btnUpadateTreatment = new JButton();
 		btnUpadateTreatment.setBackground(new Color(148, 220, 219));
-		btnUpadateTreatment.setBounds(1557, 240, 40, 30);
+		btnUpadateTreatment.setBounds(1597, 240, 40, 30);
 		btnUpadateTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		btnUpadateTreatment.setBorderPainted(false);
-
-		// Botón de borrar especialidad
-		JButton btnDeleteSpeciality = new JButton();
-		btnDeleteSpeciality.setBackground(new Color(148, 220, 219));
-		btnDeleteSpeciality.setBounds(878, 240, 40, 30);
-		btnDeleteSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/delete.png")));
-		btnDeleteSpeciality.setBorderPainted(false);
-
-		// Botón de borrar tratamiento
-		JButton btnDeleteTreatment = new JButton();
-		btnDeleteTreatment.setBackground(new Color(148, 220, 219));
-		btnDeleteTreatment.setBounds(1597, 240, 40, 30);
-		btnDeleteTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/delete.png")));
-		btnDeleteTreatment.setBorderPainted(false);
 
 		// ScrollPane para cargar la talbla
 		JScrollPane menuSpecialities = new JScrollPane();
@@ -358,7 +344,7 @@ public class AdminClinic extends JFrame {
 
 					// result es un objeto de especialidad con todos los campos
 					SpecialityHibernate result = consulta.getSingleResult();
-
+					
 					// Carga los resultados
 					loadTreatments(tableTreatments, result);
 				}
@@ -625,87 +611,6 @@ public class AdminClinic extends JFrame {
 			}
 		});
 
-		// Acción de Borrar en especialidades
-		btnDeleteSpeciality.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				// Comprueba si hay una especialidad a borrar
-				if (selectedSpeciality != null) {
-					// Busca la especialidad
-					String hql = "FROM SpecialityHibernate WHERE especialidad=:especialidad";
-					Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
-					consulta.setParameter("especialidad", selectedSpeciality);
-					sh = consulta.getSingleResult();
-
-					// Feedback al usuario
-					if (sh.getId_especialidad() == null) {
-						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado la especialidad", "Error",
-								JOptionPane.ERROR_MESSAGE);
-					} else {
-						// Confirmación
-						int resp = JOptionPane.showConfirmDialog(contentPane,
-								"¿Esta seguro de que desea eliminar la especialidad " + selectedSpeciality + "?",
-								"Eliminar", JOptionPane.YES_NO_OPTION);
-
-						if (resp == 0) {
-							// Borrar la especialidad
-							session.beginTransaction();
-							session.delete(sh);
-							session.getTransaction().commit();
-							selectedSpeciality = null;
-
-							// Recargamos las tablas
-							loadSpecialities(tableSpeciality);
-							loadTreatments(tableTreatments, null);
-						}
-					}
-				}
-			}
-		});
-
-		// Acción de borrar tratamientos
-		btnDeleteTreatment.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				// Comprueba si hay un tratamiento a borrar
-				if (selectedTreatment != null) {
-					// Busca el tratamiento
-					String hql = "FROM TreatmentsHibernate";
-					Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
-					th = new TreatmentsHibernate();
-					List<TreatmentsHibernate> results = consulta.getResultList();
-					for (TreatmentsHibernate treat : results) {
-						if (treat.getNombre().equalsIgnoreCase(selectedTreatment)) {
-							th = treat;
-							continue;
-						}
-					}
-
-					// Feedback al usuario
-					if (th.getCodigo_tratamiento() == null) {
-						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado la especialidad", "Error",
-								JOptionPane.ERROR_MESSAGE);
-					} else {
-						// Confirmación
-						int resp = JOptionPane.showConfirmDialog(contentPane,
-								"¿Esta seguro de que desea eliminar el tratamiento " + selectedTreatment + "?",
-								"Eliminar", JOptionPane.YES_NO_OPTION);
-
-						if (resp == 0) {
-							// Borrar la especialidad
-							session.beginTransaction();
-							session.delete(th);
-							session.getTransaction().commit();
-							selectedTreatment = null;
-
-							// Recargamos la tabla
-							loadTreatments(tableTreatments, th.getEspecialidad());
-						}
-					}
-				}
-			}
-		});
-
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		contentPane.add(menuSpecialities);
@@ -714,8 +619,7 @@ public class AdminClinic extends JFrame {
 		contentPane.add(btnInsertTreatment);
 		contentPane.add(btnUpadateSpeciality);
 		contentPane.add(btnUpadateTreatment);
-		contentPane.add(btnDeleteSpeciality);
-		contentPane.add(btnDeleteTreatment);
+
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -737,7 +641,10 @@ public class AdminClinic extends JFrame {
 
 		// Guarda los datos en una lista
 		List<SpecialityHibernate> results = consulta.getResultList();
-
+		
+		//Eliminamos la especialidad de Administrador
+		results.remove(0);
+		
 		// Prepara la tabla
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Especialidad" }) {
 			@Override
@@ -796,7 +703,7 @@ public class AdminClinic extends JFrame {
 		} else {
 			// Busca en la tabla los tratamientos cuyo atributo objeto especialidad es igual
 			// al que sacamos de la consulta anterior
-			String hql = "FROM TreatmentsHibernate where especialidad=:especialidad";
+			String hql = "FROM TreatmentsHibernate where especialidad_tratamiento=:especialidad";
 			Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
 			consulta.setParameter("especialidad", especialidad);
 

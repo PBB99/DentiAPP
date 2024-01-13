@@ -7,13 +7,13 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuarios")
 
 
 public class UserHibernate  implements Serializable{
 	
 	@Id
-	@Column(name = "dni", nullable = false)
+	@Column(name = "dni_usuario", nullable = false)
 	private String dni;
 	
 	@Column(name = "nombre", nullable = false)
@@ -89,24 +89,29 @@ public class UserHibernate  implements Serializable{
 	public String toString() {
 		return nombre;
 	}
+    
+    @ManyToOne() 
+    @JoinColumn(name = "especialidades_id_especialidad")
+    private SpecialityHibernate especialidad_usuario; //Este atributo va a @OneToMany en Cliente
 
-
-
-	@ManyToMany(mappedBy = "users")
-    private List<SpecialityHibernate> especialidades = new ArrayList<SpecialityHibernate>();
-
-    public List<SpecialityHibernate> getSpeciality() {
-        return especialidades;
+    public SpecialityHibernate getEspecialidad() {
+        return especialidad_usuario;
     }
 
-    public void setEspeciality(List<SpecialityHibernate> especialidades) {
-        this.especialidades = especialidades;
+    public void setEspecialidad(SpecialityHibernate especialidad_usuario) {
+        this.especialidad_usuario = especialidad_usuario;
     }
     
-    public void addEspeciality(SpecialityHibernate c)
-    {
-        this.especialidades.add(c);
-        c.getUser().add(this);
+    @OneToMany(mappedBy = "usuario_cita", cascade = CascadeType.ALL)
+	private List<CitaHibernate> citas;
+	
+	public List<CitaHibernate> getCitas(){
+		return citas;
+	}
+	
+	public void addTratamiento(CitaHibernate c){
+        if (citas == null) citas=new ArrayList<>();
+        citas.add(c);
+        c.setUser(this);
     }
-
 }

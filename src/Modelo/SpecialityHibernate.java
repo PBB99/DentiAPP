@@ -44,8 +44,8 @@ public class SpecialityHibernate  implements Serializable{
 		this.especialidad = especialidad;
 	}
 	
-	@OneToMany(mappedBy = "especialidad")
-    
+	
+	@OneToMany(mappedBy = "especialidad_tratamiento")
     private List<TreatmentsHibernate> tratamientos;
     
     public List<TreatmentsHibernate> getTratamientos(){
@@ -53,28 +53,25 @@ public class SpecialityHibernate  implements Serializable{
     }
     
     public void addTratamiento(TreatmentsHibernate th){
-        if (tratamientos == null) tratamientos=new ArrayList<>();
-        tratamientos.add(th);
-        th.setEspecialidad(this);
-    }
-
-    @ManyToMany()
-    @JoinTable(name = "especialista",
-        joinColumns = {@JoinColumn(name = "especialidad")},
-        inverseJoinColumns = {@JoinColumn(name = "dni_usuario")}
-    )
-    private List<UserHibernate> users = new ArrayList<UserHibernate>();
+        if (tratamientos == null) { 
+        	tratamientos=new ArrayList<>();
+        	tratamientos.add(th);
+        	th.setEspecialidad(this);
+        }
+    } 
     
-    public List<UserHibernate> getUser() {
-    	return users;
+    @OneToMany(mappedBy = "especialidad_usuario", cascade=CascadeType.ALL)
+    private List<UserHibernate> usuarios;
+    
+    public List<UserHibernate> getUsuarios(){
+        return usuarios;
     }
-    public void addUser(UserHibernate p)
-    {
-        this.users.add(p);
-        p.getSpeciality().add(this);
-    }
-    public void setUser(List<UserHibernate> users) {
-        this.users = users;
-    }
-	
+    
+    public void addUsuario(UserHibernate u){
+        if (usuarios == null) { 
+        	usuarios=new ArrayList<>();
+        	usuarios.add(u);
+        	u.setEspecialidad(this);
+        }
+    } 
 }

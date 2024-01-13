@@ -16,8 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import Controlador.ConexionMySQL;
-import Controlador.SpecialistController;
-import Controlador.UserController;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -109,6 +107,8 @@ public class Login extends JFrame {
 			String hql = "FROM UserHibernate";
 			Query<UserHibernate> consulta = session.createQuery(hql, UserHibernate.class);
 			userList = consulta.getResultList();
+			System.out.println(userList.getLast().getEspecialidad());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -301,7 +301,7 @@ public class Login extends JFrame {
 						// esta dado de alta
 						aux2 = false;
 						if (x.getEstado()==1) {
-							if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+							if (x.getEspecialidad().getId_especialidad() == 0) {
 								// se abre la pantalla de admin
 								AdminAppointment pa = new AdminAppointment(x, frame);
 								pa.setVisible(true);
@@ -361,7 +361,7 @@ public class Login extends JFrame {
 							// esta dado de alta
 							aux2 = false;
 							if (x.getEstado()==1) {
-								if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+								if (x.getEspecialidad().getId_especialidad() == 0) {
 									// se abre la pantalla de admin
 									AdminAppointment pa = new AdminAppointment(x, frame);
 									pa.setVisible(true);
@@ -422,7 +422,7 @@ public class Login extends JFrame {
 							// esta dado de alta
 							aux2 = false;
 							if (x.getEstado()==1) {
-								if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+								if (x.getEspecialidad().getId_especialidad() == 0) {
 									// se abre la pantalla de admin
 									AdminAppointment pa = new AdminAppointment(x, frame);
 									pa.setVisible(true);
@@ -483,7 +483,7 @@ public class Login extends JFrame {
 							// esta dado de alta
 							aux2 = false;
 							if (x.getEstado()==1) {
-								if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+								if (x.getEspecialidad().getId_especialidad() == 0) {
 									// se abre la pantalla de admin
 									AdminAppointment pa = new AdminAppointment(x, frame);
 									pa.setVisible(true);
