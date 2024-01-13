@@ -26,8 +26,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import Controlador.ConexionMySQL;
-import Controlador.SpecialistController;
-import Controlador.SpecialityController;
 import Modelo.Specialist;
 import Modelo.Speciality;
 import Modelo.SpecialityHibernate;

@@ -17,7 +17,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import Controlador.ConexionMySQL;
-import Controlador.UserController;
 import Modelo.SpecialityHibernate;
 import Modelo.UserHibernate;
 
@@ -41,7 +40,6 @@ public class DChangePass extends JDialog {
 	private char contra='1';
 	private ConexionMySQL conexion;
 	private String usuario;
-	private UserController userController;
 	private SessionFactory instancia;
 	private Session session;
 	
@@ -68,7 +66,6 @@ public class DChangePass extends JDialog {
 				.addAnnotatedClass(UserHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 		this.session.beginTransaction();
-		userController=new UserController(conexion);
 		//aparece en x:1360 y y:0, se extiende 560 pixeles  a la derecha y 1080 hacia abajo
 		setBounds(1360, 0, 560, 1080);
 		getContentPane().setLayout(null);

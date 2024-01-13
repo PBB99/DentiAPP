@@ -76,6 +76,19 @@ public class ClienteHibernate implements Serializable {
 	public String toString() {
 		return dni_doc;
 	}
+
+
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<OdontogramaHibernate> odontos;
+    
+    public List<OdontogramaHibernate> getOdontos(){
+        return odontos;
+    }
+    
+    public void addOdonto(OdontogramaHibernate odonto){
+        if (odontos == null) odontos=new ArrayList<>();
+        odontos.add(odonto);
+        odonto.setCliente(this);
 	
 	@OneToMany(mappedBy = "cliente_cita", cascade = CascadeType.ALL)
 	private List<CitaHibernate> citas;

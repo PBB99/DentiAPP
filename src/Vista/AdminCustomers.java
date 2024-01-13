@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Controlador.ConexionMySQL;
 import Modelo.UserHibernate;
 import btndentiapp.ButtonDentiApp;
 
@@ -25,7 +24,6 @@ public class AdminCustomers extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private ConexionMySQL conex;
 	private JFrame parent, frame;
 	private UserHibernate userHi;
 	/**
