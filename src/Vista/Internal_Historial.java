@@ -2,6 +2,8 @@ package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -28,15 +30,13 @@ public class Internal_Historial extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	/*
-	 id_odontograma
-	 id_cliente
-	 observaciones
-	 fecha
-	 clientes_dni_clientes*/
+	 * id_odontograma id_cliente observaciones fecha clientes_dni_clientes
+	 */
 
-private SessionFactory instancia;
-private Session session;
-private List<OdontogramaHibernate> odonList;
+	private SessionFactory instancia;
+	private Session session;
+	private List<OdontogramaHibernate> odonList;
+
 	/**
 	 * Launch the application.
 	 */
@@ -53,89 +53,119 @@ private List<OdontogramaHibernate> odonList;
 	/**
 	 * Create the dialog.
 	 */
-	public Internal_Historial(int id_diente,ClienteHibernate cliente) {
-		
+	public Internal_Historial(int id_diente, ClienteHibernate cliente) {
+
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(OdontogramaHibernate.class).addAnnotatedClass(ClienteHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(OdontogramaHibernate.class)
+				.addAnnotatedClass(ClienteHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 		this.session.beginTransaction();
-		
-		//sacamos toda la info del diente que queramos teniendo en cuenta el paciente que tenemos
-		String hql="From odontogramas where id_diente="+id_diente+" & clientes_dni_clientes=" +cliente.getDni_cliente();
+
+		// sacamos toda la info del diente que queramos teniendo en cuenta el paciente
+		// que tenemos
+		String hql = "From odontogramas where id_diente=" + id_diente + " & clientes_dni_clientes="
+				+ cliente.getDni_cliente();
 		Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
-		odonList=consulta.getResultList();
-		String consultaNombre=" from clientes where dni_cliente="+cliente.getDni_cliente();
-		Query<ClienteHibernate>resultadoConsultaNombre=session.createQuery(consultaNombre,ClienteHibernate.class);
-		ClienteHibernate nombreCliente=resultadoConsultaNombre.getSingleResult();
-		
+		odonList = consulta.getResultList();
+		String consultaNombre = " from clientes where dni_cliente=" + cliente.getDni_cliente();
+		Query<ClienteHibernate> resultadoConsultaNombre = session.createQuery(consultaNombre, ClienteHibernate.class);
+		ClienteHibernate nombreCliente = resultadoConsultaNombre.getSingleResult();
+		setUndecorated(true);
 		setBounds(0, 0, 506, 680);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JLabel lblidDiente = new JLabel("Diiente: ");
-			lblidDiente.setBounds(31, 125, 46, 14);
-			contentPanel.add(lblidDiente);
+
 		}
-		//---------------componentes gráficos-----------------
+		// ---------------componentes gráficos-----------------
 		JLabel lblFecha = new JLabel("Fecha");
 		lblFecha.setBounds(272, 125, 46, 14);
-		contentPanel.add(lblFecha);
-		
+
+		JLabel lblidDiente = new JLabel("Diiente:");
+		lblidDiente.setBounds(31, 125, 46, 14);
+
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(328, 121, 30, 22);
-		for(OdotongramaHibernate x:odonList) {
-			
+		// mostrar las fechas en las que ese diente de ese cliente han tenido registros
+		// de tratamiento
+		for (OdontogramaHibernate x : odonList) {
+			comboBox.addItem(x.getFecha());
 		}
-		contentPanel.add(comboBox);
-		
+
 		JLabel lblObservaciones = new JLabel("Tratamiento: ");
 		lblObservaciones.setBounds(29, 224, 79, 14);
-		contentPanel.add(lblObservaciones);
-		
+
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(29, 249, 436, 288);
-		contentPanel.add(textArea);
-		
+
 		JLabel lblNombrePaciente = new JLabel("");
 		lblNombrePaciente.setText(nombreCliente.getNombre());
 		lblNombrePaciente.setBounds(31, 34, 192, 14);
-		
-		contentPanel.add(lblNombrePaciente);
-		
+
 		JLabel lblimagenDiente = new JLabel("");
 		lblimagenDiente.setBounds(304, 34, 66, 54);
+		//--------LOGICA-------------------
+		
 		imagenDiente(id_diente, lblimagenDiente);
+		
+		comboBox.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String eleccion=(String)comboBox.getSelectedItem();
+				String hql2="FROM odontogramas where id_diente="+id_diente+" & fecha="+eleccion;
+				Query<OdontogramaHibernate>consultaDatos=session.createQuery(hql2,OdontogramaHibernate.class);
+				OdontogramaHibernate dienteCargado=consultaDatos.getSingleResult();
+				lblidDiente.setText(Integer.toString(dienteCargado.getId_diente()));
+				lblObservaciones.setText(dienteCargado.getObservaciones());
+				
+				
+			}
+		});
+		
+		// -----------------------------ADICIONES----------------------------
+		contentPanel.add(comboBox);
+		contentPanel.add(lblFecha);
+		contentPanel.add(lblObservaciones);
+		contentPanel.add(textArea);
+		contentPanel.add(lblNombrePaciente);
 		contentPanel.add(lblimagenDiente);
+		contentPanel.add(lblidDiente);
 		{
 			JPanel bpBotonera = new JPanel();
 			bpBotonera.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(bpBotonera, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("Imprimir");
+				//aqui en teoria deberia imprimirse el informe que aun no hemos realizado
 				okButton.setActionCommand("OK");
 				bpBotonera.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Salir");
+				//aqui se cierra la ventana
 				cancelButton.setActionCommand("Cancel");
 				bpBotonera.add(cancelButton);
 			}
 		}
-		
-		
+
 	}
+
+//--------METODOS Y FUNCIONES--------------------
 	
-	public static void imagenDiente(int id_diente,JLabel imagen) {
+	//metodo para poner la imagen correspondiente al diente seleccionado
+	public static void imagenDiente(int id_diente, JLabel imagen) {
 		switch (id_diente) {
 		case 11:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_5.png")));
-		break;
+			break;
 		case 15:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_2.png")));
-		break;
+			break;
 		case 17:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_1.png")));
 			break;
@@ -160,7 +190,7 @@ private List<OdontogramaHibernate> odonList;
 		case 47:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_6.png")));
 			break;
-		
+
 		}
 	}
 }
