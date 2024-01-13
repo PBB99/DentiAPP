@@ -111,24 +111,23 @@ public class AdminUsers extends JFrame {
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);
-
 		menuBar.setMargin(new Insets(50, 0, 0, 25));
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
+		
 		// Labels
+		
 		// añadir
 		JLabel lAdd = new JLabel();
 		lAdd.setText("Añadir");
 		lAdd.setBounds(1477, 205, 100, 20);
+		
 		// Modificar
 		JLabel lMod = new JLabel();
 		lMod.setText("Modificar");
 		lMod.setBounds(1577, 205, 100, 20);
-		// Borrar
-		JLabel lDel = new JLabel();
-		lDel.setText("Dar de Baja");
-		lDel.setBounds(1677, 205, 100, 20);
+		
 		// item
 		JMenu mnNewMenu = new JMenu("");
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
@@ -136,7 +135,7 @@ public class AdminUsers extends JFrame {
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem("");
-		ItemName.setText(userHi.getNombre());
+//		ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
@@ -184,7 +183,7 @@ public class AdminUsers extends JFrame {
 		tabla.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tabla.getTableHeader().setBackground(new Color(148, 220, 219));
 		tabla.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-//		
+		
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -346,17 +345,16 @@ public class AdminUsers extends JFrame {
 					@Override
 					public void windowClosed(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void windowActivated(WindowEvent e) {
-						// TODO Auto-generated method stub
 						if(control==0) {
 							cargarTabla("admin", tabla);
 						}else {
 							cargarTabla("doctor", tabla);
 						}
+					}
+					
+					@Override
+					public void windowActivated(WindowEvent e) {
+						
 					}
 				});
 
@@ -450,56 +448,7 @@ public class AdminUsers extends JFrame {
 
 			}
 		});
-		lDel.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				Query<UserHibernate> consulta2 = miSesion.createQuery("FROM UserHibernate", UserHibernate.class);
-				List<UserHibernate> listaUsers = consulta2.getResultList();
-				List<String> listaDnis = new ArrayList<String>();
-				for (UserHibernate x : listaUsers) {
-					listaDnis.add(x.getDni());
-				}
-				String resultado = (String) JOptionPane.showInputDialog(null, "Usuarios", "Elegir",
-						JOptionPane.QUESTION_MESSAGE, null, listaDnis.toArray(), listaDnis.toArray()[0]);
-				System.out.println(resultado);
-				UserHibernate user = miSesion.get(UserHibernate.class, resultado);
-				user.setDni(resultado);
-				user.setEstado(0);
-				System.out.println(user.getEstado());
-				miSesion.beginTransaction();
-				miSesion.update(user);
-				miSesion.getTransaction().commit();
-				
-			}
-
-		});
-
+		
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -600,7 +549,6 @@ public class AdminUsers extends JFrame {
 		contentPane.add(menuBar);
 		contentPane.add(lAdd);
 		contentPane.add(lMod);
-		contentPane.add(lDel);
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -635,14 +583,6 @@ public class AdminUsers extends JFrame {
 	}
 
 //-----------------------Métodos------------------------------------------
-	public String mostrarEspecialidades(UserHibernate u) {
-		String total = "";
-		for (int i = 0; i < u.getSpeciality().size(); i++) {
-			total = total + u.getSpeciality().get(i).getEspecialidad() + ",";
-		}
-		return total;
-	}
-
 	public void cargarTabla(String nombreTabla, JTable tablaDoctores) {
 		// Relaiza la consulta de todos los usuarios y los extrae
 		miSesion=instancia.openSession();
@@ -668,13 +608,11 @@ public class AdminUsers extends JFrame {
 				// dentro de los admin solo puede tener una espcialidad, pero en el caso de que
 				// se le haya metido en varias ocasiones la especialidad admin tenemos en cuenta
 				// que pueda tener mas especialidades
-				if (!x.getSpeciality().isEmpty()) {
-
-					if (x.getSpeciality().get(0).getId_especialidad() == 0) {
+				if (x.getEspecialidad()!=null) {
+					if (x.getEspecialidad().getId_especialidad() == 0) {
 						admin.add(x);
 					}
 				}
-
 			}
 			tablaDoctores.setModel(model);
 			JTableHeader header = tablaDoctores.getTableHeader();
@@ -690,7 +628,7 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getDni(), fila, 0);
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
-				model.setValueAt(mostrarEspecialidades(y), fila, 3);
+				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
 				fila++;
 			}
 
@@ -703,9 +641,9 @@ public class AdminUsers extends JFrame {
 			for (UserHibernate x : userList) {
 				// los doctores tienen al menos una especialidad con posbilidad de tener mas y
 				// distintas de cero
-				if (!x.getSpeciality().isEmpty()) {
+				if (x.getEspecialidad()!=null) {
 
-					if (x.getSpeciality().get(0).getId_especialidad() != 0) {
+					if (x.getEspecialidad().getId_especialidad() != 0) {
 						admin.add(x);
 					}
 				}
@@ -725,7 +663,7 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getDni(), fila, 0);
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
-				model.setValueAt(mostrarEspecialidades(y), fila, 3);
+				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
 				fila++;
 			}
 

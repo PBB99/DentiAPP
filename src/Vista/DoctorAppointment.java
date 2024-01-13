@@ -78,12 +78,12 @@ public class DoctorAppointment extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-//				try {
-//					DoctorAppointment frame = new DoctorAppointment(null,null);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+				try {
+					DoctorAppointment frame = new DoctorAppointment(null,null);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -103,8 +103,8 @@ public class DoctorAppointment extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
-				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.addAnnotatedClass(UserHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class)
 				.buildSessionFactory();
 		this.session = instancia.openSession();
 		this.session.beginTransaction();
