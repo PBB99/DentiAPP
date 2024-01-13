@@ -29,6 +29,6 @@
         <mapping class="Modelo.UserHibernate"/>
         <mapping class="Modelo.CitaHibernate"/>
         <mapping class="Modelo.ClienteHibernate"/>
-        
+        <mapping class="Modelo.OrganigramaHibernate"/>
     </session-factory>
 </hibernate-configuration>
