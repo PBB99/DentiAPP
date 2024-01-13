@@ -354,7 +354,7 @@ public class AdminAppointment extends JFrame {
 
 		DefaultTableModel modelo = new DefaultTableModel();
 		JTable table = new JTable();
-		table.setBounds(420, 180, 199, 196);
+		table.setBounds(420, 180, 500, 500);
 		contentPane.add(table);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(modelo);
@@ -370,7 +370,7 @@ public class AdminAppointment extends JFrame {
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
 		System.out.println(formateador.format(fechaCalen.getTime()));
-		for (int i = 9; i < 15; i++) {
+		for (int i = 8; i < 15; i++) {
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
 			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
 		}
@@ -419,6 +419,8 @@ public class AdminAppointment extends JFrame {
 					System.out.println(formateador.format(fechaCal.getTime()) + "------");
 					if (formateador.format(fechaCal.getTime()).equals(formateador.format(dia))) {
 						System.out.println("saddasdas");
+						System.out.println(allCitas.isEmpty()+" Es el bueno");
+						System.out.println("Tamaño "+allCitas.size());
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
@@ -562,6 +564,7 @@ public class AdminAppointment extends JFrame {
 					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
 					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
 						System.out.println("saddasdas");
+						System.out.println(allCitas.isEmpty());
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);

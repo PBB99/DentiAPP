@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class CitaHibernate implements Serializable{
 	
 	@Id
-	@Column(name = "idcita", nullable = false)
+	@Column(name = "id_cita", nullable = false)
 	private Integer idcita;
 	
 	@Column(name = "fecha", nullable = false)
