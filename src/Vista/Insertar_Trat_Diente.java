@@ -62,7 +62,7 @@ public class Insertar_Trat_Diente extends JDialog {
 		this.session.beginTransaction();
 		setBounds(0, 0, 506, 680);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 0, 506, 647);
+		contentPanel.setBounds(0, 0, 506, 680);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setBackground(new Color(238,238,238));
 		// ------------COMPONENTES GRAFICOS------------
