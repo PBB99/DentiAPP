@@ -332,7 +332,7 @@ public class AdminClinic extends JFrame {
 					tableSpeciality.setCellSelectionEnabled(true);
 					selectedTreatment = null;
 
-					// selección del tratamiento
+					// selección de la especialidad
 					selectedSpeciality = tableSpeciality
 							.getValueAt(tableSpeciality.getSelectedRow(), tableSpeciality.getSelectedColumn())
 							.toString();
