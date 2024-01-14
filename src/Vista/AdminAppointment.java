@@ -1,6 +1,7 @@
 package Vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -32,9 +33,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -43,9 +47,11 @@ import org.hibernate.cfg.Configuration;
 
 import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
+import Modelo.OdontogramaHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
+import Vista.PruebaOdonto.Renderer;
 
 import javax.swing.JMenuBar;
 import java.awt.Point;
@@ -101,7 +107,7 @@ public class AdminAppointment extends JFrame {
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
-				.buildSessionFactory();
+				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 
 		// -------------------- JFrame --------------------
@@ -353,13 +359,23 @@ public class AdminAppointment extends JFrame {
 
 		DefaultTableModel modelo = new DefaultTableModel();
 		JTable table = new JTable();
-		table.setBounds(420, 180, 500, 500);
+		table.setBounds(420, 180, 500, 735);
 		contentPane.add(table);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(modelo);
-		modelo.addColumn("Hora");
-		modelo.addColumn("Cita");
-		modelo.insertRow(0, new Object[] { "Hora", "Cita" });
+		table.setShowVerticalLines(false);
+		table.setShowHorizontalLines(false);
+		table.setCellSelectionEnabled(true);
+		table.setBackground(new Color(250, 250, 250));
+		table.setSelectionBackground(new Color(148, 220, 219));
+		table.setShowGrid(false);
+		table.setBorder(null);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.setRowHeight(35);
+		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.getTableHeader().setBackground(new Color(148, 220, 219));
+		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
 		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id",
@@ -368,30 +384,28 @@ public class AdminAppointment extends JFrame {
 		consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
-		System.out.println(formateador.format(fechaCalen.getTime()));
-		for (int i = 8; i < 15; i++) {
-			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
-			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
-		}
-		for (int i = 17; i < 20; i++) {
-			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
-			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
-		}
-
-		System.out.println(allCitas.size());
-		for (int i = 0; i < allCitas.size(); i++) {
-			// System.out.println("saddasdas");
-			java.util.Date dia = allCitas.get(i).getFecha();
-			// System.out.println(formateador.format(dia) + "------");
-			if (formateador.format(fechaCalen.getTime()).equals(formateador.format(dia))) {
-				// System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-				for (int j = 0; j < table.getModel().getRowCount(); j++) {
-					if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
-						table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
-					}
-				}
-			}
-		}
+//		System.out.println(formateador.format(fechaCalen.getTime()));
+//		for (int i = 8; i < 15; i++) {
+//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
+//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
+//		}
+//		for (int i = 17; i < 20; i++) {
+//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
+//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
+//		}
+//
+//		for (int i = 0; i < allCitas.size(); i++) {
+//			java.util.Date dia = allCitas.get(i).getFecha();
+//			if (formateador.format(fechaCalen.getTime()).equals(formateador.format(dia))) {
+//				for (int j = 0; j < table.getModel().getRowCount(); j++) {
+//					if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
+//						table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
+//					}
+//				}
+//			}
+//		}
+		
+		loadCitas(table, calendar, (UserHibernate) cbUsuarios.getSelectedItem(), formateador);
 
 		calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
 
@@ -401,6 +415,7 @@ public class AdminAppointment extends JFrame {
 				// TODO Auto-generated method stub
 				for (int j = 1; j < table.getModel().getRowCount(); j++) {
 					table.getModel().setValueAt("", j, 1);
+					table.getModel().setValueAt("", j, 2);
 				}
 
 				Calendar fechaCal = (Calendar) evt.getNewValue();
@@ -414,15 +429,11 @@ public class AdminAppointment extends JFrame {
 
 				for (int i = 0; i < allCitas.size(); i++) {
 					Date dia = (Date) allCitas.get(i).getFecha();
-
-					System.out.println(formateador.format(fechaCal.getTime()) + "------");
 					if (formateador.format(fechaCal.getTime()).equals(formateador.format(dia))) {
-						System.out.println("saddasdas");
-						System.out.println(allCitas.isEmpty()+" Es el bueno");
-						System.out.println("Tamaño "+allCitas.size());
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
+								table.getModel().setValueAt(allCitas.get(i).getTratamiento().getNombre(), j, 2);
 							}
 						}
 					}
@@ -438,6 +449,7 @@ public class AdminAppointment extends JFrame {
 				// TODO Auto-generated method stub
 				for (int j = 1; j < table.getModel().getRowCount(); j++) {
 					table.getModel().setValueAt("", j, 1);
+					table.getModel().setValueAt("", j, 2);
 				}
 
 				Query<CitaHibernate> consultaCitas = session
@@ -450,12 +462,11 @@ public class AdminAppointment extends JFrame {
 
 				for (int i = 0; i < allCitas.size(); i++) {
 					Date dia = (Date) allCitas.get(i).getFecha();
-					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
 					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
-						System.out.println("saddasdas");
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
+								table.getModel().setValueAt(allCitas.get(i).getTratamiento().getNombre(), j, 2);
 							}
 						}
 					}
@@ -469,29 +480,12 @@ public class AdminAppointment extends JFrame {
 			public void valueChanged(ListSelectionEvent event) {
 				String a = (table.getValueAt(table.getSelectedRow(), 0).toString());
 				if (!event.getValueIsAdjusting()) {// This line prevents double events
-					String[] opc = { "ELIMINAR CITA", "ACTUALIZAR/INSERTAR CITA" };
 					System.out.println("--");
 					if (fechaCalen.getTime().before(calendar.getCalendar().getTime())
 							|| (fechaCalen.getTime().getDay() == calendar.getCalendar().getTime().getDay())
 									&& (fechaCalen.getTime().getMonth() == calendar.getCalendar().getTime().getMonth())
 									&& (fechaCalen.getTime().getYear() == calendar.getCalendar().getTime().getYear())) {
-						int opcionDml = JOptionPane.showOptionDialog(null, "¿Qué quieres hacer?", "Elige",
-								JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opc, opc[0]);
-						if (opcionDml == 0) {
-							if (!table.getValueAt(table.getSelectedRow(), 1).toString().equalsIgnoreCase("")) {
-								session.beginTransaction();
-								Query<CitaHibernate> consultaCitas = session.createQuery(
-										"FROM CitaHibernate where fecha=:fech and hora=:hora and usuario_cita=:id",
-										CitaHibernate.class);
-								consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-								consultaCitas.setParameter("hora", a);
-								consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-								CitaHibernate h3 = consultaCitas.getSingleResult();
-								session.delete(h3);
-								session.getTransaction().commit();
-								actualizarTabla();
-							}
-						} else if (opcionDml == 1) {
+						
 							UserHibernate u = (UserHibernate) cbUsuarios.getSelectedItem();
 							AdminInsertCita us = new AdminInsertCita(u.getDni(), calendar.getCalendar().getTime(),
 									(table.getValueAt(table.getSelectedRow(), 0).toString()));
@@ -544,13 +538,14 @@ public class AdminAppointment extends JFrame {
 						}
 					}
 
-				}
+				
 				
 			}
 
 			public void actualizarTabla() {
 				for (int j = 1; j < table.getModel().getRowCount(); j++) {
 					table.getModel().setValueAt("", j, 1);
+					table.getModel().setValueAt("", j, 2);
 				}
 				Query<CitaHibernate> consultaCitas = session
 						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
@@ -560,13 +555,11 @@ public class AdminAppointment extends JFrame {
 
 				for (int i = 0; i < allCitas.size(); i++) {
 					Date dia = (Date) allCitas.get(i).getFecha();
-					System.out.println(formateador.format(calendar.getCalendar().getTime()) + "------");
 					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
-						System.out.println("saddasdas");
-						System.out.println(allCitas.isEmpty());
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
+								table.getModel().setValueAt(allCitas.get(i).getTratamiento().getNombre(), j, 2);
 							}
 						}
 					}
@@ -574,5 +567,99 @@ public class AdminAppointment extends JFrame {
 			}
 		});
 
+		
 	}
+	
+	public void actualizarTabla(JTable table, JCalendar calendar, UserHibernate us, DateFormat formateador) {
+		for (int j = 1; j < table.getModel().getRowCount(); j++) {
+			table.getModel().setValueAt("", j, 1);
+			table.getModel().setValueAt("", j, 2);
+		}
+		
+		Query<CitaHibernate> consultaCitas = session
+				.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
+		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
+		consultaCitas.setParameter("id", us);
+		List<CitaHibernate> allCitas = consultaCitas.getResultList();
+
+		for (int i = 0; i < allCitas.size(); i++) {
+			Date dia = (Date) allCitas.get(i).getFecha();
+			if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
+				for (int j = 0; j < table.getModel().getRowCount(); j++) {
+					if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
+						table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
+						table.getModel().setValueAt(allCitas.get(i).getTratamiento().getNombre(), j, 2);
+					}
+				}
+			}
+		}
+	}
+	
+	public void loadCitas(JTable tabla, JCalendar calendar, UserHibernate us, DateFormat formateador) {
+		// Relaiza la consulta
+		this.session = instancia.openSession();
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "Hora", "Cita", "Tratamiento"}) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		
+		model.insertRow(0, new Object[] { "Hora", "Cita", "Tratamientos" });
+		
+		for (int i = 8; i < 15; i++) {
+			model.insertRow(model.getRowCount(), new Object[] { i + ":00", "" });
+			model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
+		}
+		for (int i = 17; i < 20; i++) {
+			model.insertRow(model.getRowCount(), new Object[] { i + ":00", "" });
+			model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
+		}
+		
+		tabla.setModel(model);
+		JTableHeader header = tabla.getTableHeader();
+
+		// Carga los datos
+		actualizarTabla(tabla, calendar, us, formateador);
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tabla.setDefaultRenderer(Object.class, tcr);
+
+		// Guarda el último id de las especialidades
+//		if (!results.isEmpty()) {
+//			lastCLiente = results.size();
+//			System.out.println("kkkkk");
+//		} else {
+//			lastCLiente = 0;
+//		}
+
+	}
+	
+	public class Renderer extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			// Evalua en que fila esta
+
+			if (row == 0) {
+				setBackground(new Color(148, 220, 219));
+			} else if (row % 2 == 0) {
+				setBackground(new Color(220, 220, 220));
+			} else {
+				setBackground(new Color(250, 250, 250));
+			}
+
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		}
+
+	}
+	
 }

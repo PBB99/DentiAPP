@@ -18,8 +18,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
 import Modelo.OdontogramaHibernate;
+import Modelo.SpecialityHibernate;
+import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
 
 import javax.swing.JLabel;
@@ -57,16 +60,18 @@ public class Internal_Historial extends JDialog {
 	public Internal_Historial(int id_diente, ClienteHibernate cliente) {
 
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(OdontogramaHibernate.class)
-				.addAnnotatedClass(ClienteHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 		this.session.beginTransaction();
 
 		// sacamos toda la info del diente que queramos teniendo en cuenta el paciente
 		// que tenemos
-		String hql = "From odontogramas where id_diente=" + id_diente + " & clientes_dni_clientes="
-				+ cliente.getDni_cliente();
+		String hql = "From OdontogramaHibernate where id_diente=:id_diente and clientes_dni_clientes=:dni_cliente";
 		Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
+		consulta.setParameter("id_diente", id_diente);
+		consulta.setParameter("dni_cliente", cliente.getDni_cliente());
 		odonList = consulta.getResultList();
 		// esto no sirve, ida de olla pero estructura comentada por si acaso es util en
 		// otro contexto
@@ -137,8 +142,10 @@ public class Internal_Historial extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String eleccion = (String) comboBox.getSelectedItem();
-				String hql2 = "FROM odontogramas where id_diente=" + id_diente + " & fecha=" + eleccion;
-				Query<OdontogramaHibernate> consultaDatos = session.createQuery(hql2, OdontogramaHibernate.class);
+				String hql2 = "FROM OdontogramaHibernate where id_diente=:id_diente and fecha=:fecha";
+				Query<OdontogramaHibernate> consultaDatos = session.createQuery(hql, OdontogramaHibernate.class);
+				consulta.setParameter("id_diente", id_diente);
+				consulta.setParameter("dni_cliente", eleccion);
 				OdontogramaHibernate dienteCargado = consultaDatos.getSingleResult();
 				lblidDiente.setText(Integer.toString(dienteCargado.getId_diente()));
 				lblObservaciones.setText(dienteCargado.getObservaciones());
