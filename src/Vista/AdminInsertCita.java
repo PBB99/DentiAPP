@@ -173,7 +173,7 @@ public class AdminInsertCita extends JDialog {
 									CitaHibernate.class);
 							List<CitaHibernate> allCitas = consultaCitas.getResultList();
 							CitaHibernate cita = new CitaHibernate(allCitas.get(allCitas.size() - 1).getIdcita() + 1,
-									dia, hora);
+									dia, hora, "");
 							cita.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
 							cita.setUser(usuario);
 							cita.setTratamiento((TreatmentsHibernate) cbTratamiento.getSelectedItem());

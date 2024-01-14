@@ -40,6 +40,8 @@ import Vista.AdminClinic.Renderer;
 import javax.swing.JComboBox;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
 
 public class PruebaOdonto extends JFrame {
 
@@ -299,6 +301,35 @@ public class PruebaOdonto extends JFrame {
 		btnOdonto.setBounds(1100, 604, 100, 100);
 		btnOdonto.setBorder(null);
 		contentPane.add(btnOdonto);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(51, 715, 443, 225);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Parece que has tenido una consulta con (nombre del cliente)");
+		lblNewLabel.setBounds(74, 5, 289, 14);
+		panel.add(lblNewLabel);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(138, 30, 162, 22);
+		panel.add(comboBox);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setBounds(32, 90, 377, 88);
+		panel.add(textPane);
+		
+		JLabel lblNewLabel_1 = new JLabel("Tratamiento:");
+		lblNewLabel_1.setBounds(74, 34, 83, 14);
+		panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Observaciones:");
+		lblNewLabel_2.setBounds(38, 65, 77, 14);
+		panel.add(lblNewLabel_2);
+		
+		JButton btnNewButton = new JButton("Actualizar");
+		btnNewButton.setBounds(320, 189, 89, 23);
+		panel.add(btnNewButton);
 	}
 
 	public void loadClientes(JTable tabla) {
