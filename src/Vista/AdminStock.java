@@ -1,11 +1,14 @@
 package Vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -20,9 +23,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -32,6 +37,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import Controlador.ConexionMySQL;
+import Modelo.ClienteHibernate;
 import Modelo.InventarioHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
@@ -48,7 +54,7 @@ public class AdminStock extends JFrame {
 	private UserHibernate userHi;
 	private SessionFactory instancia;
 	private Session session;
-	private JTable table;
+	private JTable tableStock;
 
 	/**
 	 * Launch the application.
@@ -57,7 +63,7 @@ public class AdminStock extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AdminStock frame = new AdminStock(null,null);
+					AdminStock frame = new AdminStock(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -74,8 +80,7 @@ public class AdminStock extends JFrame {
 
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(InventarioHibernate.class)
-				.buildSessionFactory();
+				.addAnnotatedClass(InventarioHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 
 		// -------------------- JFrame --------------------
@@ -87,6 +92,7 @@ public class AdminStock extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setResizable(false);
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
@@ -137,27 +143,53 @@ public class AdminStock extends JFrame {
 		btnPayments.setToolTipText("Módulo Económico (Alt+E)");
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
-		// ScrollPane para cargar la talbla
-		JScrollPane menuTable = new JScrollPane();
-		menuTable.setBorder(BorderFactory.createEmptyBorder());
-		menuTable.setBounds(418, 270, 500, 675);
-		menuTable.setBackground(new Color(148, 220, 219));
+		// Panel del Menú
+		JPanel menuStock = new JPanel();
+		menuStock.setBackground(new Color(148, 220, 219));
+		menuStock.setBounds(300, 270, 800, 705);
+		menuStock.setLayout(null);
+
+		// Buscador
+		JTextField txt = new JTextField();
+		txt.setBorder(new LineBorder(new Color(148, 220, 219)));
+		txt.setBounds(0, 5, 200, 25);
+		txt.setBackground(new Color(255, 255, 255));
+
+		// Botón de insertar producto
+		JButton btnInsertProduct = new JButton();
+		btnInsertProduct.setBackground(new Color(148, 220, 219));
+		btnInsertProduct.setBounds(720, 0, 40, 30);
+		btnInsertProduct.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
+		btnInsertProduct.setBorderPainted(false);
+
+		// Botón de modificar producto
+		JButton btnUpadateProduct = new JButton();
+		btnUpadateProduct.setBackground(new Color(148, 220, 219));
+		btnUpadateProduct.setBounds(760, 0, 40, 30);
+		btnUpadateProduct.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
+		btnUpadateProduct.setBorderPainted(false);
+
+		// ScrollPane para cargar la talbla inventario
+		JScrollPane menuTableStock = new JScrollPane();
+		menuTableStock.setBorder(BorderFactory.createEmptyBorder());
+		menuTableStock.setBounds(0, 30, 800, 675);
+		menuTableStock.setBackground(new Color(148, 220, 219));
 
 		// Tabla
-		table = new JTable();
-		table.setShowVerticalLines(false);
-		table.setShowHorizontalLines(false);
-		table.setCellSelectionEnabled(true);
-		table.setBounds(0, 0, 500, 675);
-		table.setBackground(new Color(250, 250, 250));
-		table.setSelectionBackground(new Color(148, 220, 219));
-		table.setShowGrid(false);
-		table.setBorder(null);
-		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		table.setRowHeight(35);
-		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
-		table.getTableHeader().setBackground(new Color(148, 220, 219));
-		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		tableStock = new JTable();
+		tableStock.setShowVerticalLines(false);
+		tableStock.setShowHorizontalLines(false);
+		tableStock.setCellSelectionEnabled(true);
+		tableStock.setBounds(0, 0, 800, 675);
+		tableStock.setBackground(new Color(250, 250, 250));
+		tableStock.setSelectionBackground(new Color(148, 220, 219));
+		tableStock.setShowGrid(false);
+		tableStock.setBorder(null);
+		tableStock.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableStock.setRowHeight(35);
+		tableStock.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableStock.getTableHeader().setBackground(new Color(148, 220, 219));
+		tableStock.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
@@ -251,10 +283,63 @@ public class AdminStock extends JFrame {
 			}
 		});
 
+		// Mostrar las tablas
+		loadTable(tableStock);
+
+		// Acción de seleccionar elemento de la tabla
+		tableStock.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Seleccionar row
+					tableStock.addColumnSelectionInterval(0, 1);
+
+					// Cambios en la selección
+					tableStock.setColumnSelectionAllowed(false);
+					tableStock.setCellSelectionEnabled(false);
+					tableStock.setColumnSelectionAllowed(true);
+					tableStock.setCellSelectionEnabled(true);
+				}
+			}
+		});
+
+		// Acción de desseleccionar de las tablas
+		contentPane.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+					// Cambios en la selección
+					tableStock.setColumnSelectionAllowed(false);
+					tableStock.setCellSelectionEnabled(false);
+					tableStock.setColumnSelectionAllowed(false);
+					tableStock.setCellSelectionEnabled(false);
+				}
+			}
+		});
+
+		// Acción de buscar en la tabla
+		txt.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				loadSearch(tableStock, txt.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		// -------------------- Adiciones a los paneles --------------------
+		contentPane.add(menuStock);
 		contentPane.add(menuPane);
-		contentPane.add(menuTable);
-		
+
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -262,55 +347,114 @@ public class AdminStock extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-		menuTable.add(table);
-		menuTable.setViewportView(table);
-	}
-		// -------------------- Métodos y funciones --------------------
-		public void loadSpecialities(JTable tableSpeciality) {
-			// Relaiza la consulta
-			String hql = "FROM InventarioHibernate";
-			Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
-
-			// Guarda los datos en una lista
-			List<InventarioHibernate> results = consulta.getResultList();
-			
-			// Prepara la tabla
-			DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Producto" , "Cantidad" }) {
-				@Override
-				public boolean isCellEditable(int row, int column) {
-					// all cells false
-					return false;
-				}
-			};
-			tableSpeciality.setModel(model);
-			JTableHeader header = tableSpeciality.getTableHeader();
-			if(results.size()<19) {
-				model.setRowCount(18);
-			}else {
-				model.setRowCount(results.size());
-			}
-			int fila = 0, columna = 0;
-
-			// Carga los datos
-			for (InventarioHibernate producto : results) {
-				model.setValueAt(producto.getNombre(), fila, columna);
-				model.setValueAt(producto.getCantidad(), fila, columna+1);
-				fila++;
-			}
-
-			// Se alinea el texto de las columnas
-			Renderer tcr = new Renderer();
-			tcr.setHorizontalAlignment(SwingConstants.CENTER);
-			tableSpeciality.getColumnModel().getColumn(0).setCellRenderer(tcr);
-			tableSpeciality.setDefaultRenderer(Object.class, tcr);
-
-//			// Guarda el último id de las especialidades
-//			if (!results.isEmpty()) {
-//				lastIdSpeciality = results.getLast().getId_especialidad();
-//			} else {
-//				lastIdSpeciality = 0;
-//			}
 		
+		menuTableStock.add(tableStock);
+		menuTableStock.setViewportView(tableStock);
+		
+		menuStock.add(txt);
+		menuStock.add(menuTableStock);
+		menuStock.add(btnInsertProduct);
+		menuStock.add(btnUpadateProduct);
 	}
 
+	// -------------------- Métodos y funciones --------------------
+	public void loadTable(JTable table) {
+		// Relaiza la consulta
+		String hql = "FROM InventarioHibernate";
+		Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
+
+		// Guarda los datos en una lista
+		List<InventarioHibernate> results = consulta.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Producto", "Cantidad" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		table.setModel(model);
+		JTableHeader header = table.getTableHeader();
+		if (results.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (InventarioHibernate producto : results) {
+			model.setValueAt(producto.getNombre(), fila, columna);
+			model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.setDefaultRenderer(Object.class, tcr);
+	}
+
+	// Método para hacer consulta en el buscador
+	public void loadSearch(JTable tabla, String busq) {
+		// Relaiza la consulta
+		this.session = instancia.openSession();
+		String hql = "FROM InventarioHibernate where nombre like :busq";
+		Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
+		consulta.setParameter("busq", "%" + busq + "%");
+
+		// Guarda los datos en una lista
+		List<InventarioHibernate> results = consulta.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Producto", "Cantidad" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tableStock.setModel(model);
+		JTableHeader header = tableStock.getTableHeader();
+		if (results.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (InventarioHibernate producto : results) {
+			model.setValueAt(producto.getNombre(), fila, columna);
+			model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tableStock.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tableStock.setDefaultRenderer(Object.class, tcr);
+	}
+
+	// Clase para cambiar el color de las filas
+	public class Renderer extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			// Evalua en que fila esta
+			if (row % 2 == 0) {
+				setBackground(new Color(220, 220, 220));
+			} else {
+				setBackground(new Color(250, 250, 250));
+			}
+
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		}
+
+	}
 }

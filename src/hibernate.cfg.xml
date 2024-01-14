@@ -22,7 +22,6 @@
         update. Actualiza las tablas 
         Validate. Comprueba si son correctas
         -->
-        
         <property name="hbm2ddl.auto">update</property>
         <mapping class="Modelo.SpecialityHibernate" />
         <mapping class="Modelo.TreatmentsHibernate" />
@@ -30,7 +29,7 @@
         <mapping class="Modelo.CitaHibernate"/>
         <mapping class="Modelo.ClienteHibernate"/>
         <mapping class="Modelo.OdontogramaHibernate"/>
-        <mapping class="Modelo.InventarioHibernate">
-			
+        <mapping class="Modelo.InventarioHibernate"/>
+        
     </session-factory>
 </hibernate-configuration>
