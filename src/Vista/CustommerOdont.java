@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.hibernate.Session;
+
 import Modelo.ClienteHibernate;
 import btndentiapp.ButtonDentiApp;
 
@@ -19,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JTabbedPane;
 
@@ -46,7 +49,7 @@ public class CustommerOdont extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public CustommerOdont(ClienteHibernate cliente) {
+	public CustommerOdont(ClienteHibernate cliente,Session session, Boolean admin) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		// --------------ELEMENTOS-------------
 
@@ -147,16 +150,6 @@ public class CustommerOdont extends JDialog {
 		bDiente35.setOpaque(false);
 
 		
-
-		JButton bDiente37 = new JButton("");
-		bDiente37.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_8.png")));
-		bDiente37.setBounds(298, 410, 89, 51);
-		bDiente37.setBorderPainted(false);
-		bDiente37.setContentAreaFilled(false);
-		bDiente37.setFocusPainted(false);
-		bDiente37.setOpaque(false);
-
-		
 		JButton bDiente45 = new JButton("");
 		bDiente45.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_7.png")));
 		bDiente45.setBounds(70, 479, 89, 81);
@@ -175,12 +168,21 @@ public class CustommerOdont extends JDialog {
 		bDiente41.setFocusPainted(false);
 		bDiente41.setOpaque(false);
 		
+		JButton bDiente37 = new JButton("");
+		bDiente37.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_8.png")));
+		bDiente37.setBounds(298, 410, 89, 51);
+		bDiente37.setBorderPainted(false);
+		bDiente37.setContentAreaFilled(false);
+		bDiente37.setFocusPainted(false);
+		bDiente37.setOpaque(false);
+		
 		//panel donde iran los tabs de historial e inserccion de tratamiento
 		JPanel Historial_Insertar = new JPanel();
 		Historial_Insertar.setBounds(883, 70, 506, 608);
 		//elemento para tener dos pestañas en el panel
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 506, 608);
+		
 		
 
 
@@ -226,10 +228,39 @@ public class CustommerOdont extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(17,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(17, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(17, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(17, cliente,session);
+
+				// Crear paneles para contener los JDialog
+				
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
+
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
 			}
 		});
 
@@ -273,11 +304,42 @@ public class CustommerOdont extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(47,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(47, cliente);	
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(47, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(47, cliente,session);
+
+				// Crear paneles para contener los JDialog
+				
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
+
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
+				
+				
+				
 			}
 		});
 
@@ -321,10 +383,40 @@ public class CustommerOdont extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(11,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(11, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(11, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(11, cliente,session);
+
+				// Crear paneles para contener los JDialog
+				
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
+
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
+				
 			}
 		});
 		bDiente15.addMouseListener(new MouseListener() {
@@ -366,10 +458,41 @@ public class CustommerOdont extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(15,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(15, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(15, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(15, cliente,session);
+
+				// Crear paneles para contener los JDialog
+				
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
+
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
+				
+			
 			}
 		});
 
@@ -413,10 +536,40 @@ public class CustommerOdont extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(25,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(25, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);	
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(25, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(25, cliente,session);
+
+				// Crear paneles para contener los JDialog
+				
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
+
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
+					
 			}
 		});
 
@@ -456,15 +609,44 @@ public class CustommerOdont extends JDialog {
 			}
 		});
 		
-		bDiente25.addActionListener(new ActionListener() {
+		bDiente27.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(25,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(25, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(27, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(27, cliente,session);
+
+				// Crear paneles para contener los JDialog
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
+
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
+			
 			}
 		});
 		
@@ -509,57 +691,40 @@ public class CustommerOdont extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(35,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(35, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
-			}
-		});
-		bDiente37.addMouseListener(new MouseListener() {
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(35, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(35, cliente,session);
 
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+				// Crear paneles para contener los JDialog
+				
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
 
-			}
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
 
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				bDiente37.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_8.png")));
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				bDiente37.setIcon(
-						new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_8_verde.png")));
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		
-		bDiente37.addActionListener(new ActionListener() {
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(37,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(37, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
 			}
 		});
 
@@ -604,10 +769,38 @@ public class CustommerOdont extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(45,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(45, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(45, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(45, cliente,session);
+
+				if(admin==false){
+					JPanel panelTratamiento = new JPanel(new BorderLayout());
+					panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+					panelTratamiento.setBounds(Historial_Insertar.getBounds());
+					// Agregar los paneles al JTabbedPane
+					
+					tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+					// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+					
+
+					it.pack();
+					it.setVisible(true);
+					}
+				
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
+			
 			}
 		});
 		bDiente41.addMouseListener(new MouseListener() {
@@ -650,12 +843,122 @@ public class CustommerOdont extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Internal_Historial ih=new Internal_Historial(41,cliente);
-				Insertar_Trat_Diente it=new Insertar_Trat_Diente(41, cliente);
-				tabbedPane.addTab("Historial", ih);
-				tabbedPane.addTab("Tratamiento", it);
+				
+				if (tabbedPane.getTabCount() > 0) {
+				    // No hay pestañas en el JTabbedPane
+					
+					tabbedPane.removeAll();
+				}
+//				
+				Internal_Historial ih = new Internal_Historial(41, cliente,session);
+				Insertar_Trat_Diente it = new Insertar_Trat_Diente(41, cliente,session);
+
+				// Crear paneles para contener los JDialog
+				if(admin==false){
+				JPanel panelTratamiento = new JPanel(new BorderLayout());
+				panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+				panelTratamiento.setBounds(Historial_Insertar.getBounds());
+				// Agregar los paneles al JTabbedPane
+				
+				tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+				// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+				
+
+				it.pack();
+				it.setVisible(true);
+				}
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				
+			
 			}
 		});
+		
+				
+		
+				
+				bDiente37.addMouseListener(new MouseListener() {
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						bDiente37.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_8.png")));
+
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						bDiente37.setIcon(
+								new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_8_verde.png")));
+
+					}
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+				
+				bDiente37.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						
+						if (tabbedPane.getTabCount() > 0) {
+						    // No hay pestañas en el JTabbedPane
+							
+							tabbedPane.removeAll();
+						}
+//				
+						Internal_Historial ih = new Internal_Historial(37, cliente,session);
+						Insertar_Trat_Diente it = new Insertar_Trat_Diente(37, cliente,session);
+
+						if(admin==false){
+							JPanel panelTratamiento = new JPanel(new BorderLayout());
+							panelTratamiento.add(it.getContentPane(), BorderLayout.CENTER);
+							panelTratamiento.setBounds(Historial_Insertar.getBounds());
+							// Agregar los paneles al JTabbedPane
+							
+							tabbedPane.addTab("Tratamiento", panelTratamiento);
+
+							// Mostrar los JDialog después de agregar los paneles al JTabbedPane
+							
+
+							it.pack();
+							it.setVisible(true);
+							}
+						
+							JPanel panelHistorial = new JPanel(new BorderLayout());
+							panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+							panelHistorial.setBounds(Historial_Insertar.getBounds());
+							tabbedPane.addTab("Historial", panelHistorial);
+							ih.pack();
+							ih.setVisible(true);
+						
+					
+					}
+				});
+				
 		
 
 		// ---------------ADICIONES-----------------
@@ -669,12 +972,16 @@ public class CustommerOdont extends JDialog {
 		panelOdonto.add(lFondo);
 		contentPane.add(menuPane);
 		menuPane.add(lblLogo);
+		Historial_Insertar.setLayout(null);
 		Historial_Insertar.add(tabbedPane);
 		contentPane.add(Historial_Insertar);
 		panelOdonto.add(bDiente41);
 		panelOdonto.add(bDiente45);
-		panelOdonto.add(bDiente37);
 		panelOdonto.add(bDiente35);
+		panelOdonto.add(bDiente37);
+		JLabel lblCliente = new JLabel("CLIENTE: "+cliente.getNombre()+" "+cliente.getApellidos());
+		lblCliente.setBounds(174, 24, 386, 14);
+		contentPane.add(lblCliente);
 
 	}
 }
