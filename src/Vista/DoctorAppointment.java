@@ -230,7 +230,7 @@ public class DoctorAppointment extends JFrame {
 		modelo.insertRow(0, new Object[] { "Hora", "Cita" });
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
-		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id",
+		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id",
 				CitaHibernate.class);
 		consultaCitas.setParameter("fech", fechaCalen.getTime());
 		consultaCitas.setParameter("id", mainUser);
@@ -271,7 +271,7 @@ public class DoctorAppointment extends JFrame {
 
 				Calendar fechaCal = (Calendar) evt.getNewValue();
 				Query<CitaHibernate> consulta = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
+						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 				consulta.setParameter("fech", fechaCal.getTime());
 				consulta.setParameter("id",mainUser);
 				List<CitaHibernate> allCitas = consulta.getResultList();
