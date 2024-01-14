@@ -85,6 +85,7 @@ public class AdminInsertCita extends JDialog {
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 
+		setLocationRelativeTo(null);
 		// -----------------------COMPONENTES-------------------
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());

@@ -56,6 +56,8 @@ public class DInsertCliente extends JDialog {
 	 * Create the dialog.
 	 */
 	public DInsertCliente(String dni, String name, String apellido, String edad, boolean edit) {
+		setLocationRelativeTo(null);
+		
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)

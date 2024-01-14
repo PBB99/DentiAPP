@@ -490,6 +490,7 @@ public class AdminAppointment extends JFrame {
 							AdminInsertCita us = new AdminInsertCita(u.getDni(), calendar.getCalendar().getTime(),
 									(table.getValueAt(table.getSelectedRow(), 0).toString()));
 							us.setVisible(true);
+							us.setLocationRelativeTo(null);
 							us.addWindowListener(new WindowListener() {
 
 								@Override
