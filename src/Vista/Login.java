@@ -4,7 +4,13 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+
+import Modelo.CitaHibernate;
+import Modelo.ClienteHibernate;
+import Modelo.OdontogramaHibernate;
 import Modelo.Specialist;
+import Modelo.SpecialityHibernate;
+import Modelo.TreatmentsHibernate;
 import Modelo.User;
 import Modelo.UserHibernate;
 
@@ -94,7 +100,10 @@ public class Login extends JFrame {
 //		this.conex = new ConexionMySQL();
 //		conex.conectar();
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(UserHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.addAnnotatedClass(SpecialityHibernate.class).addAnnotatedClass(OdontogramaHibernate.class).
+				buildSessionFactory();
 		this.session = instancia.openSession();
 		this.session.beginTransaction();
 //		us = new UserController(conex);
@@ -174,7 +183,7 @@ public class Login extends JFrame {
 		JButton btnLogin = new JButton("Iniciar sesión");
 		btnLogin.setMnemonic(KeyEvent.VK_ENTER);
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		btnLogin.setBounds(200, 675, 150, 50);
+		btnLogin.setBounds(200, 674, 150, 50);
 		
 		// ----------------------------------------------LOGICA----------------------------------------------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
