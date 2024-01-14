@@ -5,12 +5,15 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+
+
 @Entity
 @Table(name = "odontogramas")
 public class OdontogramaHibernate implements Serializable{
 	
 	@Id
 	@Column(name = "id_odontogramas", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_odontogramas;
 	
 	@Column(name = "id_diente", nullable = false)
@@ -30,6 +33,14 @@ public class OdontogramaHibernate implements Serializable{
 	public OdontogramaHibernate(Integer id_odontograma, Integer id_diente, String observaciones, Date fecha) {
 		super();
 		this.id_odontogramas = id_odontograma;
+		this.id_diente = id_diente;
+		this.observaciones = observaciones;
+		this.fecha = fecha;
+	}
+	
+	public OdontogramaHibernate(Integer id_diente, String observaciones, Date fecha) {
+		super();
+	
 		this.id_diente = id_diente;
 		this.observaciones = observaciones;
 		this.fecha = fecha;
@@ -68,7 +79,7 @@ public class OdontogramaHibernate implements Serializable{
 	}
   
 	@ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "clientes_dni_cliente")
+    @JoinColumn(name = "cliente_dni_cliente")
     private ClienteHibernate cliente;
 
     public ClienteHibernate getCliente() {

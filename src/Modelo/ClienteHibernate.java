@@ -17,7 +17,7 @@ public class ClienteHibernate implements Serializable {
 
 	@Id
 	@Column(name = "dni_cliente", nullable = false)
-	private String dni_doc;
+	private String dni_cliente;
 
 	@Column(name = "nombre", nullable = false)
 	private String nombre;
@@ -34,18 +34,20 @@ public class ClienteHibernate implements Serializable {
 
 	public ClienteHibernate(String dni_cliente, String nombre, String apellidos, int edad) {
 		super();
-		this.dni_doc = dni_cliente;
+		this.dni_cliente = dni_cliente;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.edad = edad;
 	}
 
+	
+
 	public String getDni_cliente() {
-		return dni_doc;
+		return dni_cliente;
 	}
 
 	public void setDni_cliente(String dni_cliente) {
-		this.dni_doc = dni_cliente;
+		this.dni_cliente = dni_cliente;
 	}
 
 	public String getNombre() {
@@ -74,7 +76,7 @@ public class ClienteHibernate implements Serializable {
 	
 	@Override
 	public String toString() {
-		return dni_doc;
+		return dni_cliente;
 	}
 
 
