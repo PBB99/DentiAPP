@@ -290,7 +290,7 @@ public class DoctorAppointment extends JFrame {
 
 				Calendar fechaCal = (Calendar) evt.getNewValue();
 				Query<CitaHibernate> consulta = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and dni_doc=:id", CitaHibernate.class);
+						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 				consulta.setParameter("fech", fechaCal.getTime());
 				consulta.setParameter("id",mainUser);
 				List<CitaHibernate> allCitas = consulta.getResultList();
