@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -39,6 +40,7 @@ import org.hibernate.cfg.Configuration;
 import Controlador.ConexionMySQL;
 import Modelo.ClienteHibernate;
 import Modelo.InventarioHibernate;
+import Modelo.ProveedorHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
@@ -54,7 +56,15 @@ public class AdminStock extends JFrame {
 	private UserHibernate userHi;
 	private SessionFactory instancia;
 	private Session session;
+
 	private JTable tableStock;
+	private int lastIdProducto;
+	private String selectedProduct = null;
+	private InventarioHibernate ph;
+
+	private JTable tableProveedor;
+	private String selectedProveedor = null;
+	private ProveedorHibernate prh;
 
 	/**
 	 * Launch the application.
@@ -80,7 +90,8 @@ public class AdminStock extends JFrame {
 
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(InventarioHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(InventarioHibernate.class).addAnnotatedClass(ProveedorHibernate.class)
+				.buildSessionFactory();
 		this.session = instancia.openSession();
 
 		// -------------------- JFrame --------------------
@@ -143,36 +154,46 @@ public class AdminStock extends JFrame {
 		btnPayments.setToolTipText("Módulo Económico (Alt+E)");
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
+		// Inventario
 		// Panel del Menú
 		JPanel menuStock = new JPanel();
 		menuStock.setBackground(new Color(148, 220, 219));
-		menuStock.setBounds(300, 270, 800, 705);
+		menuStock.setBounds(300, 270, 600, 705);
 		menuStock.setLayout(null);
 
+		// Lupa
+		JLabel jlLupaInventario = new JLabel();
+		jlLupaInventario.setBackground(new Color(148, 220, 219));
+		jlLupaInventario.setBounds(5, 0, 40, 30);
+		jlLupaInventario.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+
 		// Buscador
-		JTextField txt = new JTextField();
-		txt.setBorder(new LineBorder(new Color(148, 220, 219)));
-		txt.setBounds(0, 5, 200, 25);
-		txt.setBackground(new Color(255, 255, 255));
+		JTextField txtInventario = new JTextField();
+		txtInventario.setBorder(new LineBorder(new Color(148, 220, 219)));
+		txtInventario.setBounds(45, 5, 200, 25);
+		txtInventario.setBackground(new Color(255, 255, 255));
+		txtInventario.setToolTipText("Buscador");
 
 		// Botón de insertar producto
 		JButton btnInsertProduct = new JButton();
 		btnInsertProduct.setBackground(new Color(148, 220, 219));
-		btnInsertProduct.setBounds(720, 0, 40, 30);
+		btnInsertProduct.setBounds(520, 0, 40, 30);
 		btnInsertProduct.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertProduct.setBorderPainted(false);
+		btnInsertProduct.setToolTipText("Insertar Producto");
 
 		// Botón de modificar producto
 		JButton btnUpadateProduct = new JButton();
 		btnUpadateProduct.setBackground(new Color(148, 220, 219));
-		btnUpadateProduct.setBounds(760, 0, 40, 30);
+		btnUpadateProduct.setBounds(560, 0, 40, 30);
 		btnUpadateProduct.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		btnUpadateProduct.setBorderPainted(false);
+		btnUpadateProduct.setToolTipText("Modificar Producto");
 
 		// ScrollPane para cargar la talbla inventario
 		JScrollPane menuTableStock = new JScrollPane();
 		menuTableStock.setBorder(BorderFactory.createEmptyBorder());
-		menuTableStock.setBounds(0, 30, 800, 675);
+		menuTableStock.setBounds(0, 30, 600, 675);
 		menuTableStock.setBackground(new Color(148, 220, 219));
 
 		// Tabla
@@ -180,7 +201,7 @@ public class AdminStock extends JFrame {
 		tableStock.setShowVerticalLines(false);
 		tableStock.setShowHorizontalLines(false);
 		tableStock.setCellSelectionEnabled(true);
-		tableStock.setBounds(0, 0, 800, 675);
+		tableStock.setBounds(0, 0, 600, 675);
 		tableStock.setBackground(new Color(250, 250, 250));
 		tableStock.setSelectionBackground(new Color(148, 220, 219));
 		tableStock.setShowGrid(false);
@@ -190,6 +211,64 @@ public class AdminStock extends JFrame {
 		tableStock.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tableStock.getTableHeader().setBackground(new Color(148, 220, 219));
 		tableStock.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+
+		// Proveedores
+		// Panel del Menú
+		JPanel menuProovedores = new JPanel();
+		menuProovedores.setBackground(new Color(148, 220, 219));
+		menuProovedores.setBounds(1000, 270, 800, 705);
+		menuProovedores.setLayout(null);
+
+		// Lupa
+		JLabel jlLupaProveedores = new JLabel();
+		jlLupaProveedores.setBackground(new Color(148, 220, 219));
+		jlLupaProveedores.setBounds(5, 0, 40, 30);
+		jlLupaProveedores.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+
+		// Buscador
+		JTextField txtProveedores = new JTextField();
+		txtProveedores.setBorder(new LineBorder(new Color(148, 220, 219)));
+		txtProveedores.setBounds(45, 5, 200, 25);
+		txtProveedores.setBackground(new Color(255, 255, 255));
+		txtProveedores.setToolTipText("Buscador");
+
+		// Botón de insertar proveedor
+		JButton btnInsertProveedor = new JButton();
+		btnInsertProveedor.setBackground(new Color(148, 220, 219));
+		btnInsertProveedor.setBounds(720, 0, 40, 30);
+		btnInsertProveedor.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
+		btnInsertProveedor.setBorderPainted(false);
+		btnInsertProveedor.setToolTipText("Insertar Producto");
+
+		// Botón de modificar proveedor
+		JButton btnUpadateProveedor = new JButton();
+		btnUpadateProveedor.setBackground(new Color(148, 220, 219));
+		btnUpadateProveedor.setBounds(760, 0, 40, 30);
+		btnUpadateProveedor.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
+		btnUpadateProveedor.setBorderPainted(false);
+		btnUpadateProveedor.setToolTipText("Modificar Producto");
+
+		// ScrollPane para cargar la talbla inventario
+		JScrollPane menuTableProveedor = new JScrollPane();
+		menuTableProveedor.setBorder(BorderFactory.createEmptyBorder());
+		menuTableProveedor.setBounds(0, 30, 800, 675);
+		menuTableProveedor.setBackground(new Color(148, 220, 219));
+
+		// Tabla
+		tableProveedor = new JTable();
+		tableProveedor.setShowVerticalLines(false);
+		tableProveedor.setShowHorizontalLines(false);
+		tableProveedor.setCellSelectionEnabled(true);
+		tableProveedor.setBounds(0, 0, 800, 675);
+		tableProveedor.setBackground(new Color(250, 250, 250));
+		tableProveedor.setSelectionBackground(new Color(148, 220, 219));
+		tableProveedor.setShowGrid(false);
+		tableProveedor.setBorder(null);
+		tableProveedor.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableProveedor.setRowHeight(35);
+		tableProveedor.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tableProveedor.getTableHeader().setBackground(new Color(148, 220, 219));
+		tableProveedor.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
@@ -284,12 +363,20 @@ public class AdminStock extends JFrame {
 		});
 
 		// Mostrar las tablas
-		loadTable(tableStock);
+		loadTableStock(tableStock);
+		loadTableProveedores(tableProveedor);
 
-		// Acción de seleccionar elemento de la tabla
+		// Acción de seleccionar elemento de la tabla Inventario
 		tableStock.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
 				if (evnt.getClickCount() == 1) {
+
+					// Deselecciona en la tabla proveedores
+					tableProveedor.setColumnSelectionAllowed(false);
+					tableProveedor.setCellSelectionEnabled(false);
+					tableProveedor.setColumnSelectionAllowed(false);
+					tableProveedor.setCellSelectionEnabled(false);
+					selectedProveedor = null;
 
 					// Seleccionar row
 					tableStock.addColumnSelectionInterval(0, 1);
@@ -299,6 +386,42 @@ public class AdminStock extends JFrame {
 					tableStock.setCellSelectionEnabled(false);
 					tableStock.setColumnSelectionAllowed(true);
 					tableStock.setCellSelectionEnabled(true);
+
+					// selección de la especialidad
+					selectedProduct = tableStock.getValueAt(tableStock.getSelectedRow(), tableStock.getSelectedColumn())
+							.toString();
+
+					System.out.println("Producto " + selectedProduct);
+				}
+			}
+		});
+
+		// Acción de seleccionar elemento de la tabla Proveedor
+		tableProveedor.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Deselecciona en la tabla Inventario
+					tableStock.setColumnSelectionAllowed(false);
+					tableStock.setCellSelectionEnabled(false);
+					tableStock.setColumnSelectionAllowed(false);
+					tableStock.setCellSelectionEnabled(false);
+					selectedProduct = null;
+
+					// Seleccionar row
+					tableProveedor.addColumnSelectionInterval(0, 3);
+
+					// Cambios en la selección
+					tableProveedor.setColumnSelectionAllowed(false);
+					tableProveedor.setCellSelectionEnabled(false);
+					tableProveedor.setColumnSelectionAllowed(true);
+					tableProveedor.setCellSelectionEnabled(true);
+
+					// selección de la especialidad
+					selectedProveedor = tableProveedor
+							.getValueAt(tableProveedor.getSelectedRow(), tableProveedor.getSelectedColumn()).toString();
+
+					System.out.println("CIF " + selectedProveedor);
 				}
 			}
 		});
@@ -312,12 +435,19 @@ public class AdminStock extends JFrame {
 					tableStock.setCellSelectionEnabled(false);
 					tableStock.setColumnSelectionAllowed(false);
 					tableStock.setCellSelectionEnabled(false);
+					selectedProduct = null;
+
+					tableProveedor.setColumnSelectionAllowed(false);
+					tableProveedor.setCellSelectionEnabled(false);
+					tableProveedor.setColumnSelectionAllowed(false);
+					tableProveedor.setCellSelectionEnabled(false);
+					selectedProveedor = null;
 				}
 			}
 		});
 
 		// Acción de buscar en la tabla
-		txt.addKeyListener(new KeyListener() {
+		txtInventario.addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -326,7 +456,7 @@ public class AdminStock extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				loadSearch(tableStock, txt.getText());
+				loadSearchStock(tableStock, txtInventario.getText());
 			}
 
 			@Override
@@ -336,9 +466,302 @@ public class AdminStock extends JFrame {
 			}
 		});
 
+		// Acción de insertar en proveedor
+		btnInsertProveedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Crea el JDialog para modificar el tratamiento
+				InsertProveedor ut = new InsertProveedor(instancia);
+				ut.setSession(session);
+				ut.setVisible(true);
+
+				// Cargar la tabla tratamientos
+				ut.addWindowListener(new WindowListener() {
+
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosed(WindowEvent e) {
+						if (!txtProveedores.getText().isBlank()) {
+							loadSearchProveedor(tableProveedor, txtProveedores.getText());
+						} else {
+							// Recargamos la tabla
+							loadTableProveedores(tableProveedor);
+						}
+					}
+
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+			}
+		});
+
+		// Acción de insertar en producto
+		btnInsertProduct.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {	
+				// Crea el JDialog para modificar el tratamiento
+				InsertarProducto ut = new InsertarProducto(instancia);
+				
+				// Relaiza la consulta
+				String hql = "FROM ProveedorHibernate";
+				Query<ProveedorHibernate> consulta = session.createQuery(hql, ProveedorHibernate.class);
+
+				// Guarda los datos en una lista
+				List<ProveedorHibernate> results = consulta.getResultList();
+
+				for (ProveedorHibernate p : results) {
+					ut.addCboxItem(p.getCif());
+				}
+				
+				ut.setIdProducto(lastIdProducto+1);
+				ut.setSession(session);
+				ut.setVisible(true);
+
+				// Cargar la tabla tratamientos
+				ut.addWindowListener(new WindowListener() {
+
+					@Override
+					public void windowOpened(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowIconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowDeactivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosing(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosed(WindowEvent e) {
+						if (!txtInventario.getText().isBlank()) {
+							loadSearchStock(tableStock, txtInventario.getText());
+						} else {
+							// Recargamos la tabla
+							loadTableStock(tableStock);
+						}
+					}
+
+					@Override
+					public void windowActivated(WindowEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+			}
+		});
+
+		// Acción de modificar inventario
+		btnUpadateProduct.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Comprueba si hay una especialidad a modificar
+				if (selectedProduct != null) {
+					// Busca la especialidad
+					String hql = "FROM InventarioHibernate WHERE nombre=:nombre";
+					Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
+					consulta.setParameter("nombre", selectedProduct);
+					ph = consulta.getSingleResult();
+
+					// Feedback al usuario
+					if (ph.getId_producto() == null) {
+						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado la especialidad", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					} else {
+						// Crea el JDialog para modificar el tratamiento
+						ChangeProducto ut = new ChangeProducto(instancia, ph);
+						ut.setSession(session);
+						ut.setTextCantidad(ph.getCantidad().toString());
+						ut.setTextNombre(ph.getNombre());
+						ut.setVisible(true);
+
+						// Cargar la tabla tratamientos
+						ut.addWindowListener(new WindowListener() {
+
+							@Override
+							public void windowOpened(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowIconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeiconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeactivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowClosing(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowClosed(WindowEvent e) {
+								if (!txtInventario.getText().isBlank()) {
+									loadSearchStock(tableStock, txtInventario.getText());
+								} else {
+									// Recargamos la tabla
+									loadTableStock(tableStock);
+								}
+							}
+
+							@Override
+							public void windowActivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+					}
+				}
+			}
+		});
+
+		// Acción de Modificar proveedor
+		btnUpadateProveedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Comprueba si hay un tratamiento seleccionado
+				if (selectedProveedor != null) {
+					// Busca el tratmiento
+					String hql = "FROM ProveedorHibernate WHERE cif=:cif";
+					Query<ProveedorHibernate> consulta = session.createQuery(hql, ProveedorHibernate.class);
+					consulta.setParameter("cif", selectedProveedor);
+					prh = consulta.getSingleResult();
+
+					// Feedback al usuario
+					if (prh.getCif() == null) {
+						JOptionPane.showMessageDialog(contentPane, "No se ha encontrado el tratamiento", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					} else {
+						// Crea el JDialog para modificar el tratamiento
+						ChangeProveedor ut = new ChangeProveedor(instancia, prh);
+						ut.setSession(session);
+						ut.setTextCif(prh.getCif());
+						ut.setTextNombre(prh.getNombre());
+						ut.setTextCorreo(prh.getCorreo());
+						ut.setEstado(prh.getEstado());
+						ut.setVisible(true);
+
+						// Cargar la tabla tratamientos
+						ut.addWindowListener(new WindowListener() {
+
+							@Override
+							public void windowOpened(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowIconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeiconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeactivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowClosing(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowClosed(WindowEvent e) {
+								if (!txtProveedores.getText().isBlank()) {
+									loadSearchProveedor(tableProveedor, txtProveedores.getText());
+								} else {
+									// Recargamos la tabla
+									loadTableProveedores(tableProveedor);
+								}
+							}
+
+							@Override
+							public void windowActivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
+					}
+				}
+			}
+		});
+
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuStock);
 		contentPane.add(menuPane);
+		contentPane.add(menuProovedores);
 
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
@@ -347,18 +770,29 @@ public class AdminStock extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-		
+
 		menuTableStock.add(tableStock);
 		menuTableStock.setViewportView(tableStock);
-		
-		menuStock.add(txt);
+
+		menuStock.add(txtInventario);
 		menuStock.add(menuTableStock);
 		menuStock.add(btnInsertProduct);
 		menuStock.add(btnUpadateProduct);
+		menuStock.add(jlLupaInventario);
+
+		menuProovedores.add(txtProveedores);
+		menuProovedores.add(menuTableProveedor);
+		menuProovedores.add(btnInsertProveedor);
+		menuProovedores.add(btnUpadateProveedor);
+		menuProovedores.add(jlLupaProveedores);
+
+		menuTableProveedor.add(tableProveedor);
+		menuTableProveedor.setViewportView(tableProveedor);
+
 	}
 
 	// -------------------- Métodos y funciones --------------------
-	public void loadTable(JTable table) {
+	public void loadTableStock(JTable table) {
 		// Relaiza la consulta
 		String hql = "FROM InventarioHibernate";
 		Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
@@ -395,10 +829,22 @@ public class AdminStock extends JFrame {
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.setDefaultRenderer(Object.class, tcr);
+
+		int[] anchos = { 400, 200 };
+		for (int i = 0; i < 2; i++) {
+			table.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		}
+
+		// Guarda el último id del inventario
+		if (!results.isEmpty()) {
+			lastIdProducto = results.getLast().getId_producto();
+		} else {
+			lastIdProducto = 0;
+		}
 	}
 
 	// Método para hacer consulta en el buscador
-	public void loadSearch(JTable tabla, String busq) {
+	public void loadSearchStock(JTable tabla, String busq) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
 		String hql = "FROM InventarioHibernate where nombre like :busq";
@@ -437,6 +883,109 @@ public class AdminStock extends JFrame {
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		tableStock.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		tableStock.setDefaultRenderer(Object.class, tcr);
+
+		int[] anchos = { 400, 200 };
+		for (int i = 0; i < 2; i++) {
+			tableStock.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		}
+	}
+
+	public void loadTableProveedores(JTable table) {
+		// Relaiza la consulta
+		String hql = "FROM ProveedorHibernate";
+		Query<ProveedorHibernate> consulta = session.createQuery(hql, ProveedorHibernate.class);
+
+		// Guarda los datos en una lista
+		List<ProveedorHibernate> results = consulta.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "CIF", "Nombre", "Estado", "Correo" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		table.setModel(model);
+		JTableHeader header = table.getTableHeader();
+		if (results.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (ProveedorHibernate proveedor : results) {
+			model.setValueAt(proveedor.getCif(), fila, columna);
+			model.setValueAt(proveedor.getNombre(), fila, columna + 1);
+			model.setValueAt(proveedor.getEstado(), fila, columna + 2);
+			model.setValueAt(proveedor.getCorreo(), fila, columna + 3);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.setDefaultRenderer(Object.class, tcr);
+
+		int[] anchos = { 125, 250, 75, 350 };
+		for (int i = 0; i < 4; i++) {
+			table.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		}
+
+	}
+
+	// Método para hacer consulta en el buscador
+	public void loadSearchProveedor(JTable tabla, String busq) {
+		// Relaiza la consulta
+		this.session = instancia.openSession();
+		String hql = "FROM ProveedorHibernate where nombre like :busq";
+		Query<ProveedorHibernate> consulta = session.createQuery(hql, ProveedorHibernate.class);
+		consulta.setParameter("busq", "%" + busq + "%");
+
+		// Guarda los datos en una lista
+		List<ProveedorHibernate> results = consulta.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "CIF", "Nombre", "Estado", "Correo" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tabla.setModel(model);
+		JTableHeader header = tabla.getTableHeader();
+		if (results.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (ProveedorHibernate proveedor : results) {
+			model.setValueAt(proveedor.getCif(), fila, columna);
+			model.setValueAt(proveedor.getNombre(), fila, columna + 1);
+			model.setValueAt(proveedor.getEstado(), fila, columna + 2);
+			model.setValueAt(proveedor.getCorreo(), fila, columna + 3);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tabla.setDefaultRenderer(Object.class, tcr);
+
+		int[] anchos = { 125, 250, 75, 350 };
+		for (int i = 0; i < 4; i++) {
+			tabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		}
 	}
 
 	// Clase para cambiar el color de las filas

@@ -2,7 +2,8 @@ package Modelo;
 
 import java.sql.Date;
 import java.io.Serializable;
-
+import java.util.List;
+import java.util.ArrayList;
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +12,7 @@ public class InventarioHibernate implements Serializable{
 	
 	@Id
 	@Column(name = "id_producto", nullable = false)
-	private Integer id_historial;
+	private Integer id_producto;
 	
 	@Column(name = "nombre", nullable = false)
 	private String nombre;
@@ -23,19 +24,19 @@ public class InventarioHibernate implements Serializable{
 		super();
 	}
 
-	public InventarioHibernate(Integer id_historial, String nombre, Integer cantidad) {
+	public InventarioHibernate(Integer id_producto, String nombre, Integer cantidad) {
 		super();
-		this.id_historial = id_historial;
+		this.id_producto = id_producto;
 		this.nombre = nombre;
 		this.cantidad = cantidad;
 	}
 
-	public Integer getId_historial() {
-		return id_historial;
+	public Integer getId_producto() {
+		return id_producto;
 	}
 
-	public void setId_historial(Integer id_historial) {
-		this.id_historial = id_historial;
+	public void setId_producto(Integer id_producto) {
+		this.id_producto = id_producto;
 	}
 
 	public String getNombre() {
@@ -54,4 +55,22 @@ public class InventarioHibernate implements Serializable{
 		this.cantidad = cantidad;
 	}
 	
+	@ManyToMany()
+    @JoinTable(name = "inventario_has_proveedores",
+        joinColumns = {@JoinColumn(name = "inventario_id_producto")},
+        inverseJoinColumns = {@JoinColumn(name = "proveedores_cif_proveedor")}
+    )
+    private List<ProveedorHibernate> proveedores = new ArrayList<ProveedorHibernate>();
+    
+    public List<ProveedorHibernate> getProveedores() {
+    	return proveedores;
+    }
+    public void addProveedor(ProveedorHibernate p)
+    {
+        this.proveedores.add(p);
+        p.getProductos().add(this);
+    }
+    public void setProveedores(List<ProveedorHibernate> proveedores) {
+        this.proveedores = proveedores;
+    }
 }
