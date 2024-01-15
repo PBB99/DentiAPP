@@ -79,7 +79,7 @@ public class OdontogramaHibernate implements Serializable{
 	}
   
 	@ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name = "cliente_dni_cliente")
+    @JoinColumn(name = "clientes_dni_cliente")
     private ClienteHibernate cliente;
 
     public ClienteHibernate getCliente() {

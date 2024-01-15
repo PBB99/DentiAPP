@@ -71,7 +71,7 @@ public class Internal_Historial extends JDialog {
 
 		// sacamos toda la info del diente que queramos teniendo en cuenta el paciente
 		// que tenemos
-		String hql = "From OdontogramaHibernate where id_diente=:id_diente and cliente_dni_cliente=:dni_cliente";
+		String hql = "From OdontogramaHibernate where id_diente=:id_diente and clientes_dni_cliente=:dni_cliente";
         Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
         consulta.setParameter("id_diente", id_diente);
         consulta.setParameter("dni_cliente", cliente.getDni_cliente());
@@ -174,7 +174,7 @@ public class Internal_Historial extends JDialog {
 				
 				DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)comboBox.getModel();
 				model.removeAllElements();
-				String hql = "From OdontogramaHibernate where id_diente=:id_diente and cliente_dni_cliente=:dni_cliente";
+				String hql = "From OdontogramaHibernate where id_diente=:id_diente and clientes_dni_cliente=:dni_cliente";
 				Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
 		        consulta.setParameter("id_diente", id_diente);
 		        consulta.setParameter("dni_cliente", cliente.getDni_cliente());
