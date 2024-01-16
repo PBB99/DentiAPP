@@ -40,6 +40,8 @@ import Vista.AdminClinic.Renderer;
 import javax.swing.JComboBox;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
 
 public class PruebaOdonto extends JFrame {
 
@@ -47,10 +49,10 @@ public class PruebaOdonto extends JFrame {
 	private JPanel contentPane;
 	private SessionFactory instancia;
 	private Session session;
-	private int lastCLiente;
 	private JTable table;
 	private JTable tableHis;
 	private String selected;
+	private JButton btnOdonto;
 
 	/**
 	 * Launch the application.
@@ -79,7 +81,9 @@ public class PruebaOdonto extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(ClienteHibernate.class).addAnnotatedClass(OdontogramaHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -97,7 +101,7 @@ public class PruebaOdonto extends JFrame {
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 		table.setBounds(0, 29, 500, 675);
-		
+
 		tableHis = new JTable();
 		tableHis.setShowVerticalLines(false);
 		tableHis.setShowHorizontalLines(false);
@@ -277,6 +281,55 @@ public class PruebaOdonto extends JFrame {
 		btnUpdateCliente.setBounds(41, 0, 40, 30);
 		btnUpdateCliente.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		contentPane.add(btnUpdateCliente);
+
+		btnOdonto = new JButton("Odontograma");
+		btnOdonto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (selected != null) {
+					Query<ClienteHibernate> consultaClienteExiste = session.createQuery(
+							"FROM ClienteHibernate where dni_cliente=:dni ",ClienteHibernate.class);
+					consultaClienteExiste.setParameter("dni", selected.split(" ")[0]);
+					List<ClienteHibernate> cliente = consultaClienteExiste.getResultList();
+					CustommerOdont cust = new CustommerOdont(cliente.get(0));
+					cust.setModal(true);
+					cust.setVisible(true);
+				}
+			}
+		});
+		btnOdonto.setBackground(new Color(148, 220, 219));
+		btnOdonto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnOdonto.setBounds(1100, 604, 100, 100);
+		btnOdonto.setBorder(null);
+		contentPane.add(btnOdonto);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(51, 715, 443, 225);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Parece que has tenido una consulta con (nombre del cliente)");
+		lblNewLabel.setBounds(74, 5, 289, 14);
+		panel.add(lblNewLabel);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(138, 30, 162, 22);
+		panel.add(comboBox);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setBounds(32, 90, 377, 88);
+		panel.add(textPane);
+		
+		JLabel lblNewLabel_1 = new JLabel("Tratamiento:");
+		lblNewLabel_1.setBounds(74, 34, 83, 14);
+		panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Observaciones:");
+		lblNewLabel_2.setBounds(38, 65, 77, 14);
+		panel.add(lblNewLabel_2);
+		
+		JButton btnNewButton = new JButton("Actualizar");
+		btnNewButton.setBounds(320, 189, 89, 23);
+		panel.add(btnNewButton);
 	}
 
 	public void loadClientes(JTable tabla) {
@@ -329,21 +382,13 @@ public class PruebaOdonto extends JFrame {
 		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		tabla.setDefaultRenderer(Object.class, tcr);
 
-		// Guarda el último id de las especialidades
-		if (!results.isEmpty()) {
-			lastCLiente = results.size();
-			System.out.println("kkkkk");
-		} else {
-			lastCLiente = 0;
-		}
-
 	}
-	
+
 	public void loadOdontoStart(JTable tabla) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "ID Diente", "Fecha", "Observaciones"}) {
+				new String[] { "ID Diente", "Fecha", "Observaciones" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -375,7 +420,7 @@ public class PruebaOdonto extends JFrame {
 		tabla.setDefaultRenderer(Object.class, tcr);
 
 	}
-	
+
 	public void loadOdonto(JTable tabla) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
@@ -389,7 +434,7 @@ public class PruebaOdonto extends JFrame {
 
 		// Prepara la tabla
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "ID Diente", "Fecha", "Observaciones"}) {
+				new String[] { "ID Diente", "Fecha", "Observaciones" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -426,12 +471,6 @@ public class PruebaOdonto extends JFrame {
 		tabla.setDefaultRenderer(Object.class, tcr);
 
 		// Guarda el último id de las especialidades
-		if (!results.isEmpty()) {
-			lastCLiente = results.size();
-			System.out.println("kkkkk");
-		} else {
-			lastCLiente = 0;
-		}
 
 	}
 
@@ -459,7 +498,7 @@ public class PruebaOdonto extends JFrame {
 		if (results.size() < 19) {
 			model.setRowCount(18);
 		} else {
-			model.setRowCount(results.size()+1);
+			model.setRowCount(results.size() + 1);
 		}
 		int fila = 1, columna = 0;
 
@@ -485,12 +524,6 @@ public class PruebaOdonto extends JFrame {
 		tabla.setDefaultRenderer(Object.class, tcr);
 
 		// Guarda el último id de las especialidades
-		if (!results.isEmpty()) {
-			lastCLiente = results.size();
-			System.out.println("kkkkk");
-		} else {
-			lastCLiente = 0;
-		}
 
 	}
 

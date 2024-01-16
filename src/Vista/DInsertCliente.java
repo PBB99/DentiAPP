@@ -15,6 +15,8 @@ import org.hibernate.cfg.Configuration;
 
 import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
+import Modelo.OdontogramaHibernate;
+import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
 
@@ -55,7 +57,10 @@ public class DInsertCliente extends JDialog {
 	 */
 	public DInsertCliente(String dni, String name, String apellido, String edad, boolean edit) {
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(ClienteHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.addAnnotatedClass(SpecialityHibernate.class).addAnnotatedClass(OdontogramaHibernate.class).
+				buildSessionFactory();
 		this.session = instancia.openSession();
 
 		setBounds(100, 100, 450, 300);

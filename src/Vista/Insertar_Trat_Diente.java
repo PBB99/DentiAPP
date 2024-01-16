@@ -21,8 +21,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
 import Modelo.OdontogramaHibernate;
+import Modelo.SpecialityHibernate;
+import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
 
 public class Insertar_Trat_Diente extends JDialog {
@@ -56,8 +59,9 @@ public class Insertar_Trat_Diente extends JDialog {
 		System.out.println(dtf.format(localDate));
 		setUndecorated(true);
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
-				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(OdontogramaHibernate.class)
-				.addAnnotatedClass(ClienteHibernate.class).buildSessionFactory();
+				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
 		this.session.beginTransaction();
 		setBounds(0, 0, 506, 680);

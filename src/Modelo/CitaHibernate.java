@@ -19,14 +19,18 @@ public class CitaHibernate implements Serializable{
 	@Column(name = "hora", nullable = false)
 	private String hora;
 	
+	@Column(name = "observaciones", nullable = false)
+	private String observaciones;
+	
 	public CitaHibernate() {}
 	
-	public CitaHibernate(Integer idcita, Date fecha, String hora) {
+	public CitaHibernate(Integer idcita, Date fecha, String hora, String observaciones) {
 		super();
 		this.idcita = idcita;
 //		this.especialidad = especialidad;
 		this.fecha = fecha;
 		this.hora = hora;
+		this.observaciones = observaciones;
 	}
 
 	public Integer getIdcita() {
@@ -52,6 +56,20 @@ public class CitaHibernate implements Serializable{
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
+	
+	
+
+
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+
 
 
 

@@ -90,7 +90,7 @@ public class ClienteHibernate implements Serializable {
         odontos.add(odonto);
         odonto.setCliente(this);
     }
-    
+
 	@OneToMany(mappedBy = "cliente_cita", cascade = CascadeType.ALL)
 	private List<CitaHibernate> citas;
 	
