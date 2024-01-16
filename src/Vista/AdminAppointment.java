@@ -51,6 +51,7 @@ import Modelo.OdontogramaHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
+import Otros.*;
 import Vista.PruebaOdonto.Renderer;
 
 import javax.swing.JMenuBar;
@@ -80,6 +81,7 @@ public class AdminAppointment extends JFrame {
 	private SessionFactory instancia;
 	private Session session;
 	private UserHibernate userHi;
+
 	/**
 	 * Launch the application.
 	 */
@@ -87,8 +89,8 @@ public class AdminAppointment extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-			try {
-					AdminAppointment frame = new AdminAppointment(null,null);
+				try {
+					AdminAppointment frame = new AdminAppointment(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -116,6 +118,7 @@ public class AdminAppointment extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setResizable(false);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -137,7 +140,7 @@ public class AdminAppointment extends JFrame {
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
-		
+
 		// item
 		JMenu mnNewMenu = new JMenu("");
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
@@ -145,7 +148,7 @@ public class AdminAppointment extends JFrame {
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem("");
-		//ItemName.setText(userHi.getNombre());
+		// ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
@@ -171,31 +174,73 @@ public class AdminAppointment extends JFrame {
 				new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
 		btnUsers.setToolTipText("Módulo de Usuarios (Alt+U)");
 		btnUsers.setMnemonic(KeyEvent.VK_U);
-		
+
 		// Botón de Pacientes
 		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 405, false,
 				new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
 		btnCustomers.setToolTipText("Módulo de pacientes (Alt+P)");
 		btnCustomers.setMnemonic(KeyEvent.VK_P);
-		
+
 		// Botón de Inventario
 		ButtonDentiApp btnStock = new ButtonDentiApp(0, 540, false,
 				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
 		btnStock.setToolTipText("Módulo de materiales (Alt+I)");
 		btnStock.setMnemonic(KeyEvent.VK_I);
-		
+
 		// Botón de Tratamientos y Especialidades
 		ButtonDentiApp btnClinic = new ButtonDentiApp(0, 675, false,
 				new ImageIcon(getClass().getResource("/Resources/images/clinicGrey.png")));
 		btnClinic.setToolTipText("Módulo clínico (Alt+L)");
 		btnClinic.setMnemonic(KeyEvent.VK_L);
-		
+
 		// Botón del Módulo economico
 		ButtonDentiApp btnPayments = new ButtonDentiApp(0, 810, false,
 				new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
 		btnPayments.setToolTipText("Módulo Económico (Alt+E)");
 		btnPayments.setMnemonic(KeyEvent.VK_E);
+
+		// Citas
+		JLabel lblCitas = new JLabel("Citas");
+		lblCitas.setBounds(250, 10, 150, 135);
+		lblCitas.setFont(new Font("Tahoma", Font.PLAIN, 60));
+
+		// Panel para las citas
+		JPanel panelCitas = new RoundedPanel(50, new Color(148, 220, 219));
+		panelCitas.setBounds(250, 202, 1050, 800);
+		panelCitas.setOpaque(false);
+		contentPane.add(panelCitas);
+
+		// Panel para el calendario
+		JPanel panelCalendar = new RoundedPanel(null,50, new Color(148, 220, 219));
+		panelCalendar.setBounds(1390, 202, 450, 350);
+		panelCalendar.setOpaque(false);
+		contentPane.add(panelCalendar);
+
+		// Calendario
+		JCalendar calendar = new JCalendar();
+		calendar.setBounds(25, 25, 400, 300);
+		calendar.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panelCalendar.add(calendar);
 		
+		// Panel para los doctores
+		JPanel panelDoctors = new RoundedPanel(50, new Color(148, 220, 219));
+		panelDoctors.setBounds(1390, 600, 450, 400);
+		panelDoctors.setOpaque(false);
+		contentPane.add(panelDoctors);
+		
+		// Doctores
+		JComboBox cbUsuarios = new JComboBox();
+		cbUsuarios.setBounds(1370, 450, 200, 25);
+		cbUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		//contentPane.add(cbUsuarios);
+		Query<UserHibernate> consultaUsers = session.createQuery("FROM UserHibernate", UserHibernate.class);
+		List<UserHibernate> allUsers = consultaUsers.getResultList();
+		for (int i = 0; i < allUsers.size(); i++) {
+			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
+				cbUsuarios.addItem(allUsers.get(i));
+			}
+		}
+
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
@@ -324,6 +369,9 @@ public class AdminAppointment extends JFrame {
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
+		contentPane.add(menuBar);
+		contentPane.add(lblCitas);
+
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -331,31 +379,15 @@ public class AdminAppointment extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-
-		// menuPane.add(btnClose);
-		contentPane.add(menuBar);
 		menuBar.add(mnNewMenu);
+		
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
 		
-		//Juan
-		JCalendar calendar = new JCalendar();
-		calendar.setBounds(1370, 135, 400, 300);
-		calendar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		contentPane.add(calendar);
 
-		JComboBox cbUsuarios = new JComboBox();
-		cbUsuarios.setBounds(1370, 450, 200, 25);
-		cbUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		contentPane.add(cbUsuarios);
-		Query<UserHibernate> consultaUsers = session.createQuery("FROM UserHibernate", UserHibernate.class);
-		List<UserHibernate> allUsers = consultaUsers.getResultList();
-		for (int i = 0; i < allUsers.size(); i++) {
-			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
-				cbUsuarios.addItem(allUsers.get(i));
-			}
-		}
+
+		
 
 		DefaultTableModel modelo = new DefaultTableModel();
 		JTable table = new JTable();
@@ -375,11 +407,12 @@ public class AdminAppointment extends JFrame {
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		
+		table.setVisible(false);
+
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
-		Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id",
-				CitaHibernate.class);
+		Query<CitaHibernate> consultaCitas = session
+				.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
 		consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
@@ -404,7 +437,7 @@ public class AdminAppointment extends JFrame {
 //				}
 //			}
 //		}
-		
+
 		loadCitas(table, calendar, (UserHibernate) cbUsuarios.getSelectedItem(), formateador);
 
 		calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
@@ -485,61 +518,59 @@ public class AdminAppointment extends JFrame {
 							|| (fechaCalen.getTime().getDay() == calendar.getCalendar().getTime().getDay())
 									&& (fechaCalen.getTime().getMonth() == calendar.getCalendar().getTime().getMonth())
 									&& (fechaCalen.getTime().getYear() == calendar.getCalendar().getTime().getYear())) {
-						
-							UserHibernate u = (UserHibernate) cbUsuarios.getSelectedItem();
-							AdminInsertCita us = new AdminInsertCita(u.getDni(), calendar.getCalendar().getTime(),
-									(table.getValueAt(table.getSelectedRow(), 0).toString()));
-							us.setVisible(true);
-							us.addWindowListener(new WindowListener() {
 
-								@Override
-								public void windowClosed(WindowEvent e) {
-									// TODO Auto-generated method stub
-									actualizarTabla();
-								}
+						UserHibernate u = (UserHibernate) cbUsuarios.getSelectedItem();
+						AdminInsertCita us = new AdminInsertCita(u.getDni(), calendar.getCalendar().getTime(),
+								(table.getValueAt(table.getSelectedRow(), 0).toString()));
+						us.setVisible(true);
+						us.addWindowListener(new WindowListener() {
 
-								@Override
-								public void windowOpened(WindowEvent e) {
-									// TODO Auto-generated method stub
+							@Override
+							public void windowClosed(WindowEvent e) {
+								// TODO Auto-generated method stub
+								actualizarTabla();
+							}
 
-								}
+							@Override
+							public void windowOpened(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-								@Override
-								public void windowClosing(WindowEvent e) {
-									// TODO Auto-generated method stub
+							}
 
-								}
+							@Override
+							public void windowClosing(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-								@Override
-								public void windowIconified(WindowEvent e) {
-									// TODO Auto-generated method stub
+							}
 
-								}
+							@Override
+							public void windowIconified(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-								@Override
-								public void windowDeiconified(WindowEvent e) {
-									// TODO Auto-generated method stub
+							}
 
-								}
+							@Override
+							public void windowDeiconified(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-								@Override
-								public void windowActivated(WindowEvent e) {
-									// TODO Auto-generated method stub
+							}
 
-								}
+							@Override
+							public void windowActivated(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-								@Override
-								public void windowDeactivated(WindowEvent e) {
-									// TODO Auto-generated method stub
+							}
 
-								}
+							@Override
+							public void windowDeactivated(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-							});
-						}
+							}
+
+						});
 					}
+				}
 
-				
-				
 			}
 
 			public void actualizarTabla() {
@@ -567,15 +598,14 @@ public class AdminAppointment extends JFrame {
 			}
 		});
 
-		
 	}
-	
+
 	public void actualizarTabla(JTable table, JCalendar calendar, UserHibernate us, DateFormat formateador) {
 		for (int j = 1; j < table.getModel().getRowCount(); j++) {
 			table.getModel().setValueAt("", j, 1);
 			table.getModel().setValueAt("", j, 2);
 		}
-		
+
 		Query<CitaHibernate> consultaCitas = session
 				.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
@@ -594,22 +624,22 @@ public class AdminAppointment extends JFrame {
 			}
 		}
 	}
-	
+
 	public void loadCitas(JTable tabla, JCalendar calendar, UserHibernate us, DateFormat formateador) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
 		// Prepara la tabla
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "Hora", "Cita", "Tratamiento"}) {
+				new String[] { "Hora", "Cita", "Tratamiento" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
 				return false;
 			}
 		};
-		
+
 		model.insertRow(0, new Object[] { "Hora", "Cita", "Tratamientos" });
-		
+
 		for (int i = 8; i < 15; i++) {
 			model.insertRow(model.getRowCount(), new Object[] { i + ":00", "" });
 			model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
@@ -618,7 +648,7 @@ public class AdminAppointment extends JFrame {
 			model.insertRow(model.getRowCount(), new Object[] { i + ":00", "" });
 			model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
 		}
-		
+
 		tabla.setModel(model);
 		JTableHeader header = tabla.getTableHeader();
 
@@ -640,7 +670,7 @@ public class AdminAppointment extends JFrame {
 //		}
 
 	}
-	
+
 	public class Renderer extends DefaultTableCellRenderer {
 
 		@Override
@@ -661,5 +691,4 @@ public class AdminAppointment extends JFrame {
 		}
 
 	}
-	
 }
