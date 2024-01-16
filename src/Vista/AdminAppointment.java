@@ -80,6 +80,7 @@ public class AdminAppointment extends JFrame {
 	private SessionFactory instancia;
 	private Session session;
 	private UserHibernate userHi;
+	private Color oscuro=new Color(255,255,255);
 	/**
 	 * Launch the application.
 	 */
@@ -139,12 +140,13 @@ public class AdminAppointment extends JFrame {
 		menuBar.add(Box.createHorizontalGlue());
 		
 		// item
-		JMenu mnNewMenu = new JMenu("");
-		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/desplegable.png")));
-		mnNewMenu.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		JMenu mnNewMenu = new JMenu(userHi.getDni());
+		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/definitiva.png")));
+		mnNewMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		mnNewMenu.setBackground(new Color(0,0,0,0));
 
 		// nombre del doctor o admin
-		JMenuItem ItemName = new JMenuItem("");
+		JMenuItem ItemName = new JMenuItem(userHi.getNombre());
 		//ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
@@ -198,6 +200,8 @@ public class AdminAppointment extends JFrame {
 		
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+		
+		
 		this.addWindowListener(new WindowListener() {
 
 			@Override
