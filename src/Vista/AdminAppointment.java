@@ -70,6 +70,7 @@ import com.toedter.calendar.JCalendar;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import com.github.lgooddatepicker.components.CalendarPanel;
 
 public class AdminAppointment extends JFrame {
 
@@ -214,17 +215,25 @@ public class AdminAppointment extends JFrame {
 		JPanel panelCalendar = new RoundedPanel(null,50, new Color(148, 220, 219));
 		panelCalendar.setBounds(1390, 202, 450, 350);
 		panelCalendar.setOpaque(false);
-		contentPane.add(panelCalendar);
+		//contentPane.add(panelCalendar);
 
 		// Calendario
 		JCalendar calendar = new JCalendar();
 		calendar.setBounds(25, 25, 400, 300);
 		calendar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		panelCalendar.add(calendar);
+		//panelCalendar.add(calendar);
+		
+		CalendarPanel calendarus = new CalendarPanel();
+		//calendarus.setBounds(25, 25, 400, 300);
+		calendarus.setBounds(1415, 227, 400, 300);
+		calendarus.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		calendarus.setBackground(new Color(148, 220, 219));
+		//panelCalendar.add(calendarus);
+		contentPane.add(calendarus);
 		
 		// Panel para los doctores
 		JPanel panelDoctors = new RoundedPanel(50, new Color(148, 220, 219));
-		panelDoctors.setBounds(1390, 600, 450, 400);
+		panelDoctors.setBounds(1390, 580, 450, 400);
 		panelDoctors.setOpaque(false);
 		contentPane.add(panelDoctors);
 		
