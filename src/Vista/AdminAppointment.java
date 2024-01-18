@@ -143,7 +143,45 @@ public class AdminAppointment extends JFrame {
 		JMenu mnNewMenu = new JMenu(userHi.getDni());
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/definitiva.png")));
 		mnNewMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		mnNewMenu.setOpaque(false);
 		mnNewMenu.setBackground(new Color(0,0,0,0));
+		mnNewMenu.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				mnNewMenu.setOpaque(false);
+				mnNewMenu.setBackground(new Color(0,0,0,0));
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				mnNewMenu.setOpaque(true);
+				mnNewMenu.setBackground(Color.LIGHT_GRAY);
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+				
+			}
+		});
+		
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem(userHi.getNombre());
