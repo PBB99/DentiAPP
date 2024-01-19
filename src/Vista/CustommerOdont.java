@@ -1,34 +1,51 @@
 package Vista;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import Modelo.ClienteHibernate;
+import Modelo.OdontogramaHibernate;
+import Vista.AdminCustomers.Renderer;
 import btndentiapp.ButtonDentiApp;
 
 import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 public class CustommerOdont extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JTable table;
+	private JTable tableHis;
 
 	/**
 	 * Launch the application.
@@ -65,6 +82,21 @@ public class CustommerOdont extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 //---------COMPONENTE GRAFICO-----
+		// TABLA
+		table = new JTable();
+		table.setShowVerticalLines(false);
+		table.setShowHorizontalLines(false);
+		table.setCellSelectionEnabled(true);
+		table.setBackground(new Color(250, 250, 250));
+		table.setSelectionBackground(new Color(148, 220, 219));
+		table.setShowGrid(false);
+		table.setBorder(null);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.setRowHeight(35);
+		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.getTableHeader().setBackground(new Color(148, 220, 219));
+		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		table.setBounds(883, 70, 506, 608);
 
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
@@ -179,6 +211,11 @@ public class CustommerOdont extends JDialog {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 506, 608);
 
+		JScrollPane menuTableStock = new JScrollPane();
+		menuTableStock.setBorder(BorderFactory.createEmptyBorder());
+		menuTableStock.setBounds(883, 70, 506, 608);
+		menuTableStock.setBackground(new Color(148, 220, 219));
+
 		// ----------------Logica-------------
 
 		bDiente17.addMouseListener(new MouseListener() {
@@ -244,14 +281,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 17, session);
+				}
 
 			}
 		});
@@ -319,14 +359,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 47, session);
+				}
 
 			}
 		});
@@ -394,14 +437,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 11, session);
+				}
 
 			}
 		});
@@ -467,14 +513,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 15, session);
+				}
 
 			}
 		});
@@ -542,14 +591,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 25, session);
+				}
 
 			}
 		});
@@ -617,14 +669,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 27, session);
+				}
 
 			}
 		});
@@ -693,14 +748,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 35, session);
+				}
 
 			}
 		});
@@ -767,14 +825,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 45, session);
+				}
 
 			}
 		});
@@ -841,13 +902,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
+
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 41, session);
 				}
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
 
 			}
 		});
@@ -915,14 +980,17 @@ public class CustommerOdont extends JDialog {
 
 					it.pack();
 					it.setVisible(true);
-				}
 
-				JPanel panelHistorial = new JPanel(new BorderLayout());
-				panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
-				panelHistorial.setBounds(Historial_Insertar.getBounds());
-				tabbedPane.addTab("Historial", panelHistorial);
-				ih.pack();
-				ih.setVisible(true);
+					JPanel panelHistorial = new JPanel(new BorderLayout());
+					panelHistorial.add(ih.getContentPane(), BorderLayout.CENTER);
+					panelHistorial.setBounds(Historial_Insertar.getBounds());
+					tabbedPane.addTab("Historial", panelHistorial);
+					ih.pack();
+					ih.setVisible(true);
+				} else {
+
+					loadSearch(table, cliente, 37, session);
+				}
 
 			}
 		});
@@ -948,6 +1016,79 @@ public class CustommerOdont extends JDialog {
 		JLabel lblCliente = new JLabel("CLIENTE: " + cliente.getNombre() + " " + cliente.getApellidos());
 		lblCliente.setBounds(174, 24, 386, 14);
 		contentPane.add(lblCliente);
+		contentPane.add(menuTableStock);
+		menuTableStock.add(table);
+		menuTableStock.setViewportView(table);
+
+	}
+
+	public void loadSearch(JTable tabla, ClienteHibernate cliente, int diente, Session session) {
+		// Relaiza la consulta
+		table.setOpaque(true);
+		String hql = "From OdontogramaHibernate where id_diente=:id_diente and clientes_dni_cliente=:dni_cliente";
+		Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
+		consulta.setParameter("id_diente", diente);
+		consulta.setParameter("dni_cliente", cliente.getDni_cliente());
+
+		// Guarda los datos en una lista
+		List<OdontogramaHibernate> odonList = consulta.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "DNI", "Diente", "Observaciones", "Fecha" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tabla.setModel(model);
+		JTableHeader header = tabla.getTableHeader();
+		if (odonList.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(odonList.size() + 1);
+		}
+		int fila = 1, columna = 0;
+
+		
+
+		// Carga los datos
+		for (OdontogramaHibernate x : odonList) {
+			System.out.println("aa");
+			model.setValueAt(x.getCliente().getDni_cliente(), fila, 0);
+			model.setValueAt(x.getId_diente(), fila, 1);
+			model.setValueAt(x.getObservaciones(), fila, 3);
+			model.setValueAt(x.getFecha(), fila, 2);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tabla.setDefaultRenderer(Object.class, tcr);
+
+	}
+
+	public class Renderer extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			// Evalua en que fila esta
+
+			if (row == 0) {
+				setBackground(new Color(148, 220, 219));
+			} else if (row % 2 == 0) {
+				setBackground(new Color(220, 220, 220));
+			} else {
+				setBackground(new Color(250, 250, 250));
+			}
+
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		}
 
 	}
 }
