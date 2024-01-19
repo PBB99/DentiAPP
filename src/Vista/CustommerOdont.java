@@ -107,7 +107,6 @@ public class CustommerOdont extends JDialog {
 
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
-		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblLogo.setBounds(0, 0, 135, 135);
 		lblLogo.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/logoMenu.png")));
 		// Panel odontograma
@@ -115,6 +114,14 @@ public class CustommerOdont extends JDialog {
 		panelOdonto.setBounds(174, 70, 579, 608);
 
 		panelOdonto.setLayout(null);
+		
+		//Label historial
+		JLabel lblHistorial = new JLabel("Historial");
+		lblHistorial.setBounds(883, 24, 100, 150);
+		Font font=lblHistorial.getFont();
+		Font fuenteNueva=new Font(font.getFontName(),Font.BOLD,33);
+		lblHistorial.setFont(fuenteNueva);
+		
 		// fondo del panel de odontograma
 		JLabel lFondo = new JLabel("");
 		lFondo.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/odontograma.png")));
@@ -1019,6 +1026,7 @@ public class CustommerOdont extends JDialog {
 		contentPane.add(menuTableStock);
 		menuTableStock.add(table);
 		menuTableStock.setViewportView(table);
+		contentPane.add(lblHistorial);
 
 	}
 
