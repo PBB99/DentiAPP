@@ -6,6 +6,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,8 +33,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -82,7 +85,9 @@ public class AdminAppointment extends JFrame {
 	private SessionFactory instancia;
 	private Session session;
 	private UserHibernate userHi;
-
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private Font font = new Font("Dialog", Font.BOLD, 15);
+	
 	/**
 	 * Launch the application.
 	 */
@@ -209,39 +214,68 @@ public class AdminAppointment extends JFrame {
 		JPanel panelCitas = new RoundedPanel(50, new Color(148, 220, 219));
 		panelCitas.setBounds(250, 202, 1050, 800);
 		panelCitas.setOpaque(false);
+		panelCitas.setLayout(null);
 		contentPane.add(panelCitas);
 
+		// Panel secundario para las citas
+		JPanel panelTitleCitas = new JPanel();
+		panelTitleCitas.setBounds(15, 15, 1020, 770);
+		panelTitleCitas.setBorder(new TitledBorder(lb, "  Citas  ",
+				TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleCitas.setOpaque(false);
+		panelCitas.add(panelTitleCitas);
+
 		// Panel para el calendario
-		JPanel panelCalendar = new RoundedPanel(null,50, new Color(148, 220, 219));
+		JPanel panelCalendar = new RoundedPanel(null, 50, new Color(148, 220, 219));
 		panelCalendar.setBounds(1390, 202, 450, 350);
 		panelCalendar.setOpaque(false);
-		//contentPane.add(panelCalendar);
+		panelCalendar.setLayout(null);
+		contentPane.add(panelCalendar);
+
+		// Panel secundario para el calendario
+		JPanel panelTitleCalendar = new JPanel();
+		panelTitleCalendar.setBounds(15, 15, 415, 315);
+		panelTitleCalendar.setBorder(new TitledBorder(lb, "  Calendario  ",
+				TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleCalendar.setOpaque(false);
+		panelCalendar.add(panelTitleCalendar);
 
 		// Calendario
 		JCalendar calendar = new JCalendar();
 		calendar.setBounds(25, 25, 400, 300);
 		calendar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		//panelCalendar.add(calendar);
-		
-		CalendarPanel calendarus = new CalendarPanel();
-		//calendarus.setBounds(25, 25, 400, 300);
-		calendarus.setBounds(1415, 227, 400, 300);
-		calendarus.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		calendarus.setBackground(new Color(148, 220, 219));
-		//panelCalendar.add(calendarus);
-		contentPane.add(calendarus);
-		
+		// panelCalendar.add(calendar);
+
+		CalendarPanel calendarPanel = new CalendarPanel();
+		GridBagLayout gbl_calendarPanel = (GridBagLayout) calendarPanel.getLayout();
+		gbl_calendarPanel.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+		gbl_calendarPanel.rowHeights = new int[] { 6, 0, 5, 138, 5, 0, 5 };
+		gbl_calendarPanel.columnWeights = new double[] { 1.0, 1.0, 1.0 };
+		gbl_calendarPanel.columnWidths = new int[] { 5, 219, 5 };
+		calendarPanel.setBounds(25, 25, 400, 300);
+		calendarPanel.setOpaque(false);
+		panelCalendar.add(calendarPanel);
+
 		// Panel para los doctores
 		JPanel panelDoctors = new RoundedPanel(50, new Color(148, 220, 219));
-		panelDoctors.setBounds(1390, 580, 450, 400);
+		panelDoctors.setBounds(1390, 580, 450, 420);
 		panelDoctors.setOpaque(false);
+		panelDoctors.setLayout(null);
 		contentPane.add(panelDoctors);
-		
+
+		// Panel secundario para doctores
+		JPanel panelTitleDoctores = new JPanel();
+		panelTitleDoctores.setBounds(15, 15, 415, 390);
+		panelTitleDoctores.setBorder(new TitledBorder(lb, "  Doctores  ",
+				TitledBorder.LEFT, TitledBorder.TOP,font, new Color(0, 0, 0)));
+		panelTitleDoctores.setOpaque(false);
+		panelDoctors.add(panelTitleDoctores);
+
 		// Doctores
 		JComboBox cbUsuarios = new JComboBox();
 		cbUsuarios.setBounds(1370, 450, 200, 25);
 		cbUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		//contentPane.add(cbUsuarios);
+		// contentPane.add(cbUsuarios);
 		Query<UserHibernate> consultaUsers = session.createQuery("FROM UserHibernate", UserHibernate.class);
 		List<UserHibernate> allUsers = consultaUsers.getResultList();
 		for (int i = 0; i < allUsers.size(); i++) {
@@ -389,14 +423,10 @@ public class AdminAppointment extends JFrame {
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
 		menuBar.add(mnNewMenu);
-		
+
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-		
-
-
-		
 
 		DefaultTableModel modelo = new DefaultTableModel();
 		JTable table = new JTable();
