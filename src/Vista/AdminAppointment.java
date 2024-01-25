@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,11 +28,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -87,7 +91,7 @@ public class AdminAppointment extends JFrame {
 	private UserHibernate userHi;
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -220,8 +224,8 @@ public class AdminAppointment extends JFrame {
 		// Panel secundario para las citas
 		JPanel panelTitleCitas = new JPanel();
 		panelTitleCitas.setBounds(15, 15, 1020, 770);
-		panelTitleCitas.setBorder(new TitledBorder(lb, "  Citas  ",
-				TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleCitas.setBorder(
+				new TitledBorder(lb, "  Citas  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleCitas.setOpaque(false);
 		panelCitas.add(panelTitleCitas);
 
@@ -235,8 +239,8 @@ public class AdminAppointment extends JFrame {
 		// Panel secundario para el calendario
 		JPanel panelTitleCalendar = new JPanel();
 		panelTitleCalendar.setBounds(15, 15, 415, 315);
-		panelTitleCalendar.setBorder(new TitledBorder(lb, "  Calendario  ",
-				TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleCalendar.setBorder(new TitledBorder(lb, "  Calendario  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+				new Color(51, 51, 51)));
 		panelTitleCalendar.setOpaque(false);
 		panelCalendar.add(panelTitleCalendar);
 
@@ -266,18 +270,55 @@ public class AdminAppointment extends JFrame {
 		// Panel secundario para doctores
 		JPanel panelTitleDoctores = new JPanel();
 		panelTitleDoctores.setBounds(15, 15, 415, 390);
-		panelTitleDoctores.setBorder(new TitledBorder(lb, "  Doctores  ",
-				TitledBorder.LEFT, TitledBorder.TOP,font, new Color(0, 0, 0)));
+		panelTitleDoctores.setBorder(
+				new TitledBorder(lb, "  Doctores  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(0, 0, 0)));
 		panelTitleDoctores.setOpaque(false);
+		panelTitleDoctores.setLayout(new GridLayout(0, 1, 0, 0));
 		panelDoctors.add(panelTitleDoctores);
+
+		// ScrollPane doctores
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(30, 30, 395, 368);
+		scrollPane.setBorder(null);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		panelDoctors.add(scrollPane);
+		
+		JPanel panelSCrollDoctors = new JPanel();
+		panelSCrollDoctors.setLayout(new GridLayout(0, 1, 0, 0));
+		panelSCrollDoctors.setBackground(new Color(148, 220, 219));
+		scrollPane.setViewportView(panelSCrollDoctors);
+		
+		// Cargar los doctores en el panel de doctores
+		ButtonGroup buttonGroup = new ButtonGroup();
+
+		Query<UserHibernate> consultaUsers = session.createQuery("FROM UserHibernate", UserHibernate.class);
+		List<UserHibernate> allUsers = consultaUsers.getResultList();
+
+		for (int i = 0; i < allUsers.size(); i++) {
+			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
+				JRadioButton radioButton = new JRadioButton(
+						allUsers.get(i).getNombre() + " " + allUsers.get(i).getApellido());
+				radioButton.setFont(font);
+				radioButton.setOpaque(false);
+				buttonGroup.add(radioButton);
+				panelSCrollDoctors.add(radioButton);
+				radioButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Seleccionaste: " + radioButton.getText());
+					}
+				});
+			}
+		}
 
 		// Doctores
 		JComboBox cbUsuarios = new JComboBox();
 		cbUsuarios.setBounds(1370, 450, 200, 25);
 		cbUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		// contentPane.add(cbUsuarios);
-		Query<UserHibernate> consultaUsers = session.createQuery("FROM UserHibernate", UserHibernate.class);
-		List<UserHibernate> allUsers = consultaUsers.getResultList();
+		// Query<UserHibernate> consultaUsers = session.createQuery("FROM
+		// UserHibernate", UserHibernate.class);
+		// List<UserHibernate> allUsers = consultaUsers.getResultList();
 		for (int i = 0; i < allUsers.size(); i++) {
 			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
 				cbUsuarios.addItem(allUsers.get(i));
