@@ -297,7 +297,7 @@ public class AdminAppointment extends JFrame {
 		for (int i = 0; i < allUsers.size(); i++) {
 			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
 				JRadioButton radioButton = new JRadioButton(
-						allUsers.get(i).getNombre() + " " + allUsers.get(i).getApellido());
+						i+". "+allUsers.get(i).getNombre() + " " + allUsers.get(i).getApellido());
 				radioButton.setFont(font);
 				radioButton.setOpaque(false);
 				buttonGroup.add(radioButton);
