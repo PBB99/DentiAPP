@@ -296,8 +296,8 @@ public class AdminAppointment extends JFrame {
 
 		for (int i = 0; i < allUsers.size(); i++) {
 			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
-				JRadioButton radioButton = new JRadioButton(
-						i+". "+allUsers.get(i).getNombre() + " " + allUsers.get(i).getApellido());
+				RadioButton radioButton = new RadioButton(
+						allUsers.get(i).getNombre() + " " + allUsers.get(i).getApellido(),allUsers.get(i).getDni());
 				radioButton.setFont(font);
 				radioButton.setOpaque(false);
 				buttonGroup.add(radioButton);
@@ -305,7 +305,7 @@ public class AdminAppointment extends JFrame {
 				radioButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						System.out.println("Seleccionaste: " + radioButton.getText());
+						System.out.println("Seleccionaste: " + radioButton.getText()+" DNI: "+radioButton.getId());
 					}
 				});
 			}
