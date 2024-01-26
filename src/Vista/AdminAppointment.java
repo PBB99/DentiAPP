@@ -213,9 +213,9 @@ public class AdminAppointment extends JFrame {
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
 		// Citas
-		JLabel lblCitas = new JLabel("Citas");
-		lblCitas.setBounds(250, 10, 150, 135);
-		lblCitas.setFont(new Font("Tahoma", Font.PLAIN, 60));
+		JLabel lblNAdmin = new JLabel(userHi.getNombre()+" "+userHi.getNombre());
+		lblNAdmin.setBounds(250, 10, 800, 135);
+		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 60));
 
 		// Panel para las citas
 		JPanel panelCitas = new RoundedPanel(50, new Color(148, 220, 219));
@@ -258,7 +258,6 @@ public class AdminAppointment extends JFrame {
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		panelTitleCitas.add(table);
 		menuTableStock.add(table);
 		menuTableStock.setViewportView(table);
 		
@@ -523,7 +522,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		contentPane.add(menuBar);
-		contentPane.add(lblCitas);
+		contentPane.add(lblNAdmin);
 
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
