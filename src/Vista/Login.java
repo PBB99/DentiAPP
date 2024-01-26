@@ -13,6 +13,7 @@ import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.User;
 import Modelo.UserHibernate;
+import Otros.RoundedPanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,10 +144,9 @@ public class Login extends JFrame {
 
 		// --------------------Componentes--------------------
 		// Login Layout
-		JPanel loginPane = new JPanel();
+		JPanel loginPane = new RoundedPanel(50,Color.WHITE);
+		loginPane.setOpaque(false);
 		loginPane.setBounds(685, 165, 550, 750);
-		// loginPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		loginPane.setBackground(Color.WHITE);
 		loginPane.setLayout(null);
 
 		// Label del Logo
