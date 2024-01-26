@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -227,8 +228,38 @@ public class AdminAppointment extends JFrame {
 		panelTitleCitas.setBorder(
 				new TitledBorder(lb, "  Citas  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleCitas.setOpaque(false);
+		panelTitleCitas.setLayout(null);
 		panelCitas.add(panelTitleCitas);
 
+		// ScrollPane para cargar la talbla inventario
+		JScrollPane menuTableStock = new JScrollPane();
+		menuTableStock.setBorder(BorderFactory.createEmptyBorder());
+		menuTableStock.setBounds(5, 20, 1011, 745);
+		menuTableStock.setBackground(new Color(148, 220, 219));
+		panelTitleCitas.add(menuTableStock);
+		
+		// Tabla de citas
+		DefaultTableModel modelo = new DefaultTableModel();
+		JTable table = new JTable();
+		table.setBounds(5, 20, 1011, 745);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setModel(modelo);
+		table.setShowVerticalLines(false);
+		table.setShowHorizontalLines(false);
+		table.setCellSelectionEnabled(true);
+		table.setBackground(new Color(240, 240, 240));
+		table.setSelectionBackground(new Color(148, 220, 219));
+		table.setShowGrid(false);
+		table.setBorder(null);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.setRowHeight(35);
+		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.getTableHeader().setBackground(new Color(148, 220, 219));
+		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		panelTitleCitas.add(table);
+		menuTableStock.add(table);
+		menuTableStock.setViewportView(table);
+		
 		// Panel para el calendario
 		JPanel panelCalendar = new RoundedPanel(null, 50, new Color(148, 220, 219));
 		panelCalendar.setBounds(1390, 202, 450, 350);
@@ -282,12 +313,12 @@ public class AdminAppointment extends JFrame {
 		scrollPane.setBorder(null);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		panelDoctors.add(scrollPane);
-		
+
 		JPanel panelSCrollDoctors = new JPanel();
 		panelSCrollDoctors.setLayout(new GridLayout(0, 1, 0, 0));
 		panelSCrollDoctors.setBackground(new Color(148, 220, 219));
 		scrollPane.setViewportView(panelSCrollDoctors);
-		
+
 		// Cargar los doctores en el panel de doctores
 		ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -297,7 +328,7 @@ public class AdminAppointment extends JFrame {
 		for (int i = 0; i < allUsers.size(); i++) {
 			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
 				RadioButton radioButton = new RadioButton(
-						allUsers.get(i).getNombre() + " " + allUsers.get(i).getApellido(),allUsers.get(i).getDni());
+						allUsers.get(i).getNombre() + " " + allUsers.get(i).getApellido(), allUsers.get(i).getDni());
 				radioButton.setFont(font);
 				radioButton.setOpaque(false);
 				buttonGroup.add(radioButton);
@@ -305,7 +336,7 @@ public class AdminAppointment extends JFrame {
 				radioButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						System.out.println("Seleccionaste: " + radioButton.getText()+" DNI: "+radioButton.getId());
+						System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
 					}
 				});
 			}
@@ -468,26 +499,6 @@ public class AdminAppointment extends JFrame {
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-
-		DefaultTableModel modelo = new DefaultTableModel();
-		JTable table = new JTable();
-		table.setBounds(420, 180, 500, 735);
-		contentPane.add(table);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setModel(modelo);
-		table.setShowVerticalLines(false);
-		table.setShowHorizontalLines(false);
-		table.setCellSelectionEnabled(true);
-		table.setBackground(new Color(250, 250, 250));
-		table.setSelectionBackground(new Color(148, 220, 219));
-		table.setShowGrid(false);
-		table.setBorder(null);
-		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		table.setRowHeight(35);
-		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
-		table.getTableHeader().setBackground(new Color(148, 220, 219));
-		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		table.setVisible(false);
 
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
@@ -718,15 +729,19 @@ public class AdminAppointment extends JFrame {
 			}
 		};
 
-		model.insertRow(0, new Object[] { "Hora", "Cita", "Tratamientos" });
+		//model.insertRow(0, new Object[] { "Hora", "Cita", "Tratamientos" });
 
-		for (int i = 8; i < 15; i++) {
+		for (int i = 8; i <= 15; i++) {
 			model.insertRow(model.getRowCount(), new Object[] { i + ":00", "" });
-			model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
+			if (i < 15) {
+				model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
+			}
 		}
-		for (int i = 17; i < 20; i++) {
+		for (int i = 17; i <= 20; i++) {
 			model.insertRow(model.getRowCount(), new Object[] { i + ":00", "" });
-			model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
+			if (i < 20) {
+				model.insertRow(model.getRowCount(), new Object[] { i + ":30", "" });
+			}
 		}
 
 		tabla.setModel(model);
@@ -738,16 +753,7 @@ public class AdminAppointment extends JFrame {
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
-		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		tabla.setDefaultRenderer(Object.class, tcr);
-
-		// Guarda el último id de las especialidades
-//		if (!results.isEmpty()) {
-//			lastCLiente = results.size();
-//			System.out.println("kkkkk");
-//		} else {
-//			lastCLiente = 0;
-//		}
 
 	}
 
@@ -759,9 +765,7 @@ public class AdminAppointment extends JFrame {
 
 			// Evalua en que fila esta
 
-			if (row == 0) {
-				setBackground(new Color(148, 220, 219));
-			} else if (row % 2 == 0) {
+			if (row % 2 == 0) {
 				setBackground(new Color(220, 220, 220));
 			} else {
 				setBackground(new Color(250, 250, 250));
