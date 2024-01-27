@@ -5,8 +5,10 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -40,6 +42,7 @@ public class Internal_Historial extends JDialog {
 	private SessionFactory instancia;
 	private Session session;
 	private List<OdontogramaHibernate> odonList;
+	private List<OdontogramaHibernate> odonList2;
 
 	/**
 	 * Launch the application.
@@ -57,22 +60,23 @@ public class Internal_Historial extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Internal_Historial(int id_diente, ClienteHibernate cliente) {
+	public Internal_Historial(int id_diente, ClienteHibernate cliente,Session session) {
 
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
-				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
+				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(OdontogramaHibernate.class).addAnnotatedClass(ClienteHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
-		this.session = instancia.openSession();
-		this.session.beginTransaction();
+		this.session = session;
+		
 
 		// sacamos toda la info del diente que queramos teniendo en cuenta el paciente
 		// que tenemos
-		String hql = "From OdontogramaHibernate where id_diente=:id_diente and clientes_dni_clientes=:dni_cliente";
-		Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
-		consulta.setParameter("id_diente", id_diente);
-		consulta.setParameter("dni_cliente", cliente.getDni_cliente());
-		odonList = consulta.getResultList();
+		String hql = "From OdontogramaHibernate where id_diente=:id_diente and clientes_dni_cliente=:dni_cliente";
+        Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
+        consulta.setParameter("id_diente", id_diente);
+        consulta.setParameter("dni_cliente", cliente.getDni_cliente());
+        odonList = consulta.getResultList();
+		
 		// esto no sirve, ida de olla pero estructura comentada por si acaso es util en
 		// otro contexto
 //		String consultaNombre = " from clientes where dni_cliente=" + cliente.getDni_cliente();
@@ -92,11 +96,11 @@ public class Internal_Historial extends JDialog {
 		JLabel lblFecha = new JLabel("Fecha");
 		lblFecha.setBounds(272, 125, 46, 14);
 
-		JLabel lblidDiente = new JLabel("Diente:");
-		lblidDiente.setBounds(31, 125, 46, 14);
+		JLabel lblidDiente = new JLabel("Diente: "+id_diente);
+		lblidDiente.setBounds(31, 125, 110, 14);
 
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(328, 121, 30, 22);
+		comboBox.setBounds(328, 121, 137, 22);
 		// mostrar las fechas en las que ese diente de ese cliente han tenido registros
 		// de tratamiento
 		for (OdontogramaHibernate x : odonList) {
@@ -105,7 +109,7 @@ public class Internal_Historial extends JDialog {
 		}
 
 		JLabel lblObservaciones = new JLabel("Tratamiento: ");
-		lblObservaciones.setBounds(29, 224, 79, 14);
+		lblObservaciones.setBounds(29, 224, 137, 14);
 
 		JTextArea taObservaciones = new JTextArea();
 		taObservaciones.setBounds(29, 249, 436, 288);
@@ -113,7 +117,7 @@ public class Internal_Historial extends JDialog {
 
 		JLabel lblNombrePaciente = new JLabel("");
 		lblNombrePaciente.setText(cliente.getNombre());
-		lblNombrePaciente.setBounds(31, 34, 192, 14);
+		lblNombrePaciente.setBounds(31, 34, 218, 14);
 
 		JLabel lblimagenDiente = new JLabel("");
 		lblimagenDiente.setBounds(304, 34, 66, 54);
@@ -127,9 +131,9 @@ public class Internal_Historial extends JDialog {
 		// aqui en teoria deberia imprimirse el informe que aun no hemos realizado
 		bImprimir.setActionCommand("OK");
 
-		JButton bSalir = new JButton("Salir");
+		JButton bRecargar = new JButton("Recargar");
 		// aqui se cierra la ventana
-		bSalir.setActionCommand("Cancel");
+		bRecargar.setActionCommand("Cancel");
 		getRootPane().setDefaultButton(bImprimir);
 
 		// --------LOGICA-------------------
@@ -141,14 +145,14 @@ public class Internal_Historial extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String eleccion = (String) comboBox.getSelectedItem();
+				Date eleccion = (Date) comboBox.getSelectedItem();
 				String hql2 = "FROM OdontogramaHibernate where id_diente=:id_diente and fecha=:fecha";
-				Query<OdontogramaHibernate> consultaDatos = session.createQuery(hql, OdontogramaHibernate.class);
-				consulta.setParameter("id_diente", id_diente);
-				consulta.setParameter("dni_cliente", eleccion);
+				Query<OdontogramaHibernate> consultaDatos = session.createQuery(hql2, OdontogramaHibernate.class);
+				consultaDatos.setParameter("id_diente", id_diente);
+				consultaDatos.setParameter("fecha", eleccion);
 				OdontogramaHibernate dienteCargado = consultaDatos.getSingleResult();
-				lblidDiente.setText(Integer.toString(dienteCargado.getId_diente()));
-				lblObservaciones.setText(dienteCargado.getObservaciones());
+				
+				taObservaciones.setText(dienteCargado.getObservaciones());
 
 			}
 		});
@@ -162,12 +166,25 @@ public class Internal_Historial extends JDialog {
 			}
 		});
 
-		bSalir.addActionListener(new ActionListener() {
+		bRecargar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// salir
-				dispose();
+				
+				DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>)comboBox.getModel();
+				model.removeAllElements();
+				String hql = "From OdontogramaHibernate where id_diente=:id_diente and clientes_dni_cliente=:dni_cliente";
+				Query<OdontogramaHibernate> consulta = session.createQuery(hql, OdontogramaHibernate.class);
+		        consulta.setParameter("id_diente", id_diente);
+		        consulta.setParameter("dni_cliente", cliente.getDni_cliente());
+		        
+		        odonList2 = consulta.getResultList();
+				for (OdontogramaHibernate y : odonList2) {
+					
+					comboBox.addItem(y.getFecha());
+
+				}
 			}
 		});
 		// -----------------------------ADICIONES----------------------------
@@ -179,7 +196,7 @@ public class Internal_Historial extends JDialog {
 		contentPanel.add(lblimagenDiente);
 		contentPanel.add(lblidDiente);
 		bpBotonera.add(bImprimir);
-		bpBotonera.add(bSalir);
+		bpBotonera.add(bRecargar);
 
 	}
 

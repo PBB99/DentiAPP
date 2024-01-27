@@ -320,6 +320,7 @@ public class AdminCustomers extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				DInsertCliente it = new DInsertCliente("", "", "", "", false);
 				it.setModal(true);
+				it.setLocationRelativeTo(null);
 				it.setVisible(true);
 				it.addWindowListener(new WindowListener() {
 
@@ -377,7 +378,7 @@ public class AdminCustomers extends JFrame {
 							"FROM ClienteHibernate where dni_cliente=:dni ",ClienteHibernate.class);
 					consultaClienteExiste.setParameter("dni", selected.split(" ")[0]);
 					List<ClienteHibernate> cliente = consultaClienteExiste.getResultList();
-					CustommerOdont cust = new CustommerOdont(cliente.get(0));
+					CustommerOdont cust = new CustommerOdont(cliente.get(0),session,true);
 					cust.setModal(true);
 					cust.setVisible(true);
 				}
@@ -411,11 +412,12 @@ public class AdminCustomers extends JFrame {
 		btnUpdateCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
-					DInsertCliente it = new DInsertCliente(selected.split(" ")[0], selected.split(" ")[1],
+					DInsertCliente at = new DInsertCliente(selected.split(" ")[0], selected.split(" ")[1],
 							selected.split(" ")[2], selected.split(" ")[3], true);
-					it.setModal(true);
-					it.setVisible(true);
-					it.addWindowListener(new WindowListener() {
+					at.setModal(true);
+					at.setLocationRelativeTo(null);
+					at.setVisible(true);
+					at.addWindowListener(new WindowListener() {
 
 						@Override
 						public void windowOpened(WindowEvent e) {
