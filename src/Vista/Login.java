@@ -612,6 +612,12 @@ public class Login extends JFrame {
 
 			}
 		});
+		String texto="<html><body>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; © 2024 DentiAPP <br> Todos los Derechos Reservados</body></html>";
+		JLabel lblCopy = new JLabel(texto);
+		lblCopy.setForeground(Color.GRAY);
+		lblCopy.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 17));
+		lblCopy.setBounds(829, 920, 250, 200);
+		contentPane.add(lblCopy);
 // -------------------------------------ADICIONES AL PANEL Y AL LOGIN
 // PANEL-----------------
 		contentPane.add(loginPane);
