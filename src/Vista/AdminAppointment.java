@@ -92,6 +92,7 @@ public class AdminAppointment extends JFrame {
 	private Session session;
 	private UserHibernate userHi;
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private Font metropolis;
 	/**
@@ -223,22 +224,25 @@ public class AdminAppointment extends JFrame {
 
 		// Citas
 		JPanel panelTitleAdmin = new JPanel();
-		panelTitleAdmin.setBounds(0, 0, 250, 150);
-		panelTitleAdmin.setBorder(new TitledBorder(lb, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleAdmin.setBounds(4, 50, 150, 60);
+		panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleAdmin.setOpaque(false);
 		panelTitleAdmin.setLayout(null);
 		
-		//rounded panel de fomdo para el nombre
-		JPanel panelnombre = new RoundedPanel(30, new Color(148, 220, 219));
-		panelnombre.setBounds(136, 0, 250, 135);
+		//rounded panel de fomdo para el nombre 
+		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
+		panelnombre.setBounds(146, 46, 150, 60);
 		panelnombre.setOpaque(false);
 		panelnombre.setLayout(null);
 		contentPane.add(panelnombre);
 		panelnombre.add(panelTitleAdmin);
-		JLabel lblNAdmin = new JLabel(userHi.getNombre()+" \n"+userHi.getApellido());
+		String htmlString = "<html><body><sup>" 
+		+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
+		"</span></body></html>";
+		JLabel lblNAdmin = new JLabel(htmlString);
 		lblNAdmin.setToolTipText("Nombre & Apellido");
-		lblNAdmin.setBounds(10, 5, 250, 100);
-		lblNAdmin.setFont(metropolis);
+		lblNAdmin.setBounds(10, 5, 150, 60);
+		lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
 		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas
