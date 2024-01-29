@@ -23,6 +23,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -79,6 +81,9 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import com.github.lgooddatepicker.components.CalendarPanel;
+import com.github.lgooddatepicker.optionalusertools.CalendarListener;
+import com.github.lgooddatepicker.zinternaltools.CalendarSelectionEvent;
+import com.github.lgooddatepicker.zinternaltools.YearMonthChangeEvent;
 
 public class AdminAppointment extends JFrame {
 
@@ -291,6 +296,7 @@ public class AdminAppointment extends JFrame {
 		gbl_calendarPanel.columnWidths = new int[] { 5, 219, 5 };
 		calendarPanel.setBounds(25, 25, 400, 300);
 		calendarPanel.setOpaque(false);
+		calendarPanel.setSelectedDate(LocalDate.now());
 		panelCalendar.add(calendarPanel);
 
 		// Panel para los doctores
@@ -337,14 +343,21 @@ public class AdminAppointment extends JFrame {
 				panelSCrollDoctors.add(radioButton);
 				if(i==0) {
 					radioButton.setSelected(true);
-					actualizarTabla(table, calendar, userHi);
-					System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
+					Query<UserHibernate> consultUs = session.createQuery("FROM UserHibernate where dni=:id", UserHibernate.class);
+					consultUs.setParameter("id", radioButton.getId());
+					List<UserHibernate> user = consultaUsers.getResultList();
+					actualizarTabla(table, calendarPanel, user.get(0));
 				}
 				radioButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
-						//System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+						System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+						Query<UserHibernate> consulUs = session.createQuery("FROM UserHibernate where dni=:id", UserHibernate.class);
+						consulUs.setParameter("id", radioButton.getId());
+						List<UserHibernate> us = consulUs.getResultList();
+						System.out.println(us.get(0).getNombre());
+						actualizarTabla(table, calendarPanel, us.get(0));
 					}
 				});
 			}
@@ -574,23 +587,30 @@ public class AdminAppointment extends JFrame {
 //			}
 //		}
 
-		loadCitas(table, calendar, (UserHibernate) cbUsuarios.getSelectedItem(), formateador);
-
-		calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
-
+		loadCitas(table, calendarPanel, (UserHibernate) cbUsuarios.getSelectedItem(), formateador);
+		
+		calendarPanel.addCalendarListener(new CalendarListener() {
+			
 			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-
+			public void yearMonthChanged(YearMonthChangeEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void selectedDateChanged(CalendarSelectionEvent arg0) {
 				// TODO Auto-generated method stub
 				for (int j = 1; j < table.getModel().getRowCount(); j++) {
 					table.getModel().setValueAt("", j, 1);
 					table.getModel().setValueAt("", j, 2);
 				}
+				System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
-				Calendar fechaCal = (Calendar) evt.getNewValue();
+				//Calendar fechaCal = (Calendar) evt.getNewValue();
+				java.util.Date d = Date.from(calendarPanel.getSelectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
 				Query<CitaHibernate> consulta = session
 						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
-				consulta.setParameter("fech", fechaCal.getTime());
+				consulta.setParameter("fech", d);
 				consulta.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
 				List<CitaHibernate> allCitas = consulta.getResultList();
 
@@ -598,7 +618,7 @@ public class AdminAppointment extends JFrame {
 
 				for (int i = 0; i < allCitas.size(); i++) {
 					Date dia = (Date) allCitas.get(i).getFecha();
-					if (formateador.format(fechaCal.getTime()).equals(formateador.format(dia))) {
+					if (formateador.format(d).equals(formateador.format(dia))) {
 						for (int j = 0; j < table.getModel().getRowCount(); j++) {
 							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
@@ -607,6 +627,15 @@ public class AdminAppointment extends JFrame {
 						}
 					}
 				}
+			}
+		});
+		
+		calendarPanel.addPropertyChangeListener("calendar", new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+
+				
 			}
 		});
 
@@ -736,21 +765,23 @@ public class AdminAppointment extends JFrame {
 
 	}
 
-	public void actualizarTabla(JTable table, JCalendar calendar, UserHibernate us) {
+	public void actualizarTabla(JTable table, CalendarPanel calendar, UserHibernate us) {
 		for (int j = 1; j < table.getModel().getRowCount(); j++) {
 			table.getModel().setValueAt("", j, 1);
 			table.getModel().setValueAt("", j, 2);
 		}
+		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
 		Query<CitaHibernate> consultaCitas = session
 				.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
-		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
+		java.util.Date d = Date.from(calendar.getSelectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+		consultaCitas.setParameter("fech", d);
 		consultaCitas.setParameter("id", us);
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
 		for (int i = 0; i < allCitas.size(); i++) {
 			Date dia = (Date) allCitas.get(i).getFecha();
-			if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
+			if (formateador.format(d).equals(formateador.format(dia))) {
 				for (int j = 0; j < table.getModel().getRowCount(); j++) {
 					if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 						table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
@@ -761,7 +792,7 @@ public class AdminAppointment extends JFrame {
 		}
 	}
 
-	public void loadCitas(JTable tabla, JCalendar calendar, UserHibernate us, DateFormat formateador) {
+	public void loadCitas(JTable tabla, CalendarPanel calendar, UserHibernate us, DateFormat formateador) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
 		// Prepara la tabla
