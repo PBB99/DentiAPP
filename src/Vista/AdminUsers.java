@@ -41,6 +41,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -54,6 +55,7 @@ import Controlador.ConexionMySQL;
 
 import Modelo.SpecialityHibernate;
 import Modelo.UserHibernate;
+import Otros.RoundedPanel;
 import btndentiapp.ButtonDentiApp;
 import javax.persistence.*;
 
@@ -67,7 +69,12 @@ public class AdminUsers extends JFrame {
 	private SessionFactory instancia;
 	private Session miSesion;
 	private JTable tabla;
-	private int control=0;
+	private int control = 0;
+
+	private Color blanquito = new Color(240, 240, 240);
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private Font font = new Font("Dialog", Font.BOLD, 15);
+	private Color azulito = new Color(148, 220, 219);
 
 	/**
 	 * Launch the application.
@@ -97,7 +104,7 @@ public class AdminUsers extends JFrame {
 		this.instancia = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(UserHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.miSesion = instancia.openSession();
-		
+
 		// -------------------- JFrame --------------------
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -108,21 +115,7 @@ public class AdminUsers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
-		
-		
-		// Labels
-		
-		// añadir
-		JLabel lAdd = new JLabel();
-		lAdd.setText("Añadir");
-		lAdd.setBounds(1477, 205, 100, 20);
-		
-		// Modificar
-		JLabel lMod = new JLabel();
-		lMod.setText("Modificar");
-		lMod.setBounds(1577, 205, 100, 20);
-		
-		//menu bar
+		// menu bar
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);
@@ -131,54 +124,52 @@ public class AdminUsers extends JFrame {
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
-		
+
 		// item
 		JMenu mnNewMenu = new JMenu(userHi.getDni());
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/definitiva.png")));
 		mnNewMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		mnNewMenu.setOpaque(false);
-		mnNewMenu.setBackground(new Color(0,0,0,0));
+		mnNewMenu.setBackground(new Color(0, 0, 0, 0));
 		mnNewMenu.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(false);
-				mnNewMenu.setBackground(new Color(0,0,0,0));
-				
+				mnNewMenu.setBackground(new Color(0, 0, 0, 0));
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(true);
 				mnNewMenu.setBackground(Color.LIGHT_GRAY);
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 
-				
 			}
 		});
-		
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem(userHi.getNombre());
-		//ItemName.setText(userHi.getNombre());
+		// ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
@@ -188,12 +179,62 @@ public class AdminUsers extends JFrame {
 		JMenuItem ItemOut = new JMenuItem("Cerrar Sesión");
 		ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
 
-
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
 		menuPane.setBackground(new Color(148, 220, 219));
 		menuPane.setBounds(0, 0, 135, 1080);
 		menuPane.setLayout(null);
+
+		// Panel fondo de usuarios
+		JPanel panelBackUser = new RoundedPanel(50, azulito);
+		panelBackUser.setBounds(335, 202, 1385, 800);
+		panelBackUser.setOpaque(false);
+		panelBackUser.setLayout(null);
+		contentPane.add(panelBackUser);
+
+		// Panel titulo de usuario
+		JPanel panelTitleUsers = new JPanel();
+		panelTitleUsers.setBounds(15, 15, 1355, 770);
+		panelTitleUsers
+				.setBorder(new TitledBorder(lb, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleUsers.setOpaque(false);
+		panelTitleUsers.setLayout(null);
+		panelBackUser.add(panelTitleUsers);
+
+		// Boton admins
+		JButton bAdmin = new JButton();
+		bAdmin.setBounds(30, 5, 100, 20);
+		bAdmin.setFont(font);
+		bAdmin.setBackground(azulito);
+		bAdmin.setBorder(null);
+		bAdmin.setOpaque(true);
+		bAdmin.setText("Admin");
+		panelBackUser.add(bAdmin);
+		panelBackUser.setComponentZOrder(bAdmin, 0);
+		
+		// Boton Doctores
+		JButton bDoctor = new JButton();
+		bDoctor.setBounds(145, 5, 100, 20);
+		bDoctor.setFont(font);
+		bDoctor.setBackground(azulito);
+		bDoctor.setBorder(null);
+		bDoctor.setOpaque(true);
+		bDoctor.setText("Doctor");
+		panelBackUser.add(bDoctor);
+		panelBackUser.setComponentZOrder(bDoctor, 0);
+		
+		
+		// contentPane.add(menuUsers);
+
+		// añadir
+		JLabel lAdd = new JLabel();
+		lAdd.setText("Añadir");
+		lAdd.setBounds(1477, 205, 100, 20);
+
+		// Modificar
+		JLabel lMod = new JLabel();
+		lMod.setText("Modificar");
+		lMod.setBounds(1577, 205, 100, 20);
 
 		// panel donde colcare la tabla
 		JScrollPane menuUsers = new JScrollPane();
@@ -201,16 +242,6 @@ public class AdminUsers extends JFrame {
 		// menuUsers.setBorder(BorderFactory.createEmptyBorder());
 		menuUsers.setBorder(new LineBorder(new Color(0, 0, 0)));
 		menuUsers.setBackground(new Color(148, 220, 219));
-		// Boton Doctores
-		JButton bDoctor = new JButton();
-		bDoctor.setBounds(377, 205, 100, 20);
-		bDoctor.setText("Doctor");
-
-		// Boton admins
-		JButton bAdmin = new JButton();
-
-		bAdmin.setBounds(277, 205, 100, 20);
-		bAdmin.setText("Admin");
 
 		// La tabla
 		tabla = new JTable();
@@ -227,7 +258,7 @@ public class AdminUsers extends JFrame {
 		tabla.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tabla.getTableHeader().setBackground(new Color(148, 220, 219));
 		tabla.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		
+
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -239,36 +270,36 @@ public class AdminUsers extends JFrame {
 				new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
 		btnAppointment.setToolTipText("Módulo de citas (Alt+C)");
 		btnAppointment.setMnemonic(KeyEvent.VK_C);
-		
+
 		// Botón de usuarios
 		ButtonDentiApp btnUsers = new ButtonDentiApp(0, 270, true,
 				new ImageIcon(getClass().getResource("/Resources/images/users.png")));
 		btnUsers.setToolTipText("Módulo de Usuarios (Alt+U)");
-		
+
 		// Botón de Pacientes
 		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 405, false,
 				new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
 		btnCustomers.setToolTipText("Módulo de pacientes (Alt+P)");
 		btnCustomers.setMnemonic(KeyEvent.VK_P);
-		
+
 		// Botón de Inventario
 		ButtonDentiApp btnStock = new ButtonDentiApp(0, 540, false,
 				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
 		btnStock.setToolTipText("Módulo de materiales (Alt+I)");
 		btnStock.setMnemonic(KeyEvent.VK_I);
-		
+
 		// Botón de Tratamientos y Especialidades
 		ButtonDentiApp btnClinic = new ButtonDentiApp(0, 675, false,
 				new ImageIcon(getClass().getResource("/Resources/images/clinicGrey.png")));
 		btnClinic.setToolTipText("Módulo clínico (Alt+L)");
 		btnClinic.setMnemonic(KeyEvent.VK_L);
-		
+
 		// Botón del Módulo economico
 		ButtonDentiApp btnPayments = new ButtonDentiApp(0, 810, false,
 				new ImageIcon(getClass().getResource("/Resources/images/paymentsGrey.png")));
 		btnPayments.setToolTipText("Módulo Económico (Alt+E)");
 		btnPayments.setMnemonic(KeyEvent.VK_E);
-		
+
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		cargarTabla("Admin", tabla);
@@ -355,50 +386,50 @@ public class AdminUsers extends JFrame {
 				AdminInsertUser u = new AdminInsertUser(instancia, frame, true);
 				u.setVisible(true);
 				u.addWindowListener(new WindowListener() {
-					
+
 					@Override
 					public void windowOpened(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowIconified(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowDeiconified(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowDeactivated(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowClosing(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowClosed(WindowEvent e) {
 						// TODO Auto-generated method stub
-						if(control==0) {
+						if (control == 0) {
 							cargarTabla("admin", tabla);
-						}else {
+						} else {
 							cargarTabla("doctor", tabla);
 						}
 					}
-					
+
 					@Override
 					public void windowActivated(WindowEvent e) {
-						
+
 					}
 				});
 
@@ -436,63 +467,62 @@ public class AdminUsers extends JFrame {
 				ChangeUser c = new ChangeUser(instancia, frame, true);
 				c.setVisible(true);
 				c.addWindowListener(new WindowListener() {
-					
+
 					@Override
 					public void windowOpened(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowIconified(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowDeiconified(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowDeactivated(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowClosing(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 					@Override
 					public void windowClosed(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
-						if(control==0) {
+
+						if (control == 0) {
 							cargarTabla("admin", tabla);
 							System.out.println("CARGA");
-						}else {
-							
+						} else {
+
 							cargarTabla("doctor", tabla);
 							System.out.println("SIGUE CARGANDO");
 						}
-						
-						
+
 					}
-					
+
 					@Override
 					public void windowActivated(WindowEvent e) {
 						// TODO Auto-generated method stub
-						
+
 					}
 				});
 
 			}
 		});
-		
+
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -539,7 +569,7 @@ public class AdminUsers extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cargarTabla("Doctor", tabla);
-				control=1;
+				control = 1;
 
 			}
 		});
@@ -550,7 +580,7 @@ public class AdminUsers extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				cargarTabla("Admin", tabla);
-				control=0;
+				control = 0;
 
 			}
 		});
@@ -580,19 +610,17 @@ public class AdminUsers extends JFrame {
 				cP.setVisible(true);
 				cP.setModal(true);
 				System.out.println("PINCHADO");
-				
 
 			}
 		});
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
-		contentPane.add(menuUsers);
-		contentPane.add(bDoctor);
-		contentPane.add(bAdmin);
 		contentPane.add(menuBar);
+
 		contentPane.add(lAdd);
 		contentPane.add(lMod);
+
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
 		menuPane.add(btnUsers);
@@ -600,9 +628,12 @@ public class AdminUsers extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
+
 		menuUsers.add(tabla);
 		menuUsers.setViewportView(tabla);
+
 		menuBar.add(mnNewMenu);
+
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
@@ -629,7 +660,7 @@ public class AdminUsers extends JFrame {
 //-----------------------Métodos------------------------------------------
 	public void cargarTabla(String nombreTabla, JTable tablaDoctores) {
 		// Relaiza la consulta de todos los usuarios y los extrae
-		miSesion=instancia.openSession();
+		miSesion = instancia.openSession();
 		String hql = "FROM UserHibernate ";
 		Query<UserHibernate> consulta = miSesion.createQuery(hql, UserHibernate.class);
 		List<UserHibernate> userList = consulta.getResultList();
@@ -652,7 +683,7 @@ public class AdminUsers extends JFrame {
 				// dentro de los admin solo puede tener una espcialidad, pero en el caso de que
 				// se le haya metido en varias ocasiones la especialidad admin tenemos en cuenta
 				// que pueda tener mas especialidades
-				if (x.getEspecialidad()!=null) {
+				if (x.getEspecialidad() != null) {
 					if (x.getEspecialidad().getId_especialidad() == 0) {
 						admin.add(x);
 					}
@@ -685,7 +716,7 @@ public class AdminUsers extends JFrame {
 			for (UserHibernate x : userList) {
 				// los doctores tienen al menos una especialidad con posbilidad de tener mas y
 				// distintas de cero
-				if (x.getEspecialidad()!=null) {
+				if (x.getEspecialidad() != null) {
 
 					if (x.getEspecialidad().getId_especialidad() != 0) {
 						admin.add(x);
@@ -700,7 +731,7 @@ public class AdminUsers extends JFrame {
 				model.setRowCount(admin.size());
 			}
 			JTableHeader header = tablaDoctores.getTableHeader();
-			
+
 			int fila = 0;
 
 			for (UserHibernate y : admin) {

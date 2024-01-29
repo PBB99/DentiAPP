@@ -72,6 +72,9 @@ public class AdminStock extends JFrame {
 	private String selectedProveedor = null;
 	private ProveedorHibernate prh;
 
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private Font font = new Font("Dialog", Font.BOLD, 15);
+	private Color azulito = new Color(148, 220, 219);
 	/**
 	 * Launch the application.
 	 */
