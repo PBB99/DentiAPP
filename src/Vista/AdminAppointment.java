@@ -335,10 +335,16 @@ public class AdminAppointment extends JFrame {
 				radioButton.setOpaque(false);
 				buttonGroup.add(radioButton);
 				panelSCrollDoctors.add(radioButton);
+				if(i==0) {
+					radioButton.setSelected(true);
+					actualizarTabla(table, calendar, userHi);
+					System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
+				}
 				radioButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
+						//System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 					}
 				});
 			}
@@ -360,7 +366,7 @@ public class AdminAppointment extends JFrame {
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
-mnNewMenu.addMouseListener(new MouseListener() {
+		mnNewMenu.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -556,6 +562,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 //			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
 //		}
 //
+//
 //		for (int i = 0; i < allCitas.size(); i++) {
 //			java.util.Date dia = allCitas.get(i).getFecha();
 //			if (formateador.format(fechaCalen.getTime()).equals(formateador.format(dia))) {
@@ -729,12 +736,12 @@ mnNewMenu.addMouseListener(new MouseListener() {
 
 	}
 
-	public void actualizarTabla(JTable table, JCalendar calendar, UserHibernate us, DateFormat formateador) {
+	public void actualizarTabla(JTable table, JCalendar calendar, UserHibernate us) {
 		for (int j = 1; j < table.getModel().getRowCount(); j++) {
 			table.getModel().setValueAt("", j, 1);
 			table.getModel().setValueAt("", j, 2);
 		}
-
+		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
 		Query<CitaHibernate> consultaCitas = session
 				.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
 		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
@@ -786,7 +793,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 		JTableHeader header = tabla.getTableHeader();
 
 		// Carga los datos
-		actualizarTabla(tabla, calendar, us, formateador);
+		actualizarTabla(tabla, calendar, us);
 
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
