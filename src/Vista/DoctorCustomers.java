@@ -112,7 +112,10 @@ public class DoctorCustomers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes --------------------
-		
+		JLabel lblNAdmin = new JLabel(mainUser.getNombre()+" "+mainUser.getNombre());
+		lblNAdmin.setBounds(250, 10, 800, 135);
+		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 60));
+contentPane.add(lblNAdmin);
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
 		menuPane.setBackground(new Color(148, 220, 219));

@@ -107,7 +107,10 @@ public class AdminCustomers extends JFrame {
 
 		// -------------------- Componentes Gráficos --------------------
 		//menubar
-
+		JLabel lblNAdmin = new JLabel(userHi.getNombre()+" "+userHi.getNombre());
+		lblNAdmin.setBounds(250, 10, 800, 135);
+		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 60));
+contentPane.add(lblNAdmin);
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);

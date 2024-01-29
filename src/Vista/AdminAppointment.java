@@ -213,9 +213,24 @@ public class AdminAppointment extends JFrame {
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
 		// Citas
+		JPanel panelTitleAdmin = new JPanel();
+		panelTitleAdmin.setBounds(15, 10, 400, 90);
+		panelTitleAdmin.setBorder(new TitledBorder(lb, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleAdmin.setOpaque(false);
+		panelTitleAdmin.setLayout(null);
+		
+		//rounded panel de fomdo para el nombre
+		JPanel panelnombre = new RoundedPanel(50, new Color(148, 220, 219));
+		panelnombre.setBounds(250, 10, 400, 100);
+		panelnombre.setOpaque(false);
+		panelnombre.setLayout(null);
+		contentPane.add(panelnombre);
+		panelnombre.add(panelTitleAdmin);
 		JLabel lblNAdmin = new JLabel(userHi.getNombre()+" "+userHi.getNombre());
-		lblNAdmin.setBounds(250, 10, 800, 135);
-		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 60));
+		lblNAdmin.setToolTipText("Nombre & Apellido");
+		lblNAdmin.setBounds(10, 5, 400, 100);
+		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas
 		JPanel panelCitas = new RoundedPanel(50, new Color(148, 220, 219));
@@ -522,7 +537,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		contentPane.add(menuBar);
-		contentPane.add(lblNAdmin);
+		//contentPane.add(lblNAdmin);
 
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);

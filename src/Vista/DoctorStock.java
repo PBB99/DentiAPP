@@ -3,6 +3,7 @@ package Vista;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,6 +67,10 @@ public class DoctorStock extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes --------------------
+		JLabel lblNAdmin = new JLabel(mainUser.getNombre()+" "+mainUser.getNombre());
+		lblNAdmin.setBounds(250, 10, 800, 135);
+		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 60));
+contentPane.add(lblNAdmin);
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);

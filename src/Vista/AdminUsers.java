@@ -111,7 +111,10 @@ public class AdminUsers extends JFrame {
 		
 		
 		// Labels
-		
+		JLabel lblNAdmin = new JLabel(userHi.getNombre()+" "+userHi.getNombre());
+		lblNAdmin.setBounds(250, 10, 800, 135);
+		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 60));
+contentPane.add(lblNAdmin);
 		// añadir
 		JLabel lAdd = new JLabel();
 		lAdd.setText("Añadir");

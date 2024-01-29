@@ -3,6 +3,7 @@ package Vista;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,6 +69,10 @@ public class AdminPayments extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
+		JLabel lblNAdmin = new JLabel(userHi.getNombre()+" "+userHi.getNombre());
+		lblNAdmin.setBounds(250, 10, 800, 135);
+		lblNAdmin.setFont(new Font("Tahoma", Font.PLAIN, 60));
+contentPane.add(lblNAdmin);
 		//menu bar
 		// barra oculat de arriba
 				JMenuBar menuBar = new JMenuBar();
