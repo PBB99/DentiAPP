@@ -13,6 +13,7 @@ import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.User;
 import Modelo.UserHibernate;
+import Otros.RoundedPanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,10 +145,9 @@ public class Login extends JFrame {
 
 		// --------------------Componentes--------------------
 		// Login Layout
-		JPanel loginPane = new JPanel();
+		JPanel loginPane = new RoundedPanel(50,Color.WHITE);
+		loginPane.setOpaque(false);
 		loginPane.setBounds(685, 165, 550, 750);
-		// loginPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		loginPane.setBackground(Color.WHITE);
 		loginPane.setLayout(null);
 
 		// Label del Logo
@@ -181,13 +181,54 @@ public class Login extends JFrame {
 		tfPassword.setFont(new Font("Tahoma", Font.PLAIN, 25));
 
 		// Botón de Login
-		JButton btnLogin = new JButton("Iniciar sesión");
+		JButton btnLogin = new JButton("INICIAR SESIÓN");
 		btnLogin.setMnemonic(KeyEvent.VK_ENTER);
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		btnLogin.setBounds(200, 674, 150, 50);
+		btnLogin.setBounds(170, 674, 180, 50);
+		btnLogin.setBackground(new Color(148, 220, 219));
+		btnLogin.setForeground(Color.white);
+		
 		
 		// ----------------------------------------------LOGICA----------------------------------------------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
+		btnLogin.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnLogin.setBackground(new Color(148, 220, 219));
+				
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnLogin.setBackground(new Color(20, 220, 219));
+				
+				
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		this.addWindowListener(new WindowListener() {
 
 			@Override
@@ -403,14 +444,14 @@ public class Login extends JFrame {
 									System.out.println(ex);
 								}
 							} else {// esta dado de baja
-								JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
+								JOptionPane.showMessageDialog(frame, "Cuidado", "Este usuario ya no es válido",
 										JOptionPane.WARNING_MESSAGE);
 								break;
 							}
 						}
 					}
 					if (aux2 == true) {
-						JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
+						JOptionPane.showMessageDialog(frame, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
 								"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -572,6 +613,12 @@ public class Login extends JFrame {
 
 			}
 		});
+		String texto="<html><body>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; © 2024 DentiAPP <br> Todos los Derechos Reservados</body></html>";
+		JLabel lblCopy = new JLabel(texto);
+		lblCopy.setForeground(Color.GRAY);
+		lblCopy.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 17));
+		lblCopy.setBounds(829, 920, 250, 200);
+		contentPane.add(lblCopy);
 // -------------------------------------ADICIONES AL PANEL Y AL LOGIN
 // PANEL-----------------
 		contentPane.add(loginPane);

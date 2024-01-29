@@ -292,7 +292,7 @@ public class PruebaOdonto extends JFrame {
 							"FROM ClienteHibernate where dni_cliente=:dni ",ClienteHibernate.class);
 					consultaClienteExiste.setParameter("dni", selected.split(" ")[0]);
 					List<ClienteHibernate> cliente = consultaClienteExiste.getResultList();
-					CustommerOdont cust = new CustommerOdont(cliente.get(0));
+					CustommerOdont cust = new CustommerOdont(cliente.get(0),session,false);
 					cust.setModal(true);
 					cust.setVisible(true);
 				}

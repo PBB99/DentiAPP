@@ -29,5 +29,8 @@
         <mapping class="Modelo.CitaHibernate"/>
         <mapping class="Modelo.ClienteHibernate"/>
         <mapping class="Modelo.OdontogramaHibernate"/>
+        <mapping class="Modelo.InventarioHibernate"/>
+        <mapping class="Modelo.ProveedorHibernate"/>
+        
     </session-factory>
 </hibernate-configuration>
