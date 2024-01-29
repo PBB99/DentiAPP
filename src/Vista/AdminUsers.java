@@ -593,7 +593,7 @@ public class AdminUsers extends JFrame {
 		// preparacion de la tabla
 
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "DNI", "Nombre", "Apellido", "Especialidad" }) {
+				new String[] { "DNI", "Nombre", "Apellido", "Especialidad" , "Estado"}) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -629,6 +629,7 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
 				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
+				
 				fila++;
 			}
 
