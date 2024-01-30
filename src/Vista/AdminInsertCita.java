@@ -170,6 +170,7 @@ public class AdminInsertCita extends JDialog {
 						List<CitaHibernate> check = consultaCitaExiste.getResultList();
 
 						if (check.isEmpty()) {
+							System.out.println("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 							Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate",
 									CitaHibernate.class);
 							List<CitaHibernate> allCitas = consultaCitas.getResultList();
@@ -184,6 +185,7 @@ public class AdminInsertCita extends JDialog {
 							System.out.println(
 									"------------------------------------------------------------------------------------------------------------------------------------------");
 						} else {
+							System.out.println("2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
 							CitaHibernate citaEx = consultaCitaExiste.getSingleResult();
 							citaEx.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
 							citaEx.setUser(usuario);
