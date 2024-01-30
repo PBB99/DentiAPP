@@ -224,14 +224,14 @@ public class AdminAppointment extends JFrame {
 
 		// Citas
 		JPanel panelTitleAdmin = new JPanel();
-		panelTitleAdmin.setBounds(4, 50, 150, 60);
+		panelTitleAdmin.setBounds(1, 2, 170, 90);
 		panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleAdmin.setOpaque(false);
 		panelTitleAdmin.setLayout(null);
 		
 		//rounded panel de fomdo para el nombre 
 		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
-		panelnombre.setBounds(146, 46, 150, 60);
+		panelnombre.setBounds(136, 0, 150, 60);
 		panelnombre.setOpaque(false);
 		panelnombre.setLayout(null);
 		contentPane.add(panelnombre);
