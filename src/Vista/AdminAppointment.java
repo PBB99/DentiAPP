@@ -6,6 +6,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -91,8 +92,9 @@ public class AdminAppointment extends JFrame {
 	private Session session;
 	private UserHibernate userHi;
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
-
+	private Font metropolis;
 	/**
 	 * Launch the application.
 	 */
@@ -122,7 +124,15 @@ public class AdminAppointment extends JFrame {
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
-
+		//----FUENTE
+		try {
+			//crea la fuente
+			metropolis=Font.createFont(Font.TRUETYPE_FONT, new java.io.File("/Resources/fonts/metropolis.thin.otf"));
+			//la registra en el entorno grafico
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(metropolis);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		// -------------------- JFrame --------------------
 		this.parent = parent;
 		this.frame = this;
@@ -213,9 +223,27 @@ public class AdminAppointment extends JFrame {
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
 		// Citas
-		JLabel lblCitas = new JLabel("Citas");
-		lblCitas.setBounds(250, 10, 150, 135);
-		lblCitas.setFont(new Font("Tahoma", Font.PLAIN, 60));
+		JPanel panelTitleAdmin = new JPanel();
+		panelTitleAdmin.setBounds(1, 2, 170, 90);
+		panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleAdmin.setOpaque(false);
+		panelTitleAdmin.setLayout(null);
+		
+		//rounded panel de fomdo para el nombre 
+		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
+		panelnombre.setBounds(136, 0, 150, 60);
+		panelnombre.setOpaque(false);
+		panelnombre.setLayout(null);
+		contentPane.add(panelnombre);
+		panelnombre.add(panelTitleAdmin);
+		String htmlString = "<html><body><sup>" 
+		+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
+		"</span></body></html>";
+		JLabel lblNAdmin = new JLabel(htmlString);
+		lblNAdmin.setToolTipText("Nombre & Apellido");
+		lblNAdmin.setBounds(10, 5, 150, 60);
+		lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
+		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas
 		JPanel panelCitas = new RoundedPanel(50, new Color(148, 220, 219));
@@ -258,7 +286,6 @@ public class AdminAppointment extends JFrame {
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		panelTitleCitas.add(table);
 		menuTableStock.add(table);
 		menuTableStock.setViewportView(table);
 		
@@ -523,7 +550,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		contentPane.add(menuBar);
-		contentPane.add(lblCitas);
+		//contentPane.add(lblNAdmin);
 
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);

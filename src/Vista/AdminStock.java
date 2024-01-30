@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -50,6 +51,7 @@ import Modelo.ProveedorHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
+import Otros.RoundedPanel;
 import Vista.AdminClinic.Renderer;
 import btndentiapp.ButtonDentiApp;
 
@@ -71,6 +73,7 @@ public class AdminStock extends JFrame {
 	private JTable tableProveedor;
 	private String selectedProveedor = null;
 	private ProveedorHibernate prh;
+	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 
 	/**
 	 * Launch the application.
@@ -114,6 +117,29 @@ public class AdminStock extends JFrame {
 
 		// -------------------- Componentes Gráficos --------------------
 		//menu bar
+		// nombre
+				JPanel panelTitleAdmin = new JPanel();
+				panelTitleAdmin.setBounds(1, 2, 170, 90);
+				panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
+				panelTitleAdmin.setOpaque(false);
+				panelTitleAdmin.setLayout(null);
+				
+				//rounded panel de fomdo para el nombre 
+				JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
+				panelnombre.setBounds(136, 0, 150, 60);
+				panelnombre.setOpaque(false);
+				panelnombre.setLayout(null);
+				contentPane.add(panelnombre);
+				panelnombre.add(panelTitleAdmin);
+				String htmlString = "<html><body><sup>" 
+				+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
+				"</span></body></html>";
+				JLabel lblNAdmin = new JLabel(htmlString);
+				lblNAdmin.setToolTipText("Nombre & Apellido");
+				lblNAdmin.setBounds(10, 5, 150, 60);
+				lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
+				panelTitleAdmin.add(lblNAdmin);
+
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);

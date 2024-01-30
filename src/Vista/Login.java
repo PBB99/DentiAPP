@@ -36,6 +36,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -74,7 +75,7 @@ public class Login extends JFrame {
 	private JFrame parent, frame;
 	private SessionFactory instancia;
 	private Session session;
-
+	private boolean mostrar=false;
 	/**
 	 * Launch the application.
 	 */
@@ -186,9 +187,39 @@ public class Login extends JFrame {
 		btnLogin.setBounds(170, 674, 180, 50);
 		btnLogin.setBackground(new Color(148, 220, 219));
 		btnLogin.setForeground(Color.white);
+		//ojo mostrar o no contraseña
+		
+		JLabel lblOjo=new JLabel();
+		lblOjo.setBounds(485, 495, 30, 30);
+		lblOjo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/mostrar.png")));
+		loginPane.add(lblOjo);
+		
 		
 		
 		// ----------------------------------------------LOGICA----------------------------------------------------------
+		
+		//Mostrar o no contraseña
+		
+		lblOjo.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e)  
+		    {  
+		       // you can open a new frame here as
+		       // i have assumed you have declared "frame" as instance variable
+				if(mostrar==false) {
+					//mostrar contrseña
+					lblOjo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/ocultar.png")));
+					((JPasswordField) tfPassword).setEchoChar((char)0);
+					mostrar=true;
+				}else {
+					//no mostrar contraseña
+					lblOjo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/mostrar.png")));
+					((JPasswordField) tfPassword).setEchoChar('•');
+					mostrar=false;
+				}
+				
+
+		    }  
+		});
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		btnLogin.addMouseListener(new MouseListener() {
 			
