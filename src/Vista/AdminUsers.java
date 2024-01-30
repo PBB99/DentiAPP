@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.awt.event.KeyEvent;
-
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 
 import java.awt.event.MouseEvent;
@@ -36,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
@@ -52,10 +53,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import Controlador.ConexionMySQL;
-
+import Modelo.InventarioHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.UserHibernate;
 import Otros.RoundedPanel;
+import Vista.AdminStock.Renderer;
 import btndentiapp.ButtonDentiApp;
 import javax.persistence.*;
 
@@ -71,10 +73,10 @@ public class AdminUsers extends JFrame {
 	private JTable tabla;
 	private int control = 0;
 
-	private Color blanquito = new Color(240, 240, 240);
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private Color azulito = new Color(148, 220, 219);
+	private Color blanquito = new Color(240, 240, 240);
 
 	/**
 	 * Launch the application.
@@ -211,20 +213,74 @@ public class AdminUsers extends JFrame {
 		bAdmin.setText("Admin");
 		panelBackUser.add(bAdmin);
 		panelBackUser.setComponentZOrder(bAdmin, 0);
-		
+
 		// Boton Doctores
 		JButton bDoctor = new JButton();
 		bDoctor.setBounds(145, 5, 100, 20);
 		bDoctor.setFont(font);
 		bDoctor.setBackground(azulito);
+		bDoctor.setForeground(blanquito);
 		bDoctor.setBorder(null);
 		bDoctor.setOpaque(true);
 		bDoctor.setText("Doctor");
 		panelBackUser.add(bDoctor);
 		panelBackUser.setComponentZOrder(bDoctor, 0);
-		
-		
-		// contentPane.add(menuUsers);
+
+		// panel donde colcare la tabla
+		JScrollPane menuUsers = new JScrollPane();
+		menuUsers.setBounds(3, 45, 1349, 725);
+		menuUsers.setBorder(BorderFactory.createEmptyBorder());
+		menuUsers.setBackground(azulito);
+		panelTitleUsers.add(menuUsers);
+
+		// La tabla
+		tabla = new JTable();
+		tabla.setShowVerticalLines(false);
+		tabla.setShowHorizontalLines(false);
+		tabla.setCellSelectionEnabled(true);
+		tabla.setBounds(0, 0, 1349, 725);
+		tabla.setBackground(new Color(250, 250, 250));
+		tabla.setSelectionBackground(azulito);
+		tabla.setShowGrid(false);
+		tabla.setBorder(null);
+		tabla.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tabla.setRowHeight(35);
+		tabla.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		tabla.getTableHeader().setBackground(azulito);
+		tabla.getTableHeader().setBorder(new LineBorder(azulito));
+
+		// Lupa
+		JLabel jlLupa = new JLabel();
+		jlLupa.setBackground(azulito);
+		jlLupa.setBounds(20, 12, 40, 30);
+		jlLupa.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		panelTitleUsers.add(jlLupa);
+
+		// Buscador
+		JTextField txtBuscador = new JTextField();
+		txtBuscador.setBorder(new LineBorder(azulito));
+		txtBuscador.setBounds(60, 15, 200, 25);
+		txtBuscador.setBackground(new Color(255, 255, 255));
+		txtBuscador.setToolTipText("Buscador");
+		panelTitleUsers.add(txtBuscador);
+
+		// Botón de insertar producto
+		JButton btnInsert = new JButton();
+		btnInsert.setBackground(azulito);
+		btnInsert.setBounds(1311, 12, 40, 30);
+		btnInsert.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
+		btnInsert.setBorderPainted(false);
+		btnInsert.setToolTipText("Insertar Producto");
+		panelTitleUsers.add(btnInsert);
+
+		// Botón de modificar producto
+		JButton btnUpadate = new JButton();
+		btnUpadate.setBackground(azulito);
+		btnUpadate.setBounds(1271, 12, 40, 30);
+		btnUpadate.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
+		btnUpadate.setBorderPainted(false);
+		btnUpadate.setToolTipText("Modificar Producto");
+		panelTitleUsers.add(btnUpadate);
 
 		// añadir
 		JLabel lAdd = new JLabel();
@@ -235,29 +291,6 @@ public class AdminUsers extends JFrame {
 		JLabel lMod = new JLabel();
 		lMod.setText("Modificar");
 		lMod.setBounds(1577, 205, 100, 20);
-
-		// panel donde colcare la tabla
-		JScrollPane menuUsers = new JScrollPane();
-		menuUsers.setBounds(277, 225, 1500, 700);
-		// menuUsers.setBorder(BorderFactory.createEmptyBorder());
-		menuUsers.setBorder(new LineBorder(new Color(0, 0, 0)));
-		menuUsers.setBackground(new Color(148, 220, 219));
-
-		// La tabla
-		tabla = new JTable();
-		tabla.setShowVerticalLines(false);
-		tabla.setShowHorizontalLines(false);
-		tabla.setCellSelectionEnabled(true);
-		tabla.setBounds(0, 0, 1500, 700);
-		tabla.setBackground(new Color(250, 250, 250));
-		tabla.setSelectionBackground(new Color(148, 220, 219));
-		tabla.setShowGrid(false);
-		tabla.setBorder(null);
-		tabla.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		tabla.setRowHeight(35);
-		tabla.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
-		tabla.getTableHeader().setBackground(new Color(148, 220, 219));
-		tabla.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
@@ -354,7 +387,7 @@ public class AdminUsers extends JFrame {
 		});
 
 		// Logica de lables
-		lAdd.addMouseListener(new MouseListener() {
+		btnInsert.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -435,7 +468,8 @@ public class AdminUsers extends JFrame {
 
 			}
 		});
-		lMod.addMouseListener(new MouseListener() {
+
+		btnUpadate.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -523,6 +557,30 @@ public class AdminUsers extends JFrame {
 			}
 		});
 
+		// Acción de buscar en la tabla
+		txtBuscador.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (control == 0) {
+					loadSearchStock("admin", tabla, txtBuscador.getText());
+				} else {
+					loadSearchStock("doctor", tabla, txtBuscador.getText());
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		// Acción del Módulo de citas
 		btnAppointment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -570,18 +628,22 @@ public class AdminUsers extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				cargarTabla("Doctor", tabla);
 				control = 1;
-
+				bDoctor.setForeground(Color.BLACK);
+				bAdmin.setForeground(blanquito);
+				txtBuscador.setText("");
 			}
 		});
+
 		// Accion boton Admin
 		bAdmin.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				cargarTabla("Admin", tabla);
 				control = 0;
-
+				bDoctor.setForeground(blanquito);
+				bAdmin.setForeground(Color.BLACK);
+				txtBuscador.setText("");
 			}
 		});
 
@@ -666,6 +728,100 @@ public class AdminUsers extends JFrame {
 		List<UserHibernate> userList = consulta.getResultList();
 		List<UserHibernate> admin = new ArrayList<UserHibernate>();
 		// preparacion de la tabla
+
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "DNI", "Nombre", "Apellido", "Especialidad" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		// este string entrará por parametro y sera elegido en función de si pulsa el
+		// boron Doctor o Administrador
+		if (nombreTabla.equalsIgnoreCase("Admin")) {
+
+			for (UserHibernate x : userList) {
+				// dentro de los admin solo puede tener una espcialidad, pero en el caso de que
+				// se le haya metido en varias ocasiones la especialidad admin tenemos en cuenta
+				// que pueda tener mas especialidades
+				if (x.getEspecialidad() != null) {
+					if (x.getEspecialidad().getId_especialidad() == 0) {
+						admin.add(x);
+					}
+				}
+			}
+			tablaDoctores.setModel(model);
+			JTableHeader header = tablaDoctores.getTableHeader();
+			if (admin.size() < 18) {
+				model.setRowCount(19);
+			} else {
+				model.setRowCount(admin.size());
+			}
+
+			int fila = 0;
+
+			for (UserHibernate y : admin) {
+				model.setValueAt(y.getDni(), fila, 0);
+				model.setValueAt(y.getNombre(), fila, 1);
+				model.setValueAt(y.getApellido(), fila, 2);
+				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
+				fila++;
+			}
+
+			// Se alinea el texto de las columnas
+			Renderer tcr = new Renderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			tablaDoctores.getColumnModel().getColumn(0).setCellRenderer(tcr);
+			tablaDoctores.setDefaultRenderer(Object.class, tcr);
+		} else {
+			for (UserHibernate x : userList) {
+				// los doctores tienen al menos una especialidad con posbilidad de tener mas y
+				// distintas de cero
+				if (x.getEspecialidad() != null) {
+
+					if (x.getEspecialidad().getId_especialidad() != 0) {
+						admin.add(x);
+					}
+				}
+
+			}
+			tablaDoctores.setModel(model);
+			if (admin.size() < 18) {
+				model.setRowCount(19);
+			} else {
+				model.setRowCount(admin.size());
+			}
+			JTableHeader header = tablaDoctores.getTableHeader();
+
+			int fila = 0;
+
+			for (UserHibernate y : admin) {
+				model.setValueAt(y.getDni(), fila, 0);
+				model.setValueAt(y.getNombre(), fila, 1);
+				model.setValueAt(y.getApellido(), fila, 2);
+				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
+				fila++;
+			}
+
+			// Se alinea el texto de las columnas
+			Renderer tcr = new Renderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			tablaDoctores.getColumnModel().getColumn(0).setCellRenderer(tcr);
+			tablaDoctores.setDefaultRenderer(Object.class, tcr);
+		}
+	}
+
+	// Método para hacer consulta en el buscador
+	public void loadSearchStock(String nombreTabla, JTable tablaDoctores, String busq) {
+		// Relaiza la consulta
+		this.miSesion = instancia.openSession();
+		String hql = "FROM UserHibernate where nombre like:busq or apellido like:busq or dni like:busq";
+		Query<UserHibernate> consulta = miSesion.createQuery(hql, UserHibernate.class);
+		consulta.setParameter("busq", "%" + busq + "%");
+
+		List<UserHibernate> userList = consulta.getResultList();
+		List<UserHibernate> admin = new ArrayList<UserHibernate>();
 
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
 				new String[] { "DNI", "Nombre", "Apellido", "Especialidad" }) {
