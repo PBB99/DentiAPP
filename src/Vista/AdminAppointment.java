@@ -6,6 +6,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -90,10 +91,10 @@ public class AdminAppointment extends JFrame {
 	private SessionFactory instancia;
 	private Session session;
 	private UserHibernate userHi;
-	
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
-	private Color azulito = new Color(148, 220, 219);
+	private Font metropolis;
 	/**
 	 * Launch the application.
 	 */
@@ -123,7 +124,15 @@ public class AdminAppointment extends JFrame {
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
-
+		//----FUENTE
+		try {
+			//crea la fuente
+			metropolis=Font.createFont(Font.TRUETYPE_FONT, new java.io.File("/Resources/fonts/metropolis.thin.otf"));
+			//la registra en el entorno grafico
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(metropolis);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		// -------------------- JFrame --------------------
 		this.parent = parent;
 		this.frame = this;
@@ -139,7 +148,7 @@ public class AdminAppointment extends JFrame {
 		// -------------------- Componentes --------------------
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
-		menuPane.setBackground(azulito);
+		menuPane.setBackground(new Color(148, 220, 219));
 		menuPane.setBounds(0, 0, 135, 1080);
 		contentPane.add(menuPane);
 		menuPane.setLayout(null);
@@ -214,12 +223,30 @@ public class AdminAppointment extends JFrame {
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
 		// Citas
-		JLabel lblCitas = new JLabel("Citas");
-		lblCitas.setBounds(250, 10, 150, 135);
-		lblCitas.setFont(new Font("Tahoma", Font.PLAIN, 60));
+		JPanel panelTitleAdmin = new JPanel();
+		panelTitleAdmin.setBounds(1, 2, 170, 90);
+		panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleAdmin.setOpaque(false);
+		panelTitleAdmin.setLayout(null);
+		
+		//rounded panel de fomdo para el nombre 
+		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
+		panelnombre.setBounds(136, 0, 150, 60);
+		panelnombre.setOpaque(false);
+		panelnombre.setLayout(null);
+		contentPane.add(panelnombre);
+		panelnombre.add(panelTitleAdmin);
+		String htmlString = "<html><body><sup>" 
+		+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
+		"</span></body></html>";
+		JLabel lblNAdmin = new JLabel(htmlString);
+		lblNAdmin.setToolTipText("Nombre & Apellido");
+		lblNAdmin.setBounds(10, 5, 150, 60);
+		lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
+		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas
-		JPanel panelCitas = new RoundedPanel(50, azulito);
+		JPanel panelCitas = new RoundedPanel(50, new Color(148, 220, 219));
 		panelCitas.setBounds(250, 202, 1050, 800);
 		panelCitas.setOpaque(false);
 		panelCitas.setLayout(null);
@@ -238,7 +265,7 @@ public class AdminAppointment extends JFrame {
 		JScrollPane menuTableStock = new JScrollPane();
 		menuTableStock.setBorder(BorderFactory.createEmptyBorder());
 		menuTableStock.setBounds(5, 20, 1011, 745);
-		menuTableStock.setBackground(azulito);
+		menuTableStock.setBackground(new Color(148, 220, 219));
 		panelTitleCitas.add(menuTableStock);
 		
 		// Tabla de citas
@@ -251,20 +278,19 @@ public class AdminAppointment extends JFrame {
 		table.setShowHorizontalLines(false);
 		table.setCellSelectionEnabled(true);
 		table.setBackground(new Color(240, 240, 240));
-		table.setSelectionBackground(azulito);
+		table.setSelectionBackground(new Color(148, 220, 219));
 		table.setShowGrid(false);
 		table.setBorder(null);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.setRowHeight(35);
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
-		table.getTableHeader().setBackground(azulito);
-		table.getTableHeader().setBorder(new LineBorder(azulito));
-		panelTitleCitas.add(table);
+		table.getTableHeader().setBackground(new Color(148, 220, 219));
+		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 		menuTableStock.add(table);
 		menuTableStock.setViewportView(table);
 		
 		// Panel para el calendario
-		JPanel panelCalendar = new RoundedPanel(null, 50, azulito);
+		JPanel panelCalendar = new RoundedPanel(null, 50, new Color(148, 220, 219));
 		panelCalendar.setBounds(1390, 202, 450, 350);
 		panelCalendar.setOpaque(false);
 		panelCalendar.setLayout(null);
@@ -295,7 +321,7 @@ public class AdminAppointment extends JFrame {
 		panelCalendar.add(calendarPanel);
 
 		// Panel para los doctores
-		JPanel panelDoctors = new RoundedPanel(50, azulito);
+		JPanel panelDoctors = new RoundedPanel(50, new Color(148, 220, 219));
 		panelDoctors.setBounds(1390, 580, 450, 420);
 		panelDoctors.setOpaque(false);
 		panelDoctors.setLayout(null);
@@ -319,7 +345,7 @@ public class AdminAppointment extends JFrame {
 
 		JPanel panelSCrollDoctors = new JPanel();
 		panelSCrollDoctors.setLayout(new GridLayout(0, 1, 0, 0));
-		panelSCrollDoctors.setBackground(azulito);
+		panelSCrollDoctors.setBackground(new Color(148, 220, 219));
 		scrollPane.setViewportView(panelSCrollDoctors);
 
 		// Cargar los doctores en el panel de doctores
@@ -524,7 +550,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		contentPane.add(menuBar);
-		contentPane.add(lblCitas);
+		//contentPane.add(lblNAdmin);
 
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
