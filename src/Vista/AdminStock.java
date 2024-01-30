@@ -1056,7 +1056,11 @@ public class AdminStock extends JFrame {
 		for (ProveedorHibernate proveedor : results) {
 			model.setValueAt(proveedor.getCif(), fila, columna);
 			model.setValueAt(proveedor.getNombre(), fila, columna + 1);
-			model.setValueAt(proveedor.getEstado(), fila, columna + 2);
+			if(proveedor.getEstado()==0) {
+				model.setValueAt("Inactivo", fila, columna + 2);
+			}else {
+				model.setValueAt("Activo", fila, columna + 2);
+			}
 			model.setValueAt(proveedor.getCorreo(), fila, columna + 3);
 			fila++;
 		}
