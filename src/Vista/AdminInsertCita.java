@@ -150,6 +150,33 @@ public class AdminInsertCita extends JDialog {
 		} catch (Exception e2) {
 			// TODO: handle exception
 		}
+		
+		Query<CitaHibernate> consultaCitaExiste = session.createQuery(
+				"FROM CitaHibernate where fecha=:fech and hora=:hora and usuarios_dni_usuario=:id",
+				CitaHibernate.class);
+		
+		java.sql.Date dia = new java.sql.Date(fecha.getTime());
+		consultaCitaExiste.setParameter("fech", dia);
+		consultaCitaExiste.setParameter("hora", hora);
+		consultaCitaExiste.setParameter("id", dniDoctor);
+		List<CitaHibernate> check = consultaCitaExiste.getResultList();
+		System.out.println("asdhijuasdiuhuhiadshuidashuihiuasdhuihudashuiasdhuihuiasdhuiasdhuihuiasdhuiashuiddhuiasdhui");
+		if(check.isEmpty() == false) {
+			System.out.println("asdhijuasdiuhuhiadshuidashuihiuasdhuihudashuiasdhuihuiasdhuiasdhuihuiasdhuiashuiddhuiasdhui");
+			for (int j = 0; j < allTratamientos.size(); j++) {
+				if(allTratamientos.get(j).getCodigo_tratamiento() == check.get(0).getTratamiento().getCodigo_tratamiento()) {
+					System.out.println("1");
+					cbTratamiento.setSelectedIndex(j);
+				}
+			}
+			for (int j = 0; j < allClientes.size(); j++) {
+				if(allClientes.get(j).getDni_cliente().equals(check.get(0).getCliente().getDni_cliente())) {
+					System.out.println("2");
+					cbPaciente.setSelectedIndex(j);
+				}
+			}
+			//cbTratamiento.setSelectedItem(check.get(0).getUser());
+		}
 
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
