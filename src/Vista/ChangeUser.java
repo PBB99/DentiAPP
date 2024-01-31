@@ -68,6 +68,10 @@ public class ChangeUser extends JDialog {
 		JLabel lblDNI = new JLabel("DNI:");
 		lblDNI.setBounds(30, 50, 200, 20);
 		lblDNI.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
+		JLabel lblEstado = new JLabel("Estado:");
+		lblEstado.setBounds(30, 350, 165, 30);
+		lblEstado.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		JComboBox cbDni = new JComboBox();
 		cbDni.setBounds(250, 50, 150, 25);
@@ -106,6 +110,10 @@ public class ChangeUser extends JDialog {
 		
 		JComboBox cbEspecialidad = new JComboBox();
 		cbEspecialidad.setBounds(250, 250, 150, 25);
+		
+		JComboBox cbEstado = new JComboBox();
+		cbEstado.setBounds(250, 357, 150, 22);
+		//condicion
 		
 		JLabel lblContraseña = new JLabel("Contraseña:");
 		lblContraseña.setBounds(30, 300, 200, 20);
@@ -175,7 +183,7 @@ public class ChangeUser extends JDialog {
 				String ape = tfApellido.getText();
 				String contra = tfContraseña.getText();
 				String especialidad = cbEspecialidad.getSelectedItem().toString();
-
+				
 				if (nom.isEmpty() || ape.isEmpty() || contra.isEmpty()
 						|| cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("")) {
 					JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos", "WARNING_MESSAGE",
@@ -191,6 +199,20 @@ public class ChangeUser extends JDialog {
 					usuario1.setApellido(ape);
 					usuario1.setContraseña(contra);
 					usuario1.setEspecialidad(especialidadO);
+					//condicion para dar de alta o baja
+					if(usuario1.getEstado()==0) {
+						if(cbEstado.getSelectedIndex()==0) {
+							usuario1.setEstado(0);
+						}else {
+							usuario1.setEstado(1);
+						}
+					}else {
+						if(cbEstado.getSelectedIndex()==0) {
+							usuario1.setEstado(1);
+						}else {
+							usuario1.setEstado(0);
+						}
+					}
 
 					miSesion.beginTransaction();
 
@@ -215,7 +237,7 @@ public class ChangeUser extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				cargarDatos(cbDni.getSelectedItem().toString(), miSesion, tfNombre, tfApellido, lEspeAct);
+				cargarDatos(cbDni.getSelectedItem().toString(), miSesion, tfNombre, tfApellido, lEspeAct,cbEstado);
 
 			}
 		});
@@ -235,11 +257,17 @@ public class ChangeUser extends JDialog {
 		contentPanel.add(cancelButton);
 		contentPanel.add(lEspeAct);
 		contentPanel.add(lNuevaEsp);
+		
+		
+		contentPanel.add(lblEstado);
+		
+		
+		contentPanel.add(cbEstado);
 
 	}
 
 	// método para poner los datos de las especialidades en los textField
-	public static void cargarDatos(String Dni, Session miSesion, JTextField nombre, JTextField apell, JLabel espeActu) {
+	public static void cargarDatos(String Dni, Session miSesion, JTextField nombre, JTextField apell, JLabel espeActu,JComboBox estado) {
 		String hql = "From UserHibernate where dni=:Dni";
 		Query<UserHibernate> consulta = miSesion.createQuery(hql, UserHibernate.class);
 		consulta.setParameter("Dni", Dni);
@@ -248,6 +276,13 @@ public class ChangeUser extends JDialog {
 		nombre.setText(u.getNombre());
 		apell.setText(u.getApellido());
 		espeActu.setText(u.getEspecialidad().getEspecialidad());
+		if(u.getEstado()==0) {
+			estado.addItem("Baja");
+			estado.addItem("Alta");
+		}else {
+			estado.addItem("Alta");
+			estado.addItem("Baja");
+		}
 
 	}
 }
