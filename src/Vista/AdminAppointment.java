@@ -131,7 +131,7 @@ public class AdminAppointment extends JFrame {
 		//----FUENTE
 		try {
 			//crea la fuente
-			metropolis=Font.createFont(Font.TRUETYPE_FONT, new java.io.File("/Resources/fonts/metropolis.thin.otf"));
+			metropolis=Font.createFont(Font.TRUETYPE_FONT, new java.io.File("/Resources/fonts/metropolis.thin.otf")).deriveFont(80f);
 			//la registra en el entorno grafico
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(metropolis);
 		}catch(Exception e) {
@@ -240,13 +240,14 @@ public class AdminAppointment extends JFrame {
 		panelnombre.setLayout(null);
 		contentPane.add(panelnombre);
 		panelnombre.add(panelTitleAdmin);
-		String htmlString = "<html><body><sup>" 
-		+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
-		"</span></body></html>";
+		String htmlString = "<html><body style='font_size:30px;'><pre>" 
+		+ userHi.getNombre().toUpperCase() 
+				+ "\n    " + userHi.getApellido().toUpperCase() + 
+		"</pre></body></html>";
 		JLabel lblNAdmin = new JLabel(htmlString);
 		lblNAdmin.setToolTipText("Nombre & Apellido");
 		lblNAdmin.setBounds(10, 5, 150, 60);
-		lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
+		lblNAdmin.setFont(metropolis);
 		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas
