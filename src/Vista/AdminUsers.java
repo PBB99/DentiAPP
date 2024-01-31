@@ -321,15 +321,15 @@ public class AdminUsers extends JFrame {
 		btnUpadate.setToolTipText("Modificar Producto");
 		panelTitleUsers.add(btnUpadate);
 
-		// añadir
-		JLabel lAdd = new JLabel();
-		lAdd.setText("Añadir");
-		lAdd.setBounds(1477, 205, 100, 20);
-
-		// Modificar
-		JLabel lMod = new JLabel();
-		lMod.setText("Modificar");
-		lMod.setBounds(1577, 205, 100, 20);
+//		// añadir
+//		JLabel lAdd = new JLabel();
+//		lAdd.setText("Añadir");
+//		lAdd.setBounds(1477, 205, 100, 20);
+//
+//		// Modificar
+//		JLabel lMod = new JLabel();
+//		lMod.setText("Modificar");
+//		lMod.setBounds(1577, 205, 100, 20);
 
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();

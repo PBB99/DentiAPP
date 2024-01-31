@@ -50,7 +50,7 @@ public class ChangeUser extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ChangeUser(SessionFactory instancia, JFrame parent, boolean modal) {
+	public ChangeUser(SessionFactory instancia, JFrame parent, boolean modal,UserHibernate userhi) {
 
 		this.instancia = instancia;
 		this.miSesion = instancia.openSession();
