@@ -9,19 +9,16 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -41,6 +38,7 @@ import Modelo.Speciality;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
+import Otros.RoundedPanel;
 import Vista.AdminStock.Renderer;
 
 import javax.swing.JButton;
@@ -74,6 +72,8 @@ public class AdminInsertCita extends JDialog {
 
 	private SessionFactory instancia;
 	private Session session;
+	private Font font = new Font("Dialog", Font.BOLD, 15);
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 
 	/**
 	 * Launch the application.
@@ -105,11 +105,11 @@ public class AdminInsertCita extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
 
-		JLabel lblDNI = new JLabel("Paciente");
-		lblDNI.setBounds(75, 55, 84, 14);
+		JLabel lblPac = new JLabel("Paciente");
+		lblPac.setBounds(75, 55, 84, 14);
 
-		JLabel lblContraseña = new JLabel("Tratamiento");
-		lblContraseña.setBounds(75, 310, 75, 14);
+		JLabel lblTrata = new JLabel("Tratamiento");
+		lblTrata.setBounds(75, 310, 75, 14);
 
 		JButton okButton = new JButton("OK");
 		okButton.setActionCommand("OK");
@@ -135,8 +135,7 @@ public class AdminInsertCita extends JDialog {
 //		}
 
 		JComboBox cbTratamiento = new JComboBox();
-		cbTratamiento.setBounds(75, 325, 129, 20);
-		contentPanel.add(cbTratamiento);
+		cbTratamiento.setBounds(150, 27, 105, 22);
 
 		Query<UserHibernate> consultaUsuarios = session.createQuery("FROM UserHibernate where dni=:dni",
 				UserHibernate.class);
@@ -154,7 +153,7 @@ public class AdminInsertCita extends JDialog {
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
 		table.setCellSelectionEnabled(true);
-		table.setBounds(75, 75, 300, 100);
+		table.setBounds(0, 0, 100, 100);
 		table.setBackground(new Color(250, 250, 250));
 		table.setSelectionBackground(new Color(148, 220, 219));
 		table.setShowGrid(false);
@@ -169,21 +168,34 @@ public class AdminInsertCita extends JDialog {
 	    table.setRowSelectionAllowed(true);
 		
 		loadTableClientes(table);
+		
+		JPanel panelTable = new RoundedPanel(null, 50, new Color(148, 220, 219));
+		panelTable.setBounds(10, 11, 414, 350);
+		panelTable.setOpaque(false);
+		panelTable.setLayout(null);
+		contentPanel.add(panelTable);
+
+		// Panel secundario para el calendario
+		JPanel panelTitleTable = new JPanel();
+		panelTitleTable.setBounds(15, 15, 389, 315);
+		panelTitleTable.setBorder(new TitledBorder(lb, "  Clientes  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleTable.setOpaque(false);
+		panelTable.add(panelTitleTable);
+		
+		JPanel panelTratamiento = new RoundedPanel(null, 50, new Color(148, 220, 219));
+		panelTratamiento.setBounds(10, 372, 414, 96);
+		panelTratamiento.setOpaque(false);
+		panelTratamiento.setLayout(null);
+		contentPanel.add(panelTratamiento);
+
+		// Panel secundario para el calendario
+		JPanel panelTitleTratamiento = new JPanel();
+		panelTitleTratamiento.setBounds(15, 15, 389, 70);
+		panelTitleTratamiento.setBorder(new TitledBorder(lb, "  Clientes  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleTratamiento.setOpaque(false);
+		panelTratamiento.add(panelTitleTratamiento);
 
 		// ------------------------------------------LOGICA-----------------------------------------------
-//		ResultSet resSet = null;
-//		try {// CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
-//
-//			resSet = conex.ejecutarSelect("Select * from especialidades");
-//			// conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido,
-//			// contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)",
-//			// cn);
-//			while (resSet.next()) {
-//				cbPaciente.addItem(resSet.getString("especialidad"));
-//			}
-//		} catch (Exception e2) {
-//			// TODO: handle exception
-//		}
 
 		// Comprobamos si el doctor tiene una cita en la fecha que se especifica
 		Query<CitaHibernate> consultaCitaExiste = session.createQuery(
@@ -216,7 +228,7 @@ public class AdminInsertCita extends JDialog {
 
 		JScrollPane menuClientes = new JScrollPane();
 		menuClientes.setBorder(BorderFactory.createEmptyBorder());
-		menuClientes.setBounds(75, 75, 300, 200);
+		menuClientes.setBounds(10, 21, 369, 283);
 		menuClientes.setBackground(new Color(148, 220, 219));
 
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -280,14 +292,18 @@ public class AdminInsertCita extends JDialog {
 			{// -------------------ADICIONES DE LOS COMPONENTES---------------
 				buttonPane.add(okButton);
 				buttonPane.add(cancelButton);
-				contentPanel.add(lblContraseña);
-				contentPanel.add(lblDNI);
+				contentPanel.add(lblPac);
+				contentPanel.add(lblTrata);
 			}
 		}
-		contentPanel.add(table);
-		contentPanel.add(menuClientes);
+		panelTitleTable.setLayout(null);
+		//contentPanel.add(table);
+		//contentPanel.add(menuClientes);
 		menuClientes.add(table);
 		menuClientes.setViewportView(table);
+		panelTitleTable.add(menuClientes);
+		panelTitleTratamiento.setLayout(null);
+		panelTitleTratamiento.add(cbTratamiento);
 
 	}
 
