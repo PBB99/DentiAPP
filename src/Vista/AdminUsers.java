@@ -723,14 +723,15 @@ public class AdminUsers extends JFrame {
 					// Cambios en la selección
 					tabla.setColumnSelectionAllowed(true);
 					tabla.setCellSelectionEnabled(true);
-					if (tabla.getSelectedRow() != 0) {
-						// selección del tratamiento
+					
+						// selección del usuario
 							 dni=tabla.getValueAt(tabla.getSelectedRow(),0).toString();
+							 //para evitar excepcion y controlar cuando se selecciona una fila vacia
+							 if(dni.equals("")) {
+								 dni=null;
+							 }
 							
-					} else {
-						dni = null;
-					}
-
+					
 				}
 			}
 			

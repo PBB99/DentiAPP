@@ -26,6 +26,16 @@ public class PedidosHibernate implements Serializable{
 		this.estado = estado;
 	}
 
-	
+	@ManyToOne
+    @JoinColumn(name = "usuarios_dni_usuario")
+    private UserHibernate usuario_pedido; //Este atributo va a @OneToMany en Cliente
+
+    public UserHibernate getUser() {
+        return usuario_pedido;
+    }
+
+    public void setUser(UserHibernate usuario_pedido) {
+        this.usuario_pedido = usuario_pedido;
+    }	
 	
 }
