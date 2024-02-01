@@ -213,7 +213,7 @@ public class AdminStock extends JFrame {
 		menuPane.setBounds(0, 0, 135, 1080);
 		menuPane.setLayout(null);
 		contentPane.add(menuPane);
-		
+
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -256,40 +256,41 @@ public class AdminStock extends JFrame {
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
 		// Inventario
-		// Panel del Menú
-		JPanel menuStock = new JPanel();
-		menuStock.setBackground(new Color(148, 220, 219));
-		menuStock.setBounds(300, 270, 600, 705);
-		menuStock.setLayout(null);
-		//contentPane.add(menuStock);
-		
+
 		// Panel fondo de stock
 		JPanel panelBackStock = new RoundedPanel(50, azulito);
-		panelBackStock.setBounds(270, 240, 630, 705);
+		panelBackStock.setBounds(230, 200, 660, 785);
 		panelBackStock.setOpaque(false);
 		panelBackStock.setLayout(null);
 		contentPane.add(panelBackStock);
 
 		// Panel titulo de stock
 		JPanel panelTitleStock = new JPanel();
-		panelTitleStock.setBounds(15, 15, 1355, 770);
-		panelTitleStock
-				.setBorder(new TitledBorder(lb, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleStock.setBounds(25, 15, 610, 745);
+		panelTitleStock.setBorder(new TitledBorder(lb, "  Inventario  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+				new Color(51, 51, 51)));
 		panelTitleStock.setOpaque(false);
 		panelTitleStock.setLayout(null);
 		panelBackStock.add(panelTitleStock);
 
+		// Panel del Menú
+		JPanel menuStock = new JPanel();
+		menuStock.setBackground(new Color(148, 220, 219));
+		menuStock.setBounds(30, 50, 600, 705);
+		menuStock.setLayout(null);
+		panelBackStock.add(menuStock);
+
 		// Lupa
 		JLabel jlLupaInventario = new JLabel();
 		jlLupaInventario.setBackground(new Color(148, 220, 219));
-		jlLupaInventario.setBounds(5, 0, 40, 30);
+		jlLupaInventario.setBounds(20, -5, 40, 30);
 		jlLupaInventario.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
 		menuStock.add(jlLupaInventario);
 
 		// Buscador
 		JTextField txtInventario = new JTextField();
 		txtInventario.setBorder(new LineBorder(new Color(148, 220, 219)));
-		txtInventario.setBounds(45, 5, 200, 25);
+		txtInventario.setBounds(65, 0, 200, 25);
 		txtInventario.setBackground(new Color(255, 255, 255));
 		txtInventario.setToolTipText("Buscador");
 		menuStock.add(txtInventario);
@@ -297,7 +298,7 @@ public class AdminStock extends JFrame {
 		// Botón de insertar producto
 		JButton btnInsertProduct = new JButton();
 		btnInsertProduct.setBackground(new Color(148, 220, 219));
-		btnInsertProduct.setBounds(520, 0, 40, 30);
+		btnInsertProduct.setBounds(520, -5, 40, 30);
 		btnInsertProduct.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertProduct.setBorderPainted(false);
 		btnInsertProduct.setToolTipText("Insertar Producto");
@@ -306,7 +307,7 @@ public class AdminStock extends JFrame {
 		// Botón de modificar producto
 		JButton btnUpadateProduct = new JButton();
 		btnUpadateProduct.setBackground(new Color(148, 220, 219));
-		btnUpadateProduct.setBounds(560, 0, 40, 30);
+		btnUpadateProduct.setBounds(560, -5, 40, 30);
 		btnUpadateProduct.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		btnUpadateProduct.setBorderPainted(false);
 		btnUpadateProduct.setToolTipText("Modificar Producto");
@@ -336,26 +337,42 @@ public class AdminStock extends JFrame {
 		tableStock.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 		menuTableStock.add(tableStock);
 		menuTableStock.setViewportView(tableStock);
-		
+
 		// Proveedores
+		// Panel fondo de Proveedores
+		JPanel panelBackUser = new RoundedPanel(50, azulito);
+		panelBackUser.setBounds(970, 200, 860, 785);
+		panelBackUser.setOpaque(false);
+		panelBackUser.setLayout(null);
+		contentPane.add(panelBackUser);
+
+		// Panel titulo de Proveedores
+		JPanel panelTitleUsers = new JPanel();
+		panelTitleUsers.setBounds(25, 15, 810, 745);
+		panelTitleUsers.setBorder(new TitledBorder(lb, "  Proveedores  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+				new Color(51, 51, 51)));
+		panelTitleUsers.setOpaque(false);
+		panelTitleUsers.setLayout(null);
+		panelBackUser.add(panelTitleUsers);
+
 		// Panel del Menú
 		JPanel menuProovedores = new JPanel();
 		menuProovedores.setBackground(new Color(148, 220, 219));
-		menuProovedores.setBounds(1000, 270, 800, 705);
+		menuProovedores.setBounds(30, 50, 800, 705);
 		menuProovedores.setLayout(null);
-		//contentPane.add(menuProovedores);
-		
+		panelBackUser.add(menuProovedores);
+
 		// Lupa
 		JLabel jlLupaProveedores = new JLabel();
 		jlLupaProveedores.setBackground(new Color(148, 220, 219));
-		jlLupaProveedores.setBounds(5, 0, 40, 30);
+		jlLupaProveedores.setBounds(5, -5, 40, 30);
 		jlLupaProveedores.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
 		menuProovedores.add(jlLupaProveedores);
 
 		// Buscador
 		JTextField txtProveedores = new JTextField();
 		txtProveedores.setBorder(new LineBorder(new Color(148, 220, 219)));
-		txtProveedores.setBounds(45, 5, 200, 25);
+		txtProveedores.setBounds(45, 0, 200, 25);
 		txtProveedores.setBackground(new Color(255, 255, 255));
 		txtProveedores.setToolTipText("Buscador");
 		menuProovedores.add(txtProveedores);
@@ -363,16 +380,16 @@ public class AdminStock extends JFrame {
 		// Botón de insertar proveedor
 		JButton btnInsertProveedor = new JButton();
 		btnInsertProveedor.setBackground(new Color(148, 220, 219));
-		btnInsertProveedor.setBounds(720, 0, 40, 30);
+		btnInsertProveedor.setBounds(720, -5, 40, 30);
 		btnInsertProveedor.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertProveedor.setBorderPainted(false);
 		btnInsertProveedor.setToolTipText("Insertar Producto");
 		menuProovedores.add(btnInsertProveedor);
-		
+
 		// Botón de modificar proveedor
 		JButton btnUpadateProveedor = new JButton();
 		btnUpadateProveedor.setBackground(new Color(148, 220, 219));
-		btnUpadateProveedor.setBounds(760, 0, 40, 30);
+		btnUpadateProveedor.setBounds(760, -5, 40, 30);
 		btnUpadateProveedor.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		btnUpadateProveedor.setBorderPainted(false);
 		btnUpadateProveedor.setToolTipText("Modificar Producto");
@@ -383,7 +400,7 @@ public class AdminStock extends JFrame {
 		menuTableProveedor.setBorder(BorderFactory.createEmptyBorder());
 		menuTableProveedor.setBounds(0, 30, 800, 675);
 		menuTableProveedor.setBackground(new Color(148, 220, 219));
-		//menuProovedores.add(menuTableProveedor);
+		menuProovedores.add(menuTableProveedor);
 
 		// Tabla
 		tableProveedor = new JTable();
@@ -402,7 +419,7 @@ public class AdminStock extends JFrame {
 		tableProveedor.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 		menuTableProveedor.add(tableProveedor);
 		menuTableProveedor.setViewportView(tableProveedor);
-		
+
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
@@ -656,6 +673,25 @@ public class AdminStock extends JFrame {
 
 					}
 				});
+			}
+		});
+
+		// Acción de buscar en la tabla
+		txtProveedores.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				loadSearchProveedor(tableProveedor, txtProveedores.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
 			}
 		});
 
@@ -955,8 +991,8 @@ public class AdminStock extends JFrame {
 		};
 		table.setModel(model);
 		JTableHeader header = table.getTableHeader();
-		if (results.size() < 19) {
-			model.setRowCount(18);
+		if (results.size() < 20) {
+			model.setRowCount(19);
 		} else {
 			model.setRowCount(results.size());
 		}
@@ -1009,8 +1045,8 @@ public class AdminStock extends JFrame {
 		};
 		tableStock.setModel(model);
 		JTableHeader header = tableStock.getTableHeader();
-		if (results.size() < 19) {
-			model.setRowCount(18);
+		if (results.size() < 20) {
+			model.setRowCount(19);
 		} else {
 			model.setRowCount(results.size());
 		}
@@ -1054,8 +1090,8 @@ public class AdminStock extends JFrame {
 		};
 		table.setModel(model);
 		JTableHeader header = table.getTableHeader();
-		if (results.size() < 19) {
-			model.setRowCount(18);
+		if (results.size() < 20) {
+			model.setRowCount(19);
 		} else {
 			model.setRowCount(results.size());
 		}
@@ -1087,11 +1123,11 @@ public class AdminStock extends JFrame {
 
 	}
 
-	// Método para hacer consulta en el buscador
+	// Método para hacer consulta en el buscador de proveedor
 	public void loadSearchProveedor(JTable tabla, String busq) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
-		String hql = "FROM ProveedorHibernate where nombre like :busq";
+		String hql = "FROM ProveedorHibernate where nombre like :busq or cif like :busq or correo like :busq";
 		Query<ProveedorHibernate> consulta = session.createQuery(hql, ProveedorHibernate.class);
 		consulta.setParameter("busq", "%" + busq + "%");
 
@@ -1109,8 +1145,8 @@ public class AdminStock extends JFrame {
 		};
 		tabla.setModel(model);
 		JTableHeader header = tabla.getTableHeader();
-		if (results.size() < 19) {
-			model.setRowCount(18);
+		if (results.size() < 20) {
+			model.setRowCount(19);
 		} else {
 			model.setRowCount(results.size());
 		}

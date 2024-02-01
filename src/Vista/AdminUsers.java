@@ -596,9 +596,9 @@ public class AdminUsers extends JFrame {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (control == 0) {
-					loadSearchStock("admin", tabla, txtBuscador.getText());
+					loadSearchUser("admin", tabla, txtBuscador.getText());
 				} else {
-					loadSearchStock("doctor", tabla, txtBuscador.getText());
+					loadSearchUser("doctor", tabla, txtBuscador.getText());
 				}
 			}
 
@@ -781,8 +781,8 @@ public class AdminUsers extends JFrame {
 			}
 			tablaDoctores.setModel(model);
 			JTableHeader header = tablaDoctores.getTableHeader();
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
@@ -820,8 +820,8 @@ public class AdminUsers extends JFrame {
 
 			}
 			tablaDoctores.setModel(model);
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
@@ -846,7 +846,7 @@ public class AdminUsers extends JFrame {
 	}
 
 	// Método para hacer consulta en el buscador
-	public void loadSearchStock(String nombreTabla, JTable tablaDoctores, String busq) {
+	public void loadSearchUser(String nombreTabla, JTable tablaDoctores, String busq) {
 		// Relaiza la consulta
 		this.miSesion = instancia.openSession();
 		String hql = "FROM UserHibernate where nombre like:busq or apellido like:busq or dni like:busq";
@@ -880,8 +880,8 @@ public class AdminUsers extends JFrame {
 			}
 			tablaDoctores.setModel(model);
 			JTableHeader header = tablaDoctores.getTableHeader();
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
@@ -914,8 +914,8 @@ public class AdminUsers extends JFrame {
 
 			}
 			tablaDoctores.setModel(model);
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
