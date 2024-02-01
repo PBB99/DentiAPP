@@ -313,7 +313,7 @@ public class AdminAppointment extends JFrame {
 
 		// Panel para los doctores
 		JPanel panelDoctors = new RoundedPanel(50, new Color(148, 220, 219));
-		panelDoctors.setBounds(1390, 580, 450, 420);
+		panelDoctors.setBounds(1390, 602, 450, 420);
 		panelDoctors.setOpaque(false);
 		panelDoctors.setLayout(null);
 		contentPane.add(panelDoctors);
@@ -650,7 +650,7 @@ public class AdminAppointment extends JFrame {
 			public void actualizarTabla() {
 				for (int j = 0; j < table.getModel().getRowCount(); j++) {
 					table.getModel().setValueAt("", j, 1);
-					table.getModel().setValueAt("bbbbb", j, 2);
+					table.getModel().setValueAt("", j, 2);
 				}
 				session = instancia.openSession();
 				Query<CitaHibernate> consultaCitas = session
