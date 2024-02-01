@@ -208,7 +208,7 @@ public class AdminInsertCita extends JDialog {
 			}
 			for (int j = 0; j < allClientes.size(); j++) {
 				if (allClientes.get(j).getDni_cliente().equals(check.get(0).getCliente().getDni_cliente())) {
-					table.setRowSelectionInterval(j, j);
+					table.setRowSelectionInterval(j	, j);
 					System.out.println("dasguhuiodasguidasguguasdugidsagigiasdggaisduksdabasdvuyhijdsayuvfsadhjdyasivhkjsdyuvhasdjasdyusjhadusyadvj5h");
 				}
 			}
