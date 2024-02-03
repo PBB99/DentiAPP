@@ -50,11 +50,9 @@ public class DUpdateTratamiento extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DUpdateTratamiento(SessionFactory instancia, TreatmentsHibernate th) {
-		this.instancia = instancia;
-		this.session = instancia.openSession();
+	public DUpdateTratamiento(TreatmentsHibernate th, SessionFactory instancia) {
 		this.th = th;
-
+		this.instancia = instancia;
 		
 		// -------------------- JDialog --------------------
 		setLocationRelativeTo(null);
@@ -163,7 +161,6 @@ public class DUpdateTratamiento extends JDialog {
 
 					// Cerramos
 					dispose();
-					session.close();
 				}
 			}
 		});
@@ -195,5 +192,15 @@ public class DUpdateTratamiento extends JDialog {
 	// Poner un precio al tratamiento
 	public void setTextPrice(int price) {
 		tfPrice.setText(String.valueOf(price));
+	}
+	
+	//Sesión
+	
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
 	}
 }
