@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -29,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -72,7 +74,13 @@ public class AdminClinic extends JFrame {
 	private JTable tableTreatments;
 	private TreatmentsHibernate th;
 	private SpecialityHibernate sh;
+
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
+	private Font font = new Font("Dialog", Font.BOLD, 15);
+	private Color azulito = new Color(148, 220, 219);
+	private Color blanquito = new Color(240, 240, 240);
+
 	/**
 	 * Launch the application.
 	 */
@@ -114,31 +122,30 @@ public class AdminClinic extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
-		//nombre
+		// nombre
 		// Citas
-				JPanel panelTitleAdmin = new JPanel();
-				panelTitleAdmin.setBounds(1, 2, 170, 90);
-				panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
-				panelTitleAdmin.setOpaque(false);
-				panelTitleAdmin.setLayout(null);
-				
-				//rounded panel de fomdo para el nombre 
-				JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
-				panelnombre.setBounds(136, 0, 150, 60);
-				panelnombre.setOpaque(false);
-				panelnombre.setLayout(null);
-				contentPane.add(panelnombre);
-				panelnombre.add(panelTitleAdmin);
-				String htmlString = "<html><body><sup>" 
-				+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
-				"</span></body></html>";
-				JLabel lblNAdmin = new JLabel(htmlString);
-				lblNAdmin.setToolTipText("Nombre & Apellido");
-				lblNAdmin.setBounds(10, 5, 150, 60);
-				lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
-				panelTitleAdmin.add(lblNAdmin);
-		//menubar
-		
+		JPanel panelTitleAdmin = new JPanel();
+		panelTitleAdmin.setBounds(1, 2, 170, 90);
+		panelTitleAdmin
+				.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
+		panelTitleAdmin.setOpaque(false);
+		panelTitleAdmin.setLayout(null);
+
+		// rounded panel de fomdo para el nombre
+		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
+		panelnombre.setBounds(136, 0, 150, 60);
+		panelnombre.setOpaque(false);
+		panelnombre.setLayout(null);
+		contentPane.add(panelnombre);
+		panelnombre.add(panelTitleAdmin);
+		String htmlString = "<html><body><sup>" + userHi.getNombre() + "</sup><span>" + userHi.getApellido()
+				+ "</span></body></html>";
+		JLabel lblNAdmin = new JLabel(htmlString);
+		lblNAdmin.setToolTipText("Nombre & Apellido");
+		lblNAdmin.setBounds(10, 5, 150, 60);
+		lblNAdmin.setFont(new Font("metropolis", Font.PLAIN, 20));
+		panelTitleAdmin.add(lblNAdmin);
+		// menubar
 
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
@@ -148,54 +155,52 @@ public class AdminClinic extends JFrame {
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
-		
+
 		// item
 		JMenu mnNewMenu = new JMenu(userHi.getDni());
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/definitiva.png")));
 		mnNewMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		mnNewMenu.setOpaque(false);
-		mnNewMenu.setBackground(new Color(0,0,0,0));
+		mnNewMenu.setBackground(new Color(0, 0, 0, 0));
 		mnNewMenu.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(false);
-				mnNewMenu.setBackground(new Color(0,0,0,0));
-				
+				mnNewMenu.setBackground(new Color(0, 0, 0, 0));
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(true);
 				mnNewMenu.setBackground(Color.LIGHT_GRAY);
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 
-				
 			}
 		});
-		
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem(userHi.getNombre());
-		//ItemName.setText(userHi.getNombre());
+		// ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
@@ -204,7 +209,7 @@ public class AdminClinic extends JFrame {
 		// item cerrar sesion
 		JMenuItem ItemOut = new JMenuItem("Cerrar Sesión");
 		ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-		
+
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
 		menuPane.setBackground(new Color(148, 220, 219));
@@ -222,25 +227,25 @@ public class AdminClinic extends JFrame {
 				new ImageIcon(getClass().getResource("/Resources/images/calendarGrey.png")));
 		btnAppointment.setToolTipText("Módulo de citas (Alt+C)");
 		btnAppointment.setMnemonic(KeyEvent.VK_C);
-		
+
 		// Botón de usuarios
 		ButtonDentiApp btnUsers = new ButtonDentiApp(0, 270, false,
 				new ImageIcon(getClass().getResource("/Resources/images/usersGrey.png")));
 		btnUsers.setToolTipText("Módulo de Usuarios (Alt+U)");
 		btnUsers.setMnemonic(KeyEvent.VK_U);
-		
+
 		// Botón de Pacientes
 		ButtonDentiApp btnCustomers = new ButtonDentiApp(0, 405, false,
 				new ImageIcon(getClass().getResource("/Resources/images/customersGrey.png")));
 		btnCustomers.setToolTipText("Módulo de pacientes (Alt+P)");
 		btnCustomers.setMnemonic(KeyEvent.VK_P);
-		
+
 		// Botón de Inventario
 		ButtonDentiApp btnStock = new ButtonDentiApp(0, 540, false,
 				new ImageIcon(getClass().getResource("/Resources/images/stockGrey.png")));
 		btnStock.setToolTipText("Módulo de materiales (Alt+I)");
 		btnStock.setMnemonic(KeyEvent.VK_I);
-		
+
 		// Botón de Tratamientos y Especialidades
 		ButtonDentiApp btnClinic = new ButtonDentiApp(0, 675, true,
 				new ImageIcon(getClass().getResource("/Resources/images/clinic.png")));
@@ -252,39 +257,60 @@ public class AdminClinic extends JFrame {
 		btnPayments.setToolTipText("Módulo Económico (Alt+E)");
 		btnPayments.setMnemonic(KeyEvent.VK_E);
 
+		// Especialidades
+		// Panel fondo de especialidad
+		JPanel panelBackSpeciality = new RoundedPanel(50, azulito);
+		panelBackSpeciality.setBounds(335, 202, 560, 775);
+		panelBackSpeciality.setOpaque(false);
+		panelBackSpeciality.setLayout(null);
+		contentPane.add(panelBackSpeciality);
+
+		// Panel titulo de especialidad
+		JPanel panelTitleSpeciality = new JPanel();
+		panelTitleSpeciality.setBounds(25, 15, 510, 735);
+		panelTitleSpeciality.setBorder(new TitledBorder(lb, "  Especialidades  ", TitledBorder.LEFT, TitledBorder.TOP,
+				font, new Color(51, 51, 51)));
+		panelTitleSpeciality.setOpaque(false);
+		panelTitleSpeciality.setLayout(null);
+		panelBackSpeciality.add(panelTitleSpeciality);
+
 		// Botón de insertar especialidad
 		JButton btnInsertSpeciality = new JButton();
 		btnInsertSpeciality.setBackground(new Color(148, 220, 219));
-		btnInsertSpeciality.setBounds(838, 240, 40, 30);
+		btnInsertSpeciality.setBounds(425, 25, 40, 30);
 		btnInsertSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertSpeciality.setBorderPainted(false);
-
-		// Botón de insertar tratamiento
-		JButton btnInsertTreatment = new JButton();
-		btnInsertTreatment.setBackground(new Color(148, 220, 219));
-		btnInsertTreatment.setBounds(1557, 240, 40, 30);
-		btnInsertTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
-		btnInsertTreatment.setBorderPainted(false);
+		panelTitleSpeciality.add(btnInsertSpeciality);
 
 		// Botón de modificar especialidad
 		JButton btnUpadateSpeciality = new JButton();
 		btnUpadateSpeciality.setBackground(new Color(148, 220, 219));
-		btnUpadateSpeciality.setBounds(878, 240, 40, 30);
+		btnUpadateSpeciality.setBounds(465, 25, 40, 30);
 		btnUpadateSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		btnUpadateSpeciality.setBorderPainted(false);
+		panelTitleSpeciality.add(btnUpadateSpeciality);
 
-		// Botón de modificar tratamiento
-		JButton btnUpadateTreatment = new JButton();
-		btnUpadateTreatment.setBackground(new Color(148, 220, 219));
-		btnUpadateTreatment.setBounds(1597, 240, 40, 30);
-		btnUpadateTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
-		btnUpadateTreatment.setBorderPainted(false);
+		// Lupa
+		JLabel jlLupaSpeciality = new JLabel();
+		jlLupaSpeciality.setBackground(azulito);
+		jlLupaSpeciality.setBounds(20, 25, 40, 30);
+		jlLupaSpeciality.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		panelTitleSpeciality.add(jlLupaSpeciality);
+
+		// Buscador
+		JTextField txtBuscadorSpeciality = new JTextField();
+		txtBuscadorSpeciality.setBorder(new LineBorder(azulito));
+		txtBuscadorSpeciality.setBounds(60, 28, 200, 25);
+		txtBuscadorSpeciality.setBackground(new Color(255, 255, 255));
+		txtBuscadorSpeciality.setToolTipText("Buscador");
+		panelTitleSpeciality.add(txtBuscadorSpeciality);
 
 		// ScrollPane para cargar la talbla
 		JScrollPane menuSpecialities = new JScrollPane();
 		menuSpecialities.setBorder(BorderFactory.createEmptyBorder());
-		menuSpecialities.setBounds(418, 270, 500, 675);
+		menuSpecialities.setBounds(30, 70, 500, 675);
 		menuSpecialities.setBackground(new Color(148, 220, 219));
+		panelBackSpeciality.add(menuSpecialities);
 
 		// Tabla
 		tableSpeciality = new JTable();
@@ -301,12 +327,63 @@ public class AdminClinic extends JFrame {
 		tableSpeciality.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tableSpeciality.getTableHeader().setBackground(new Color(148, 220, 219));
 		tableSpeciality.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		menuSpecialities.add(tableSpeciality);
+		menuSpecialities.setViewportView(tableSpeciality);
+
+		// Tratamientos
+		// Panel fondo de Tratamientos
+		JPanel panelBackTreatment = new RoundedPanel(50, azulito);
+		panelBackTreatment.setBounds(1000, 202, 560, 775);
+		panelBackTreatment.setOpaque(false);
+		panelBackTreatment.setLayout(null);
+		contentPane.add(panelBackTreatment);
+
+		// Panel titulo de tratamientos
+		JPanel panelTitleTreatment = new JPanel();
+		panelTitleTreatment.setBounds(25, 15, 510, 735);
+		panelTitleTreatment.setBorder(new TitledBorder(lb, "  Tratamientos  ", TitledBorder.LEFT, TitledBorder.TOP,
+				font, new Color(51, 51, 51)));
+		panelTitleTreatment.setOpaque(false);
+		panelTitleTreatment.setLayout(null);
+		panelBackTreatment.add(panelTitleTreatment);
+
+		// Lupa
+		JLabel jlLupaTreatments = new JLabel();
+		jlLupaTreatments.setBackground(azulito);
+		jlLupaTreatments.setBounds(20, 25, 40, 30);
+		jlLupaTreatments.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		panelTitleTreatment.add(jlLupaTreatments);
+
+		// Buscador
+		JTextField txtBuscadorTreatments = new JTextField();
+		txtBuscadorTreatments.setBorder(new LineBorder(azulito));
+		txtBuscadorTreatments.setBounds(60, 28, 200, 25);
+		txtBuscadorTreatments.setBackground(new Color(255, 255, 255));
+		txtBuscadorTreatments.setToolTipText("Buscador");
+		panelTitleTreatment.add(txtBuscadorTreatments);
+
+		// Botón de insertar tratamiento
+		JButton btnInsertTreatment = new JButton();
+		btnInsertTreatment.setBackground(new Color(148, 220, 219));
+		btnInsertTreatment.setBounds(425, 25, 40, 30);
+		btnInsertTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
+		btnInsertTreatment.setBorderPainted(false);
+		panelTitleTreatment.add(btnInsertTreatment);
+
+		// Botón de modificar tratamiento
+		JButton btnUpadateTreatment = new JButton();
+		btnUpadateTreatment.setBackground(new Color(148, 220, 219));
+		btnUpadateTreatment.setBounds(465, 25, 40, 30);
+		btnUpadateTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
+		btnUpadateTreatment.setBorderPainted(false);
+		panelTitleTreatment.add(btnUpadateTreatment);
 
 		// Panel de tratamientos
 		JScrollPane menuTreatments = new JScrollPane();
-		menuTreatments.setBounds(1137, 270, 500, 675);
+		menuTreatments.setBounds(30, 70, 500, 675);
 		menuTreatments.setBorder(BorderFactory.createEmptyBorder());
 		menuTreatments.setBackground(new Color(148, 220, 219));
+		panelBackTreatment.add(menuTreatments);
 
 		// Tabla de tratamientos
 		tableTreatments = new JTable();
@@ -323,6 +400,8 @@ public class AdminClinic extends JFrame {
 		tableTreatments.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tableTreatments.getTableHeader().setBackground(new Color(148, 220, 219));
 		tableTreatments.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		menuTreatments.add(tableTreatments);
+		menuTreatments.setViewportView(tableTreatments);
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
@@ -443,7 +522,7 @@ public class AdminClinic extends JFrame {
 
 					// result es un objeto de especialidad con todos los campos
 					SpecialityHibernate result = consulta.getSingleResult();
-					
+
 					// Carga los resultados
 					loadTreatments(tableTreatments, result);
 				}
@@ -501,8 +580,33 @@ public class AdminClinic extends JFrame {
 
 					// Recarga la tabla
 					loadSpecialities(tableSpeciality);
+					if (!txtBuscadorSpeciality.getText().isBlank()) {
+						loadSearchSpecialities(tableSpeciality, txtBuscadorSpeciality.getText());
+					} else {
+						// Recargamos la tabla
+						loadSpecialities(tableSpeciality);
+					}
 
 				}
+			}
+		});
+
+		// Acción de buscar en la tabla
+		txtBuscadorSpeciality.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				loadSearchSpecialities(tableSpeciality, txtBuscadorSpeciality.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
 			}
 		});
 
@@ -709,44 +813,38 @@ public class AdminClinic extends JFrame {
 				}
 			}
 		});
-		
+
 		// logica click item salir
-				ItemOut.addActionListener(new ActionListener() {
+		ItemOut.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("funciona");
-						Login login = new Login(frame);
-						login.setVisible(true);
-						session.close();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("funciona");
+				Login login = new Login(frame);
+				login.setVisible(true);
+				session.close();
 
-					}
-				});
+			}
+		});
 
-				// logica click cambiar contraseña
-				ItemPass.addActionListener(new ActionListener() {
+		// logica click cambiar contraseña
+		ItemPass.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						DChangePass cP = new DChangePass(userHi);
-						cP.setVisible(true);
-						cP.setModal(true);
-						System.out.println("PINCHADO");
-						session.close();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DChangePass cP = new DChangePass(userHi);
+				cP.setVisible(true);
+				cP.setModal(true);
+				System.out.println("PINCHADO");
+				session.close();
 
-					}
-				});
+			}
+		});
 
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
-		contentPane.add(menuSpecialities);
-		contentPane.add(menuTreatments);
-		contentPane.add(btnInsertSpeciality);
-		contentPane.add(btnInsertTreatment);
-		contentPane.add(btnUpadateSpeciality);
-		contentPane.add(btnUpadateTreatment);
 
 		contentPane.add(menuBar);
 		menuBar.add(mnNewMenu);
@@ -761,10 +859,6 @@ public class AdminClinic extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-		menuSpecialities.add(tableSpeciality);
-		menuTreatments.add(tableTreatments);
-		menuTreatments.setViewportView(tableTreatments);
-		menuSpecialities.setViewportView(tableSpeciality);
 	}
 
 	// -------------------- Métodos y funciones --------------------
@@ -775,10 +869,10 @@ public class AdminClinic extends JFrame {
 
 		// Guarda los datos en una lista
 		List<SpecialityHibernate> results = consulta.getResultList();
-		
-		//Eliminamos la especialidad de Administrador
+
+		// Eliminamos la especialidad de Administrador
 		results.remove(0);
-		
+
 		// Prepara la tabla
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Especialidad" }) {
 			@Override
@@ -789,9 +883,61 @@ public class AdminClinic extends JFrame {
 		};
 		tableSpeciality.setModel(model);
 		JTableHeader header = tableSpeciality.getTableHeader();
-		if(results.size()<19) {
-			model.setRowCount(18);
-		}else {
+		if (results.size() < 20) {
+			model.setRowCount(19);
+		} else {
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (SpecialityHibernate especialidad : results) {
+			model.setValueAt(especialidad.getEspecialidad(), fila, columna);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tableSpeciality.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tableSpeciality.setDefaultRenderer(Object.class, tcr);
+
+		// Guarda el último id de las especialidades
+		if (!results.isEmpty()) {
+			lastIdSpeciality = results.getLast().getId_especialidad();
+		} else {
+			lastIdSpeciality = 0;
+		}
+
+	}
+
+	public void loadSearchSpecialities(JTable tableSpeciality, String busq) {
+		// Relaiza la consulta
+		String hql = "FROM SpecialityHibernate where especialidad like:busq";
+		Query<SpecialityHibernate> consulta = session.createQuery(hql, SpecialityHibernate.class);
+		consulta.setParameter("busq", "%" + busq + "%");
+
+		// Guarda los datos en una lista
+		List<SpecialityHibernate> results = consulta.getResultList();
+
+		// Eliminamos la especialidad de Administrador
+		if (results.get(0).getEspecialidad().equalsIgnoreCase("administrador")) {
+			results.remove(0);
+		}
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Especialidad" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tableSpeciality.setModel(model);
+		JTableHeader header = tableSpeciality.getTableHeader();
+		if (results.size() < 20) {
+			model.setRowCount(19);
+		} else {
 			model.setRowCount(results.size());
 		}
 		int fila = 0, columna = 0;
@@ -830,10 +976,15 @@ public class AdminClinic extends JFrame {
 				}
 			};
 			tableTreatments.setModel(model);
-			model.setRowCount(18);
+			model.setRowCount(19);
 			JTableHeader header = tableTreatments.getTableHeader();
 			Renderer tcr2 = new Renderer();
 			tableTreatments.setDefaultRenderer(Object.class, tcr2);
+			
+			int[] anchos = { 400, 100};
+			for (int i = 0; i < 2; i++) {
+				tableTreatments.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+			}
 		} else {
 			// Busca en la tabla los tratamientos cuyo atributo objeto especialidad es igual
 			// al que sacamos de la consulta anterior
@@ -856,9 +1007,9 @@ public class AdminClinic extends JFrame {
 			};
 			tableTreatments.setModel(model);
 			JTableHeader header = tableTreatments.getTableHeader();
-			if(results.size()<19) {
-				model.setRowCount(18);
-			}else {
+			if (results.size() < 20) {
+				model.setRowCount(19);
+			} else {
 				model.setRowCount(results.size());
 			}
 			int fila = 0, columna = 0;
@@ -876,6 +1027,11 @@ public class AdminClinic extends JFrame {
 			tableTreatments.getColumnModel().getColumn(0).setCellRenderer(tcr2);
 			tableTreatments.getColumnModel().getColumn(1).setCellRenderer(tcr2);
 			tableTreatments.setDefaultRenderer(Object.class, tcr2);
+			
+			int[] anchos = { 400, 100};
+			for (int i = 0; i < 2; i++) {
+				tableTreatments.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+			}
 		}
 
 		// Guarda el último id de los tratamientos
