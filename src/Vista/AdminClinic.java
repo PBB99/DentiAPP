@@ -331,28 +331,59 @@ public class AdminClinic extends JFrame {
 		menuSpecialities.setViewportView(tableSpeciality);
 
 		// Tratamientos
+		// Panel fondo de Tratamientos
+		JPanel panelBackTreatment = new RoundedPanel(50, azulito);
+		panelBackTreatment.setBounds(1000, 202, 560, 775);
+		panelBackTreatment.setOpaque(false);
+		panelBackTreatment.setLayout(null);
+		contentPane.add(panelBackTreatment);
+
+		// Panel titulo de tratamientos
+		JPanel panelTitleTreatment = new JPanel();
+		panelTitleTreatment.setBounds(25, 15, 510, 735);
+		panelTitleTreatment.setBorder(new TitledBorder(lb, "  Tratamientos  ", TitledBorder.LEFT, TitledBorder.TOP,
+				font, new Color(51, 51, 51)));
+		panelTitleTreatment.setOpaque(false);
+		panelTitleTreatment.setLayout(null);
+		panelBackTreatment.add(panelTitleTreatment);
+
+		// Lupa
+		JLabel jlLupaTreatments = new JLabel();
+		jlLupaTreatments.setBackground(azulito);
+		jlLupaTreatments.setBounds(20, 25, 40, 30);
+		jlLupaTreatments.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		panelTitleTreatment.add(jlLupaTreatments);
+
+		// Buscador
+		JTextField txtBuscadorTreatments = new JTextField();
+		txtBuscadorTreatments.setBorder(new LineBorder(azulito));
+		txtBuscadorTreatments.setBounds(60, 28, 200, 25);
+		txtBuscadorTreatments.setBackground(new Color(255, 255, 255));
+		txtBuscadorTreatments.setToolTipText("Buscador");
+		panelTitleTreatment.add(txtBuscadorTreatments);
+
 		// Botón de insertar tratamiento
 		JButton btnInsertTreatment = new JButton();
 		btnInsertTreatment.setBackground(new Color(148, 220, 219));
-		btnInsertTreatment.setBounds(1557, 240, 40, 30);
+		btnInsertTreatment.setBounds(425, 25, 40, 30);
 		btnInsertTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsertTreatment.setBorderPainted(false);
-		contentPane.add(btnInsertTreatment);
+		panelTitleTreatment.add(btnInsertTreatment);
 
 		// Botón de modificar tratamiento
 		JButton btnUpadateTreatment = new JButton();
 		btnUpadateTreatment.setBackground(new Color(148, 220, 219));
-		btnUpadateTreatment.setBounds(1597, 240, 40, 30);
+		btnUpadateTreatment.setBounds(465, 25, 40, 30);
 		btnUpadateTreatment.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		btnUpadateTreatment.setBorderPainted(false);
-		contentPane.add(btnUpadateTreatment);
+		panelTitleTreatment.add(btnUpadateTreatment);
 
 		// Panel de tratamientos
 		JScrollPane menuTreatments = new JScrollPane();
-		menuTreatments.setBounds(1137, 270, 500, 675);
+		menuTreatments.setBounds(30, 70, 500, 675);
 		menuTreatments.setBorder(BorderFactory.createEmptyBorder());
 		menuTreatments.setBackground(new Color(148, 220, 219));
-		contentPane.add(menuTreatments);
+		panelBackTreatment.add(menuTreatments);
 
 		// Tabla de tratamientos
 		tableTreatments = new JTable();
@@ -890,7 +921,7 @@ public class AdminClinic extends JFrame {
 		List<SpecialityHibernate> results = consulta.getResultList();
 
 		// Eliminamos la especialidad de Administrador
-		if(results.get(0).getEspecialidad().equalsIgnoreCase("administrador")) {
+		if (results.get(0).getEspecialidad().equalsIgnoreCase("administrador")) {
 			results.remove(0);
 		}
 
@@ -945,10 +976,15 @@ public class AdminClinic extends JFrame {
 				}
 			};
 			tableTreatments.setModel(model);
-			model.setRowCount(18);
+			model.setRowCount(19);
 			JTableHeader header = tableTreatments.getTableHeader();
 			Renderer tcr2 = new Renderer();
 			tableTreatments.setDefaultRenderer(Object.class, tcr2);
+			
+			int[] anchos = { 400, 100};
+			for (int i = 0; i < 2; i++) {
+				tableTreatments.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+			}
 		} else {
 			// Busca en la tabla los tratamientos cuyo atributo objeto especialidad es igual
 			// al que sacamos de la consulta anterior
@@ -991,6 +1027,11 @@ public class AdminClinic extends JFrame {
 			tableTreatments.getColumnModel().getColumn(0).setCellRenderer(tcr2);
 			tableTreatments.getColumnModel().getColumn(1).setCellRenderer(tcr2);
 			tableTreatments.setDefaultRenderer(Object.class, tcr2);
+			
+			int[] anchos = { 400, 100};
+			for (int i = 0; i < 2; i++) {
+				tableTreatments.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+			}
 		}
 
 		// Guarda el último id de los tratamientos
