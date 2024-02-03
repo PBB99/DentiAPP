@@ -74,6 +74,7 @@ public class AdminInsertCita extends JDialog {
 	private Session session;
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -100,7 +101,7 @@ public class AdminInsertCita extends JDialog {
 
 		setLocationRelativeTo(null);
 		// -----------------------COMPONENTES-------------------
-		setBounds(100, 100, 450, 550);
+		setBounds(100, 100, 450, 600);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
@@ -135,7 +136,7 @@ public class AdminInsertCita extends JDialog {
 //		}
 
 		JComboBox cbTratamiento = new JComboBox();
-		cbTratamiento.setBounds(150, 27, 105, 22);
+		cbTratamiento.setBounds(125, 27, 150, 22);
 
 		Query<UserHibernate> consultaUsuarios = session.createQuery("FROM UserHibernate where dni=:dni",
 				UserHibernate.class);
@@ -170,20 +171,20 @@ public class AdminInsertCita extends JDialog {
 		loadTableClientes(table);
 		
 		JPanel panelTable = new RoundedPanel(null, 50, new Color(148, 220, 219));
-		panelTable.setBounds(10, 11, 414, 350);
+		panelTable.setBounds(10, 11, 410, 373);
 		panelTable.setOpaque(false);
 		panelTable.setLayout(null);
 		contentPanel.add(panelTable);
 
 		// Panel secundario para el calendario
 		JPanel panelTitleTable = new JPanel();
-		panelTitleTable.setBounds(15, 15, 389, 315);
+		panelTitleTable.setBounds(10, 47, 390, 315);
 		panelTitleTable.setBorder(new TitledBorder(lb, "  Clientes  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleTable.setOpaque(false);
 		panelTable.add(panelTitleTable);
 		
 		JPanel panelTratamiento = new RoundedPanel(null, 50, new Color(148, 220, 219));
-		panelTratamiento.setBounds(10, 372, 414, 96);
+		panelTratamiento.setBounds(10, 395, 414, 96);
 		panelTratamiento.setOpaque(false);
 		panelTratamiento.setLayout(null);
 		contentPanel.add(panelTratamiento);
@@ -269,6 +270,11 @@ public class AdminInsertCita extends JDialog {
 								session.beginTransaction();
 								session.save(cita);
 								session.getTransaction().commit();
+								setModal(false);
+								dispose();
+								setVisible(false);
+								AdminInsertCita.this
+										.dispatchEvent(new WindowEvent(AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
 							} else {
 								CitaHibernate citaEx = consultaCitaExiste.getSingleResult();
 								// citaEx.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
@@ -278,13 +284,13 @@ public class AdminInsertCita extends JDialog {
 								session.beginTransaction();
 								session.update(citaEx);
 								session.getTransaction().commit();
+								setModal(false);
+								dispose();
+								setVisible(false);
+								AdminInsertCita.this
+										.dispatchEvent(new WindowEvent(AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
 							}
 						}
-						setModal(false);
-						dispose();
-						setVisible(false);
-						AdminInsertCita.this
-								.dispatchEvent(new WindowEvent(AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
 					}
 				});
 
@@ -302,6 +308,30 @@ public class AdminInsertCita extends JDialog {
 		menuClientes.add(table);
 		menuClientes.setViewportView(table);
 		panelTitleTable.add(menuClientes);
+		
+		textField = new JTextField();
+		textField.setToolTipText("Buscador");
+		textField.setBorder(new LineBorder(new Color(148, 220, 219)));
+		textField.setBackground(Color.WHITE);
+		textField.setBounds(50, 11, 157, 25);
+		panelTable.add(textField);
+		textField.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if(!textField.getText().equals("")) 
+					loadSearch(table, textField.getText());
+				else
+					loadTableClientes(table);
+
+			}
+		});
+		
+		JLabel jlLupa = new JLabel();
+		jlLupa.setBackground(new Color(148, 220, 219));
+		jlLupa.setBounds(10, 11, 30, 25);
+		jlLupa.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		
+		panelTable.add(jlLupa);
 		panelTitleTratamiento.setLayout(null);
 		panelTitleTratamiento.add(cbTratamiento);
 
@@ -311,6 +341,52 @@ public class AdminInsertCita extends JDialog {
 		// Relaiza la consulta
 		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
 
+		// Guarda los datos en una lista
+		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "DNI", "Nombre", "Apellido" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		table.setModel(model);
+		JTableHeader header = table.getTableHeader();
+		if (allClientes.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(allClientes.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (ClienteHibernate cliente : allClientes) {
+			model.setValueAt(cliente.getDni_cliente(), fila, columna);
+			model.setValueAt(cliente.getNombre(), fila, columna + 1);
+			model.setValueAt(cliente.getApellidos(), fila, columna + 2);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.setDefaultRenderer(Object.class, tcr);
+
+//		int[] anchos = { 125, 250, 75, 350 };
+//		for (int i = 0; i < 3; i++) {
+//			table.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+//		}
+
+	}
+	
+	public void loadSearch(JTable table, String busq) {
+		// Relaiza la consulta
+		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate where nombre like :busq or apellidos like :busq or edad like :busq or dni_cliente like :busq", ClienteHibernate.class);
+		consultaClientes.setParameter("busq", "%" + busq + "%");
 		// Guarda los datos en una lista
 		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
 
