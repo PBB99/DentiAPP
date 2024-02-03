@@ -192,7 +192,7 @@ public class AdminInsertCita extends JDialog {
 		// Panel secundario para el calendario
 		JPanel panelTitleTratamiento = new JPanel();
 		panelTitleTratamiento.setBounds(15, 15, 389, 70);
-		panelTitleTratamiento.setBorder(new TitledBorder(lb, "  Clientes  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleTratamiento.setBorder(new TitledBorder(lb, "  Tratamiento  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleTratamiento.setOpaque(false);
 		panelTratamiento.add(panelTitleTratamiento);
 
