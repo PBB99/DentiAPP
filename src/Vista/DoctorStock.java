@@ -68,10 +68,13 @@ public class DoctorStock extends JFrame {
 	private String selectedProduct = null;
 	private InventarioHibernate ph;
 	private JTable tablaPedido;
-	private List<InventarioHibernate> elegidos=new ArrayList<>();
+	private List<InventarioHibernate> elegidos = new ArrayList<>();
 	private InventarioHibernate solicitado;
-	private int filaPedido=0;
-	
+	private int filaPedido = 0;
+	private Color azulito = new Color(148, 220, 219);
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private Font font = new Font("Dialog", Font.BOLD, 15);
+	private List<InventarioHibernate> listInvent;
 
 	/**
 	 * Launch the application.
@@ -194,10 +197,27 @@ public class DoctorStock extends JFrame {
 
 		// Inventario
 		// Panel del Menú
+		// Panel fondo de stock
+		JPanel panelBackStock = new RoundedPanel(50, azulito);
+		panelBackStock.setBounds(230, 200, 660, 785);
+		panelBackStock.setOpaque(false);
+		panelBackStock.setLayout(null);
+		contentPane.add(panelBackStock);
+
+		// Panel titulo de stock
+		JPanel panelTitleStock = new JPanel();
+		panelTitleStock.setBounds(25, 15, 610, 745);
+		panelTitleStock.setBorder(new TitledBorder(lb, "  Inventario  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+				new Color(51, 51, 51)));
+		panelTitleStock.setOpaque(false);
+		panelTitleStock.setLayout(null);
+		panelBackStock.add(panelTitleStock);
+
 		JPanel menuStock = new JPanel();
 		menuStock.setBackground(new Color(148, 220, 219));
-		menuStock.setBounds(300, 270, 600, 705);
+		menuStock.setBounds(30, 50, 600, 705);
 		menuStock.setLayout(null);
+		panelBackStock.add(menuStock);
 
 		// Lupa
 		JLabel jlLupaInventario = new JLabel();
@@ -234,12 +254,47 @@ public class DoctorStock extends JFrame {
 		tableStock.getTableHeader().setBackground(new Color(148, 220, 219));
 		tableStock.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 
-		// Pedidos
+		// Historial pedidos
+		// Panel fondo de Proveedores
+		// confirmar pedido
+		JLabel jConfirmarPedido = new JLabel();
+		jConfirmarPedido.setBackground(new Color(148, 220, 219));
+		jConfirmarPedido.setBounds(5, 0, 40, 30);
+		jConfirmarPedido.setIcon(new ImageIcon(getClass().getResource("/Resources/images/conpedio.png")));
+		jConfirmarPedido.setToolTipText("Confirmar Pedido");
+
+		JLabel jResetearPedido = new JLabel();
+		jResetearPedido.setBackground(new Color(148, 220, 219));
+		jResetearPedido.setBounds(45, 0, 40, 30);
+		jResetearPedido.setIcon(new ImageIcon(getClass().getResource("/Resources/images/resetpedio.png")));
+		jResetearPedido.setToolTipText("Resetear Pedido");
+
+		JLabel jBorrarSeleccion = new JLabel();
+		jBorrarSeleccion.setBackground(new Color(148, 220, 219));
+		jBorrarSeleccion.setBounds(85, 0, 40, 30);
+		jBorrarSeleccion.setIcon(new ImageIcon(getClass().getResource("/Resources/images/delete.png")));
+		jBorrarSeleccion.setToolTipText("Borrar Seleccion");
+
+		JPanel panelBackUser = new RoundedPanel(50, azulito);
+		panelBackUser.setBounds(970, 200, 860, 785);
+		panelBackUser.setOpaque(false);
+		panelBackUser.setLayout(null);
+		contentPane.add(panelBackUser);
+
+		// Panel titulo de Proveedores
+		JPanel panelTitleUsers = new JPanel();
+		panelTitleUsers.setBounds(25, 15, 810, 745);
+		panelTitleUsers.setBorder(new TitledBorder(lb, "  Proveedores  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+				new Color(51, 51, 51)));
+		panelTitleUsers.setOpaque(false);
+		panelTitleUsers.setLayout(null);
+		panelBackUser.add(panelTitleUsers);
 		// Panel del Menú
 		JPanel menuPedidos = new JPanel();
 		menuPedidos.setBackground(new Color(148, 220, 219));
-		menuPedidos.setBounds(1000, 270, 800, 705);
+		menuPedidos.setBounds(30, 50, 800, 705);
 		menuPedidos.setLayout(null);
+		panelBackUser.add(menuPedidos);
 		// ScrollPane para cargar la talbla inventario
 		JScrollPane menuTableProveedor = new JScrollPane();
 		menuTableProveedor.setBorder(BorderFactory.createEmptyBorder());
@@ -261,9 +316,10 @@ public class DoctorStock extends JFrame {
 		tablaPedido.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tablaPedido.getTableHeader().setBackground(new Color(148, 220, 219));
 		tablaPedido.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+
 		// -------------------- Lógica --------------------
 		// Mostrar las tablas
-		List<InventarioHibernate> listInvent = loadTableStock(tableStock);
+		listInvent = loadTableStock(tableStock);
 		// Acción de seleccionar elemento de la tabla Inventario
 		tableStock.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
@@ -285,23 +341,26 @@ public class DoctorStock extends JFrame {
 					// carga cada vez que cargamos la lista por que buscar por nombre puede dar
 					// problemas
 					for (InventarioHibernate x : listInvent) {
+						// encontramos el objeto InventarioHibernate para facilitar su update en la base
+						// de datos y pasar este objeto a la otra tabla directamente
 						if (selectedProduct.equalsIgnoreCase(x.getNombre())) {
-							solicitado=x;
+							solicitado = x;
 						}
 
 					}
 
 					int resultado = mostrarInputDialog(selectedProduct);
-					// contemplar si la cantidad elegida es posible o no
-					if (resultado <= solicitado.getCantidad()) {
-						solicitado.setCantidad(resultado);
-						elegidos.add(solicitado);
-						loadTablePedidos(tablaPedido, elegidos);
-					} else {
-						JOptionPane.showMessageDialog(null, "La cantidad elegida no esta disponible.", "Error",
-								JOptionPane.ERROR_MESSAGE);
-					}
-
+					// contemplar si la cantidad elegida es posible o no. En caso de que quedara en
+					// negativo se quedarie en 0 aparentemente y en negativo en la base de datos
+					// pasando si esta por debajo de cero a ser contemplado por el administrador que
+					// hara pedidos o no
+					listInvent.get(solicitado.getId_producto()).setCantidad(solicitado.getCantidad()-resultado);
+					solicitado.setCantidad(resultado);
+					// la lista elegido tendra dentro objetos de inventario hibernate
+					elegidos.add(solicitado);
+					loadTablePedidos(tablaPedido, elegidos);
+					//recarga con las cantidades bien puestas
+					reloadTableStock(tableStock, listInvent);
 				}
 			}
 		});
@@ -467,19 +526,20 @@ public class DoctorStock extends JFrame {
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-		contentPane.add(menuStock);
+
 		menuTableStock.add(tableStock);
 		menuTableStock.setViewportView(tableStock);
 
 		menuStock.add(txtInventario);
 		menuStock.add(menuTableStock);
 		menuStock.add(jlLupaInventario);
-		contentPane.add(menuPedidos);
 
 		menuPedidos.add(menuTableProveedor);
 		menuTableProveedor.add(tablaPedido);
 		menuTableProveedor.setViewportView(tablaPedido);
-
+		menuPedidos.add(jConfirmarPedido);
+		menuPedidos.add(jBorrarSeleccion);
+		menuPedidos.add(jResetearPedido);
 	}
 
 	public List<InventarioHibernate> loadTableStock(JTable table) {
@@ -510,7 +570,13 @@ public class DoctorStock extends JFrame {
 		// Carga los datos
 		for (InventarioHibernate producto : results) {
 			model.setValueAt(producto.getNombre(), fila, columna);
-			model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			if (producto.getCantidad() < 0) {
+				model.setValueAt(0, fila, columna + 1);
+			} else {
+
+				model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			}
+
 			fila++;
 		}
 
@@ -532,6 +598,58 @@ public class DoctorStock extends JFrame {
 			lastIdProducto = 0;
 		}
 		return results;
+	}
+
+	// Recarga de la tabla
+	public void reloadTableStock(JTable table, List<InventarioHibernate> results) {
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Producto", "Cantidad" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		table.setModel(model);
+		JTableHeader header = table.getTableHeader();
+		if (results.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (InventarioHibernate producto : results) {
+			model.setValueAt(producto.getNombre(), fila, columna);
+			if (producto.getCantidad() < 0) {
+				model.setValueAt(0, fila, columna + 1);
+			} else {
+
+				model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			}
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.setDefaultRenderer(Object.class, tcr);
+
+		int[] anchos = { 400, 200 };
+		for (int i = 0; i < 2; i++) {
+			table.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		}
+
+		// Guarda el último id del inventario
+		if (!results.isEmpty()) {
+			lastIdProducto = results.getLast().getId_producto();
+		} else {
+			lastIdProducto = 0;
+		}
+		
 	}
 
 	// Método para hacer consulta en el buscador
@@ -565,7 +683,12 @@ public class DoctorStock extends JFrame {
 		// Carga los datos
 		for (InventarioHibernate producto : results) {
 			model.setValueAt(producto.getNombre(), fila, columna);
-			model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			if (producto.getCantidad() < 0) {
+				model.setValueAt(0, fila, columna + 1);
+			} else {
+
+				model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			}
 			fila++;
 		}
 
@@ -599,18 +722,17 @@ public class DoctorStock extends JFrame {
 	}
 
 	public void loadTablePedidos(JTable table, List<InventarioHibernate> productos) {
-		//ESta consulta es para fija el tamaño maximo de la tabla pedidos, de tal forma que nunca va a existir mas filas que posibles productos a pedir
+		// ESta consulta es para fija el tamaño maximo de la tabla pedidos, de tal forma
+		// que nunca va a existir mas filas que posibles productos a pedir
 		// Relaiza la consulta
-				String hql = "FROM InventarioHibernate";
-				Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
+		String hql = "FROM InventarioHibernate";
+		Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
 
-				// Guarda los datos en una lista
-				List<InventarioHibernate> results = consulta.getResultList();
-
+		// Guarda los datos en una lista
+		List<InventarioHibernate> results = consulta.getResultList();
 
 		// Prepara la tabla
-		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "Producto", "Cantidad" }) {
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Producto", "Cantidad" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -624,16 +746,15 @@ public class DoctorStock extends JFrame {
 		} else {
 			model.setRowCount(results.size());
 		}
-		
+
 		// Carga los datos
-		int fila=0;
-		int columna=0;
-		for(InventarioHibernate y:productos) {
+		int fila = 0;
+		int columna = 0;
+		for (InventarioHibernate y : productos) {
 			model.setValueAt(y.getNombre(), fila, columna);
 			model.setValueAt(y.getCantidad(), fila, columna + 1);
 			fila++;
 		}
-		
 
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
@@ -641,7 +762,7 @@ public class DoctorStock extends JFrame {
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.setDefaultRenderer(Object.class, tcr);
 
-		int[] anchos = { 400, 200};
+		int[] anchos = { 400, 200 };
 		for (int i = 0; i < 2; i++) {
 			table.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 		}

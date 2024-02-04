@@ -31,6 +31,6 @@
         <mapping class="Modelo.OdontogramaHibernate"/>
         <mapping class="Modelo.InventarioHibernate"/>
         <mapping class="Modelo.ProveedorHibernate"/>
-        
+        <mapping class="Modelo.PedidosHibernate"/>
     </session-factory>
 </hibernate-configuration>
