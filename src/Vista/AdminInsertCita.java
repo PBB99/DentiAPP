@@ -2,21 +2,26 @@ package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+
 import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
+import java.awt.Component;
+
+import javax.swing.border.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -27,16 +32,20 @@ import Controlador.ConexionMySQL;
 import Modelo.Cita;
 import Modelo.CitaHibernate;
 import Modelo.ClienteHibernate;
+import Modelo.ProveedorHibernate;
 import Modelo.Specialist;
 import Modelo.Speciality;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
+import Otros.RoundedPanel;
+import Vista.AdminStock.Renderer;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import java.awt.event.ActionListener;
@@ -48,7 +57,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
+import com.toedter.components.JLocaleChooser;
 
 public class AdminInsertCita extends JDialog {
 	// -------------------------------VARIABLES------------------------
@@ -61,6 +72,9 @@ public class AdminInsertCita extends JDialog {
 
 	private SessionFactory instancia;
 	private Session session;
+	private Font font = new Font("Dialog", Font.BOLD, 15);
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -87,16 +101,16 @@ public class AdminInsertCita extends JDialog {
 
 		setLocationRelativeTo(null);
 		// -----------------------COMPONENTES-------------------
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 600);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
 
-		JLabel lblDNI = new JLabel("Paciente");
-		lblDNI.setBounds(105, 94, 84, 14);
+		JLabel lblPac = new JLabel("Paciente");
+		lblPac.setBounds(75, 55, 84, 14);
 
-		JLabel lblContraseña = new JLabel("Tratamiento");
-		lblContraseña.setBounds(105, 136, 84, 14);
+		JLabel lblTrata = new JLabel("Tratamiento");
+		lblTrata.setBounds(75, 310, 75, 14);
 
 		JButton okButton = new JButton("OK");
 		okButton.setActionCommand("OK");
@@ -112,18 +126,17 @@ public class AdminInsertCita extends JDialog {
 		});
 		cancelButton.setActionCommand("Cancel");
 
-		JComboBox cbPaciente = new JComboBox();
-		cbPaciente.setBounds(199, 91, 129, 20);
-		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
-		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
-
-		for (int i = 0; i < allClientes.size(); i++) {
-			cbPaciente.addItem(allClientes.get(i));
-		}
+//		JComboBox cbPaciente = new JComboBox();
+//		cbPaciente.setBounds(199, 91, 129, 20);
+//		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
+//		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
+//
+//		for (int i = 0; i < allClientes.size(); i++) {
+//			cbPaciente.addItem(allClientes.get(i));
+//		}
 
 		JComboBox cbTratamiento = new JComboBox();
-		cbTratamiento.setBounds(199, 132, 129, 20);
-		contentPanel.add(cbTratamiento);
+		cbTratamiento.setBounds(125, 27, 150, 22);
 
 		Query<UserHibernate> consultaUsuarios = session.createQuery("FROM UserHibernate where dni=:dni",
 				UserHibernate.class);
@@ -136,20 +149,88 @@ public class AdminInsertCita extends JDialog {
 			cbTratamiento.addItem(allTratamientos.get(j));
 		}
 
-		// ------------------------------------------LOGICA-----------------------------------------------
-		ResultSet resSet = null;
-		try {// CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
+		DefaultTableModel modelo = new DefaultTableModel();
+		JTable table = new JTable();
+		table.setShowVerticalLines(false);
+		table.setShowHorizontalLines(false);
+		table.setCellSelectionEnabled(true);
+		table.setBounds(0, 0, 100, 100);
+		table.setBackground(new Color(250, 250, 250));
+		table.setSelectionBackground(new Color(148, 220, 219));
+		table.setShowGrid(false);
+		table.setBorder(null);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		table.setRowHeight(35);
+		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.getTableHeader().setBackground(new Color(148, 220, 219));
+		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		table.setColumnSelectionAllowed(false);
+	    table.setRowSelectionAllowed(true);
+		
+		loadTableClientes(table);
+		
+		JPanel panelTable = new RoundedPanel(null, 50, new Color(148, 220, 219));
+		panelTable.setBounds(10, 11, 410, 373);
+		panelTable.setOpaque(false);
+		panelTable.setLayout(null);
+		contentPanel.add(panelTable);
 
-			resSet = conex.ejecutarSelect("Select * from especialidades");
-			// conex.ejecutarInsertUpdateDelete("insert into usuario(dni, nombre, apellido,
-			// contraseña, estado) values ('79379541G', 'Pedro', 'Pueblo', '1234', true)",
-			// cn);
-			while (resSet.next()) {
-				cbPaciente.addItem(resSet.getString("especialidad"));
+		// Panel secundario para el calendario
+		JPanel panelTitleTable = new JPanel();
+		panelTitleTable.setBounds(10, 47, 390, 315);
+		panelTitleTable.setBorder(new TitledBorder(lb, "  Clientes  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleTable.setOpaque(false);
+		panelTable.add(panelTitleTable);
+		
+		JPanel panelTratamiento = new RoundedPanel(null, 50, new Color(148, 220, 219));
+		panelTratamiento.setBounds(10, 395, 414, 96);
+		panelTratamiento.setOpaque(false);
+		panelTratamiento.setLayout(null);
+		contentPanel.add(panelTratamiento);
+
+		// Panel secundario para el calendario
+		JPanel panelTitleTratamiento = new JPanel();
+		panelTitleTratamiento.setBounds(15, 15, 389, 70);
+		panelTitleTratamiento.setBorder(new TitledBorder(lb, "  Tratamiento  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleTratamiento.setOpaque(false);
+		panelTratamiento.add(panelTitleTratamiento);
+
+		// ------------------------------------------LOGICA-----------------------------------------------
+
+		// Comprobamos si el doctor tiene una cita en la fecha que se especifica
+		Query<CitaHibernate> consultaCitaExiste = session.createQuery(
+				"FROM CitaHibernate where fecha=:fech and hora=:hora and usuarios_dni_usuario=:id",
+				CitaHibernate.class);
+
+		java.sql.Date dia = new java.sql.Date(fecha.getTime());
+		consultaCitaExiste.setParameter("fech", dia);
+		consultaCitaExiste.setParameter("hora", hora);
+		consultaCitaExiste.setParameter("id", dniDoctor);
+		List<CitaHibernate> check = consultaCitaExiste.getResultList();
+
+		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
+		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
+
+		if (check.isEmpty() == false) {
+			for (int j = 0; j < allTratamientos.size(); j++) {
+				if (allTratamientos.get(j).getCodigo_tratamiento() == check.get(0).getTratamiento()
+						.getCodigo_tratamiento()) {
+					cbTratamiento.setSelectedIndex(j);
+				}
 			}
-		} catch (Exception e2) {
-			// TODO: handle exception
+			for (int j = 0; j < allClientes.size(); j++) {
+				if (allClientes.get(j).getDni_cliente().equals(check.get(0).getCliente().getDni_cliente())) {
+					table.setRowSelectionInterval(j	, j);
+					System.out.println("dasguhuiodasguidasguguasdugidsagigiasdggaisduksdabasdvuyhijdsayuvfsadhjdyasivhkjsdyuvhasdjasdyusjhadusyadvj5h");
+				}
+			}
 		}
+
+		JScrollPane menuClientes = new JScrollPane();
+		menuClientes.setBorder(BorderFactory.createEmptyBorder());
+		menuClientes.setBounds(10, 21, 369, 283);
+		menuClientes.setBackground(new Color(148, 220, 219));
 
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
@@ -169,36 +250,47 @@ public class AdminInsertCita extends JDialog {
 						consultaCitaExiste.setParameter("id", dniDoctor);
 						List<CitaHibernate> check = consultaCitaExiste.getResultList();
 
-						if (check.isEmpty()) {
-							Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate",
-									CitaHibernate.class);
-							List<CitaHibernate> allCitas = consultaCitas.getResultList();
-							CitaHibernate cita = new CitaHibernate(allCitas.get(allCitas.size() - 1).getIdcita() + 1,
-									dia, hora, "");
-							cita.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
-							cita.setUser(usuario);
-							cita.setTratamiento((TreatmentsHibernate) cbTratamiento.getSelectedItem());
-							session.beginTransaction();
-							session.save(cita);
-							session.getTransaction().commit();
-							System.out.println(
-									"------------------------------------------------------------------------------------------------------------------------------------------");
-						} else {
-							CitaHibernate citaEx = consultaCitaExiste.getSingleResult();
-							citaEx.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
-							citaEx.setUser(usuario);
-							citaEx.setTratamiento((TreatmentsHibernate) cbTratamiento.getSelectedItem());
-							session.beginTransaction();
-							session.update(citaEx);
-							session.getTransaction().commit();
-							System.out.println(
-									"------------------------------------------------------------------------------------------------------------------------------------------");
+						if (table.getSelectedRow() != -1) {
+							
+							
+							Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate where dni_cliente=:cli", ClienteHibernate.class);
+							consultaClientes.setParameter("cli", table.getValueAt(table.getSelectedRow(), 0).toString());
+							List<ClienteHibernate> cliente = consultaClientes.getResultList();
+							
+							if (check.isEmpty()) {
+								Query<CitaHibernate> consultaCitas = session.createQuery("FROM CitaHibernate",
+										CitaHibernate.class);
+								List<CitaHibernate> allCitas = consultaCitas.getResultList();
+								CitaHibernate cita = new CitaHibernate(
+										allCitas.get(allCitas.size() - 1).getIdcita() + 1, dia, hora, "");
+								// cita.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
+								cita.setCliente(cliente.get(0));
+								cita.setUser(usuario);
+								cita.setTratamiento((TreatmentsHibernate) cbTratamiento.getSelectedItem());
+								session.beginTransaction();
+								session.save(cita);
+								session.getTransaction().commit();
+								setModal(false);
+								dispose();
+								setVisible(false);
+								AdminInsertCita.this
+										.dispatchEvent(new WindowEvent(AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
+							} else {
+								CitaHibernate citaEx = consultaCitaExiste.getSingleResult();
+								// citaEx.setCliente(allClientes.get(cbPaciente.getSelectedIndex()));
+								citaEx.setCliente(cliente.get(0));
+								citaEx.setUser(usuario);
+								citaEx.setTratamiento((TreatmentsHibernate) cbTratamiento.getSelectedItem());
+								session.beginTransaction();
+								session.update(citaEx);
+								session.getTransaction().commit();
+								setModal(false);
+								dispose();
+								setVisible(false);
+								AdminInsertCita.this
+										.dispatchEvent(new WindowEvent(AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
+							}
 						}
-						setModal(false);
-						dispose();
-						setVisible(false);
-						AdminInsertCita.this
-								.dispatchEvent(new WindowEvent(AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
 					}
 				});
 
@@ -206,10 +298,151 @@ public class AdminInsertCita extends JDialog {
 			{// -------------------ADICIONES DE LOS COMPONENTES---------------
 				buttonPane.add(okButton);
 				buttonPane.add(cancelButton);
-				contentPanel.add(cbPaciente);
-				contentPanel.add(lblContraseña);
-				contentPanel.add(lblDNI);
+				contentPanel.add(lblPac);
+				contentPanel.add(lblTrata);
 			}
+		}
+		panelTitleTable.setLayout(null);
+		//contentPanel.add(table);
+		//contentPanel.add(menuClientes);
+		menuClientes.add(table);
+		menuClientes.setViewportView(table);
+		panelTitleTable.add(menuClientes);
+		
+		textField = new JTextField();
+		textField.setToolTipText("Buscador");
+		textField.setBorder(new LineBorder(new Color(148, 220, 219)));
+		textField.setBackground(Color.WHITE);
+		textField.setBounds(50, 11, 157, 25);
+		panelTable.add(textField);
+		textField.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if(!textField.getText().equals("")) 
+					loadSearch(table, textField.getText());
+				else
+					loadTableClientes(table);
+
+			}
+		});
+		
+		JLabel jlLupa = new JLabel();
+		jlLupa.setBackground(new Color(148, 220, 219));
+		jlLupa.setBounds(10, 11, 30, 25);
+		jlLupa.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		
+		panelTable.add(jlLupa);
+		panelTitleTratamiento.setLayout(null);
+		panelTitleTratamiento.add(cbTratamiento);
+
+	}
+
+	public void loadTableClientes(JTable table) {
+		// Relaiza la consulta
+		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate", ClienteHibernate.class);
+
+		// Guarda los datos en una lista
+		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "DNI", "Nombre", "Apellido" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		table.setModel(model);
+		JTableHeader header = table.getTableHeader();
+		if (allClientes.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(allClientes.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (ClienteHibernate cliente : allClientes) {
+			model.setValueAt(cliente.getDni_cliente(), fila, columna);
+			model.setValueAt(cliente.getNombre(), fila, columna + 1);
+			model.setValueAt(cliente.getApellidos(), fila, columna + 2);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.setDefaultRenderer(Object.class, tcr);
+
+//		int[] anchos = { 125, 250, 75, 350 };
+//		for (int i = 0; i < 3; i++) {
+//			table.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+//		}
+
+	}
+	
+	public void loadSearch(JTable table, String busq) {
+		// Relaiza la consulta
+		Query<ClienteHibernate> consultaClientes = session.createQuery("FROM ClienteHibernate where nombre like :busq or apellidos like :busq or edad like :busq or dni_cliente like :busq", ClienteHibernate.class);
+		consultaClientes.setParameter("busq", "%" + busq + "%");
+		// Guarda los datos en una lista
+		List<ClienteHibernate> allClientes = consultaClientes.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "DNI", "Nombre", "Apellido" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		table.setModel(model);
+		JTableHeader header = table.getTableHeader();
+		if (allClientes.size() < 19) {
+			model.setRowCount(18);
+		} else {
+			model.setRowCount(allClientes.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (ClienteHibernate cliente : allClientes) {
+			model.setValueAt(cliente.getDni_cliente(), fila, columna);
+			model.setValueAt(cliente.getNombre(), fila, columna + 1);
+			model.setValueAt(cliente.getApellidos(), fila, columna + 2);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.setDefaultRenderer(Object.class, tcr);
+
+//		int[] anchos = { 125, 250, 75, 350 };
+//		for (int i = 0; i < 3; i++) {
+//			table.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+//		}
+
+	}
+
+	public class Renderer extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			// Evalua en que fila esta
+			if (row % 2 == 0) {
+				setBackground(new Color(220, 220, 220));
+			} else {
+				setBackground(new Color(250, 250, 250));
+			}
+
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		}
 
 	}

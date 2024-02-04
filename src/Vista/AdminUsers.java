@@ -82,7 +82,6 @@ public class AdminUsers extends JFrame {
 
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 
-
 	/**
 	 * Launch the application.
 	 */
@@ -122,41 +121,41 @@ public class AdminUsers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
-		
+
 		// Labels
 		// nombre
-				JPanel panelTitleAdmin = new JPanel();
-				panelTitleAdmin.setBounds(1, 2, 170, 90);
-				panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
-				panelTitleAdmin.setOpaque(false);
-				panelTitleAdmin.setLayout(null);
-				
-				//rounded panel de fomdo para el nombre 
-				JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
-				panelnombre.setBounds(136, 0, 150, 60);
-				panelnombre.setOpaque(false);
-				panelnombre.setLayout(null);
-				contentPane.add(panelnombre);
-				panelnombre.add(panelTitleAdmin);
-				String htmlString = "<html><body><sup>" 
-				+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
-				"</span></body></html>";
-				JLabel lblNAdmin = new JLabel(htmlString);
-				lblNAdmin.setToolTipText("Nombre & Apellido");
-				lblNAdmin.setBounds(10, 5, 150, 60);
-				lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
-				panelTitleAdmin.add(lblNAdmin);
+		JPanel panelTitleAdmin = new JPanel();
+		panelTitleAdmin.setBounds(1, 2, 170, 90);
+		panelTitleAdmin
+				.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
+		panelTitleAdmin.setOpaque(false);
+		panelTitleAdmin.setLayout(null);
+
+		// rounded panel de fomdo para el nombre
+		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
+		panelnombre.setBounds(136, 0, 150, 60);
+		panelnombre.setOpaque(false);
+		panelnombre.setLayout(null);
+		contentPane.add(panelnombre);
+		panelnombre.add(panelTitleAdmin);
+		String htmlString = "<html><body><sup>" + userHi.getNombre() + "</sup><span>" + userHi.getApellido()
+				+ "</span></body></html>";
+		JLabel lblNAdmin = new JLabel(htmlString);
+		lblNAdmin.setToolTipText("Nombre & Apellido");
+		lblNAdmin.setBounds(10, 5, 150, 60);
+		lblNAdmin.setFont(new Font("metropolis", Font.PLAIN, 20));
+		panelTitleAdmin.add(lblNAdmin);
 		// añadir
 		JLabel lAdd = new JLabel();
 		lAdd.setText("Añadir");
 		lAdd.setBounds(1477, 205, 100, 20);
-		
+
 		// Modificar
 		JLabel lMod = new JLabel();
 		lMod.setText("Modificar");
 		lMod.setBounds(1577, 205, 100, 20);
-		
-		//menu bar
+
+		// menu bar
 
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
@@ -321,15 +320,7 @@ public class AdminUsers extends JFrame {
 		btnUpadate.setToolTipText("Modificar Producto");
 		panelTitleUsers.add(btnUpadate);
 
-//		// añadir
-//		JLabel lAdd = new JLabel();
-//		lAdd.setText("Añadir");
-//		lAdd.setBounds(1477, 205, 100, 20);
-//
-//		// Modificar
-//		JLabel lMod = new JLabel();
-//		lMod.setText("Modificar");
-//		lMod.setBounds(1577, 205, 100, 20);
+
 
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
@@ -619,9 +610,9 @@ public class AdminUsers extends JFrame {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (control == 0) {
-					loadSearchStock("admin", tabla, txtBuscador.getText());
+					loadSearchUser("admin", tabla, txtBuscador.getText());
 				} else {
-					loadSearchStock("doctor", tabla, txtBuscador.getText());
+					loadSearchUser("doctor", tabla, txtBuscador.getText());
 				}
 			}
 
@@ -806,7 +797,8 @@ public class AdminUsers extends JFrame {
 		// preparacion de la tabla
 
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "DNI", "Nombre", "Apellido", "Especialidad","Estado" }) {
+
+				new String[] { "DNI", "Nombre", "Apellido", "Especialidad", "Estado" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -829,8 +821,8 @@ public class AdminUsers extends JFrame {
 			}
 			tablaDoctores.setModel(model);
 			JTableHeader header = tablaDoctores.getTableHeader();
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
@@ -842,9 +834,9 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
 				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
-				if(y.getEstado()==0) {
+				if (y.getEstado() == 0) {
 					model.setValueAt("Baja", fila, 4);
-				}else {
+				} else {
 					model.setValueAt("Alta", fila, 4);
 				}
 				fila++;
@@ -868,8 +860,8 @@ public class AdminUsers extends JFrame {
 
 			}
 			tablaDoctores.setModel(model);
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
@@ -899,7 +891,7 @@ public class AdminUsers extends JFrame {
 	}
 
 	// Método para hacer consulta en el buscador
-	public void loadSearchStock(String nombreTabla, JTable tablaDoctores, String busq) {
+	public void loadSearchUser(String nombreTabla, JTable tablaDoctores, String busq) {
 		// Relaiza la consulta
 		this.miSesion = instancia.openSession();
 		String hql = "FROM UserHibernate where nombre like:busq or apellido like:busq or dni like:busq";
@@ -933,8 +925,8 @@ public class AdminUsers extends JFrame {
 			}
 			tablaDoctores.setModel(model);
 			JTableHeader header = tablaDoctores.getTableHeader();
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
@@ -946,11 +938,13 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
 				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
-				if(y.getEstado()==0) {
+
+        if(y.getEstado()==0) {
 					model.setValueAt("Baja", fila, 4);
 				}else {
 					model.setValueAt("Alta", fila, 4);
 				}
+
 				fila++;
 			}
 
@@ -972,8 +966,8 @@ public class AdminUsers extends JFrame {
 
 			}
 			tablaDoctores.setModel(model);
-			if (admin.size() < 18) {
-				model.setRowCount(19);
+			if (admin.size() < 21) {
+				model.setRowCount(20);
 			} else {
 				model.setRowCount(admin.size());
 			}
@@ -986,9 +980,9 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
 				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
-				if(y.getEstado()==0) {
+				if (y.getEstado() == 0) {
 					model.setValueAt("Baja", fila, 4);
-				}else {
+				} else {
 					model.setValueAt("Alta", fila, 4);
 				}
 				fila++;
