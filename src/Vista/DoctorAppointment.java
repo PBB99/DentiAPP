@@ -532,9 +532,7 @@ public class DoctorAppointment extends JFrame {
 
 			// Evalua en que fila esta
 
-			if (row == 0) {
-				setBackground(new Color(148, 220, 219));
-			} else if (row % 2 == 0) {
+			if (row % 2 == 0) {
 				setBackground(new Color(220, 220, 220));
 			} else {
 				setBackground(new Color(250, 250, 250));
