@@ -30,5 +30,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/javahelp-2.0.02.jar"/>
 	<classpathentry kind="lib" path="lib/LGoodDatePicker-11.2.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/a"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
