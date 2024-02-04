@@ -239,7 +239,7 @@ public class AdminAppointment extends JFrame {
 		panelTitleCitas.setLayout(null);
 		panelCitas.add(panelTitleCitas);
 
-		// ScrollPane para cargar la talbla inventario
+		// ScrollPane para cargar la talbla con las citas
 		JScrollPane menuTableStock = new JScrollPane();
 		menuTableStock.setBorder(BorderFactory.createEmptyBorder());
 		menuTableStock.setBounds(5, 35, 1006, 750);

@@ -18,6 +18,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,11 +28,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -47,6 +50,7 @@ import Modelo.OdontogramaHibernate;
 import Modelo.SpecialityHibernate;
 import Modelo.TreatmentsHibernate;
 import Modelo.UserHibernate;
+import Otros.RoundedPanel;
 import Vista.PruebaOdonto.Renderer;
 import btndentiapp.ButtonDentiApp;
 
@@ -62,7 +66,8 @@ public class AdminCustomers extends JFrame {
 	private SessionFactory instancia;
 	private Session session;
 	private JButton btnOdonto;
-
+	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
+	private Font font = new Font("Dialog", Font.BOLD, 15);
 
 	/**
 	 * Launch the application.
@@ -90,8 +95,8 @@ public class AdminCustomers extends JFrame {
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(UserHibernate.class).addAnnotatedClass(CitaHibernate.class)
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
-				.addAnnotatedClass(SpecialityHibernate.class).addAnnotatedClass(OdontogramaHibernate.class).
-				buildSessionFactory();
+				.addAnnotatedClass(SpecialityHibernate.class).addAnnotatedClass(OdontogramaHibernate.class)
+				.buildSessionFactory();
 		this.session = instancia.openSession();
 
 		// -------------------- JFrame --------------------
@@ -106,7 +111,7 @@ public class AdminCustomers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
-		//menubar
+		// menubar
 
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
@@ -116,54 +121,52 @@ public class AdminCustomers extends JFrame {
 		menuBar.setOpaque(false);
 		menuBar.setBorderPainted(false);
 		menuBar.add(Box.createHorizontalGlue());
-		
+
 		// item
 		JMenu mnNewMenu = new JMenu(userHi.getDni());
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/definitiva.png")));
 		mnNewMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		mnNewMenu.setOpaque(false);
-		mnNewMenu.setBackground(new Color(0,0,0,0));
+		mnNewMenu.setBackground(new Color(0, 0, 0, 0));
 		mnNewMenu.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(false);
-				mnNewMenu.setBackground(new Color(0,0,0,0));
-				
+				mnNewMenu.setBackground(new Color(0, 0, 0, 0));
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(true);
 				mnNewMenu.setBackground(Color.LIGHT_GRAY);
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 
-				
 			}
 		});
-		
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem(userHi.getNombre());
-		//ItemName.setText(userHi.getNombre());
+		// ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
 		JMenuItem ItemPass = new JMenuItem("Cambiar Contraseña");
@@ -172,7 +175,7 @@ public class AdminCustomers extends JFrame {
 		// item cerrar sesion
 		JMenuItem ItemOut = new JMenuItem("Cerrar Sesión");
 		ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
-		
+
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
 		menuPane.setBackground(new Color(148, 220, 219));
@@ -312,35 +315,35 @@ public class AdminCustomers extends JFrame {
 				admPayments.setVisible(true);
 			}
 		});
-		
+
 		// logica click item salir
-				ItemOut.addActionListener(new ActionListener() {
+		ItemOut.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("funciona");
-						Login login = new Login(frame);
-						login.setVisible(true);
-						session.close();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("funciona");
+				Login login = new Login(frame);
+				login.setVisible(true);
+				session.close();
 
-					}
-				});
+			}
+		});
 
-				// logica click cambiar contraseña
-				ItemPass.addActionListener(new ActionListener() {
+		// logica click cambiar contraseña
+		ItemPass.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						DChangePass cP = new DChangePass(userHi);
-						cP.setVisible(true);
-						cP.setModal(true);
-						System.out.println("PINCHADO");
-						session.close();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DChangePass cP = new DChangePass(userHi);
+				cP.setVisible(true);
+				cP.setModal(true);
+				System.out.println("PINCHADO");
+				session.close();
 
-					}
-				});
+			}
+		});
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		menuPane.add(lblLogo);
@@ -350,13 +353,35 @@ public class AdminCustomers extends JFrame {
 		menuPane.add(btnStock);
 		menuPane.add(btnClinic);
 		menuPane.add(btnPayments);
-		
+
 		contentPane.add(menuBar);
 		menuBar.add(mnNewMenu);
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
 
+		// Panel para los clientes
+		JPanel panelClientes = new RoundedPanel(null, 50, new Color(148, 220, 219));
+		panelClientes.setBounds(200, 200, 500, 735);
+		panelClientes.setOpaque(false);
+		panelClientes.setLayout(null);
+		contentPane.add(panelClientes);
+
+		// Panel secundario para los clientes
+		JPanel panelTitleCliente = new JPanel();
+		panelTitleCliente.setBounds(10, 50, 480, 670);
+		panelTitleCliente.setBorder(new TitledBorder(lb, "  Cliente  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+				new Color(51, 51, 51)));
+		panelTitleCliente.setOpaque(false);
+		panelClientes.add(panelTitleCliente);
+		panelTitleCliente.setLayout(null);
+
+		// ScrollPane para cargar la talbla con los clientes
+		JScrollPane menuTableCliente = new JScrollPane();
+		menuTableCliente.setBorder(BorderFactory.createEmptyBorder());
+		menuTableCliente.setBounds(10, 25, 460, 634);
+		menuTableCliente.setBackground(new Color(148, 220, 219));
+		panelTitleCliente.add(menuTableCliente);
 
 		table = new JTable();
 		table.setShowVerticalLines(false);
@@ -371,7 +396,33 @@ public class AdminCustomers extends JFrame {
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		table.setBounds(420, 180, 500, 735);
+		table.setBounds(0, 0, 450, 675);
+		menuTableCliente.add(table);
+		menuTableCliente.setViewportView(table);
+
+		// Panel para los historiales
+		JPanel panelHist = new RoundedPanel(null, 50, new Color(148, 220, 219));
+		panelHist.setBounds(900, 200, 500, 735);
+		panelHist.setOpaque(false);
+		panelHist.setLayout(null);
+		contentPane.add(panelHist);
+
+		// Panel secundario para los historiales
+		JPanel panelTitleHist = new JPanel();
+		panelTitleHist.setBounds(10, 11, 480, 705);
+		panelTitleHist.setBorder(new TitledBorder(lb, "  Historial  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+				new Color(51, 51, 51)));
+		panelTitleHist.setOpaque(false);
+		panelHist.add(panelTitleHist);
+		panelTitleHist.setLayout(null);
+
+		// ScrollPane para cargar la talbla con los historiales
+		JScrollPane menuTableHist = new JScrollPane();
+		menuTableHist.setBorder(BorderFactory.createEmptyBorder());
+		menuTableHist.setBounds(10, 25, 460, 670);
+		menuTableHist.setBackground(new Color(148, 220, 219));
+		panelTitleHist.add(menuTableHist);
+		
 
 		tableHis = new JTable();
 		tableHis.setShowVerticalLines(false);
@@ -386,12 +437,12 @@ public class AdminCustomers extends JFrame {
 		tableHis.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tableHis.getTableHeader().setBackground(new Color(148, 220, 219));
 		tableHis.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		tableHis.setBounds(1120, 180, 500, 735);
-		contentPane.add(tableHis);
+		tableHis.setBounds(0, 0, 500, 735);
+		menuTableHist.add(tableHis);
+		menuTableHist.setViewportView(tableHis);
 
 		loadClientes(table);
 		loadCitaStart(tableHis);
-		contentPane.add(table);
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
@@ -422,7 +473,7 @@ public class AdminCustomers extends JFrame {
 		JButton btnInsert = new JButton();
 		btnInsert.setBorderPainted(false);
 		btnInsert.setBackground(new Color(148, 220, 219));
-		btnInsert.setBounds(879, 150, 40, 30);
+		btnInsert.setBounds(450, 9, 40, 30);
 		btnInsert.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -476,17 +527,17 @@ public class AdminCustomers extends JFrame {
 
 			}
 		});
-		contentPane.add(btnInsert);
-		
+		panelClientes.add(btnInsert);
+
 		btnOdonto = new JButton("Odontograma");
 		btnOdonto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
-					Query<ClienteHibernate> consultaClienteExiste = session.createQuery(
-							"FROM ClienteHibernate where dni_cliente=:dni ",ClienteHibernate.class);
+					Query<ClienteHibernate> consultaClienteExiste = session
+							.createQuery("FROM ClienteHibernate where dni_cliente=:dni ", ClienteHibernate.class);
 					consultaClienteExiste.setParameter("dni", selected.split(" ")[0]);
 					List<ClienteHibernate> cliente = consultaClienteExiste.getResultList();
-					CustommerOdont cust = new CustommerOdont(cliente.get(0),session,true);
+					CustommerOdont cust = new CustommerOdont(cliente.get(0), session, true);
 					cust.setModal(true);
 					cust.setVisible(true);
 				}
@@ -494,12 +545,12 @@ public class AdminCustomers extends JFrame {
 		});
 		btnOdonto.setBackground(new Color(148, 220, 219));
 		btnOdonto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOdonto.setBounds(1620, 815, 100, 100);
+		btnOdonto.setBounds(1398, 800, 100, 100);
 		btnOdonto.setBorder(null);
 		contentPane.add(btnOdonto);
 
 		JTextField txt = new JTextField();
-		txt.setBounds(420, 150, 100, 30);
+		txt.setBounds(44, 9, 180, 30);
 		txt.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -508,15 +559,21 @@ public class AdminCustomers extends JFrame {
 
 			}
 		});
-		contentPane.add(txt);
+		panelClientes.add(txt);
+
+		JLabel jlLupa = new JLabel();
+		jlLupa.setBackground(new Color(148, 220, 219));
+		jlLupa.setBounds(10, 11, 36, 28);
+		jlLupa.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		panelClientes.add(jlLupa);
 
 		JButton btnUpdateCliente = new JButton();
 		btnUpdateCliente.setBorderPainted(false);
 		btnUpdateCliente.setBackground(new Color(148, 220, 219));
-		btnUpdateCliente.setBounds(839, 150, 40, 30);
+		btnUpdateCliente.setBounds(400, 9, 40, 30);
 		btnUpdateCliente.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
-		contentPane.add(btnUpdateCliente);
-		
+		panelClientes.add(btnUpdateCliente);
+
 		btnUpdateCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
@@ -597,20 +654,14 @@ public class AdminCustomers extends JFrame {
 			}
 		};
 		tabla.setModel(model);
-		model.setRowCount(1);
 		JTableHeader header = tabla.getTableHeader();
 		if (results.size() < 19) {
 			model.setRowCount(18);
 		} else {
 			System.out.println("oooooooooooooooo");
-			model.setRowCount(results.size() + 1);
+			model.setRowCount(results.size());
 		}
-		int fila = 1, columna = 0;
-
-		model.setValueAt("DNI", 0, 0);
-		model.setValueAt("Nombre", 0, 1);
-		model.setValueAt("Apellido", 0, 2);
-		model.setValueAt("Años", 0, 3);
+		int fila = 0, columna = 0;
 
 		// Carga los datos
 		for (ClienteHibernate especialidad : results) {
@@ -641,14 +692,8 @@ public class AdminCustomers extends JFrame {
 			}
 		};
 		tabla.setModel(model);
-		model.setRowCount(1);
 		JTableHeader header = tabla.getTableHeader();
 		model.setRowCount(34);
-		int fila = 1, columna = 0;
-
-		model.setValueAt("Fecha", 0, 0);
-		model.setValueAt("Doctor", 0, 1);
-		model.setValueAt("Tratamiento", 0, 2);
 
 		// Carga los datos
 //		for (ClienteHibernate especialidad : results) {
@@ -687,19 +732,14 @@ public class AdminCustomers extends JFrame {
 			}
 		};
 		tabla.setModel(model);
-		model.setRowCount(1);
 		JTableHeader header = tabla.getTableHeader();
 		if (results.size() < 35) {
 			model.setRowCount(34);
 		} else {
 			System.out.println("oooooooooooooooo");
-			model.setRowCount(results.size() + 1);
+			model.setRowCount(results.size());
 		}
-		int fila = 1, columna = 0;
-
-		model.setValueAt("Fecha", 0, 0);
-		model.setValueAt("Doctor", 0, 1);
-		model.setValueAt("Tratamiento", 0, 2);
+		int fila = 0, columna = 0;
 
 		// Carga los datos
 		for (CitaHibernate cita : results) {
@@ -741,14 +781,9 @@ public class AdminCustomers extends JFrame {
 		if (results.size() < 19) {
 			model.setRowCount(18);
 		} else {
-			model.setRowCount(results.size() + 1);
+			model.setRowCount(results.size());
 		}
-		int fila = 1, columna = 0;
-
-		model.setValueAt("DNI", 0, 0);
-		model.setValueAt("Nombre", 0, 1);
-		model.setValueAt("Apellido", 0, 2);
-		model.setValueAt("Años", 0, 3);
+		int fila = 0, columna = 0;
 
 		// Carga los datos
 		for (ClienteHibernate especialidad : results) {
@@ -776,9 +811,7 @@ public class AdminCustomers extends JFrame {
 
 			// Evalua en que fila esta
 
-			if (row == 0) {
-				setBackground(new Color(148, 220, 219));
-			} else if (row % 2 == 0) {
+			if (row % 2 == 0) {
 				setBackground(new Color(220, 220, 220));
 			} else {
 				setBackground(new Color(250, 250, 250));
