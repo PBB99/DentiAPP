@@ -2,6 +2,7 @@ package Vista;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -92,10 +93,11 @@ public class PruebaOdonto extends JFrame {
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
 		table.setCellSelectionEnabled(true);
+		table.setIntercellSpacing(new Dimension(1, 0));
+		
 		table.setBackground(new Color(250, 250, 250));
 		table.setSelectionBackground(new Color(148, 220, 219));
 		table.setShowGrid(false);
-		table.setBorder(null);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.setRowHeight(35);
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -380,6 +382,7 @@ public class PruebaOdonto extends JFrame {
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tcr.setBorder(null);
 		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		tabla.setDefaultRenderer(Object.class, tcr);
 
@@ -417,6 +420,7 @@ public class PruebaOdonto extends JFrame {
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tcr.setBorder(null);
 		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		tabla.setDefaultRenderer(Object.class, tcr);
 
@@ -448,7 +452,6 @@ public class PruebaOdonto extends JFrame {
 		if (results.size() < 19) {
 			model.setRowCount(18);
 		} else {
-			System.out.println("oooooooooooooooo");
 			model.setRowCount(results.size() + 1);
 		}
 		int fila = 1, columna = 0;
@@ -468,6 +471,7 @@ public class PruebaOdonto extends JFrame {
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tcr.setBorder(null);
 		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		tabla.setDefaultRenderer(Object.class, tcr);
 
@@ -521,6 +525,7 @@ public class PruebaOdonto extends JFrame {
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tcr.setBorder(null);
 		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		tabla.setDefaultRenderer(Object.class, tcr);
 

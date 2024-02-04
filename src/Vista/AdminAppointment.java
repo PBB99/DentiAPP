@@ -24,6 +24,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -80,6 +82,9 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import com.github.lgooddatepicker.components.CalendarPanel;
+import com.github.lgooddatepicker.optionalusertools.CalendarListener;
+import com.github.lgooddatepicker.zinternaltools.CalendarSelectionEvent;
+import com.github.lgooddatepicker.zinternaltools.YearMonthChangeEvent;
 
 public class AdminAppointment extends JFrame {
 
@@ -95,6 +100,7 @@ public class AdminAppointment extends JFrame {
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
+	private UserHibernate selUs;
 
 	private Color azulito = new Color(148, 220, 219);
   private Font metropolis;
@@ -171,7 +177,7 @@ public class AdminAppointment extends JFrame {
 		mnNewMenu.setIcon(new ImageIcon(getClass().getResource("/Resources/images/definitiva.png")));
 		mnNewMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		mnNewMenu.setOpaque(false);
-		mnNewMenu.setBackground(new Color(0,0,0,0));
+		mnNewMenu.setBackground(new Color(0, 0, 0, 0));
 
 		// nombre del doctor o admin
 		JMenuItem ItemName = new JMenuItem("");
@@ -251,33 +257,33 @@ public class AdminAppointment extends JFrame {
 		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas
-		JPanel panelCitas = new RoundedPanel(50, azulito);
-		panelCitas.setBounds(250, 202, 1050, 800);
+		JPanel panelCitas = new RoundedPanel(50, new Color(148, 220, 219));
+		panelCitas.setBounds(250, 202, 1050, 820);
 		panelCitas.setOpaque(false);
 		panelCitas.setLayout(null);
 		contentPane.add(panelCitas);
 
 		// Panel secundario para las citas
 		JPanel panelTitleCitas = new JPanel();
-		panelTitleCitas.setBounds(15, 15, 1020, 770);
+		panelTitleCitas.setBounds(15, 15, 1020, 790);
 		panelTitleCitas.setBorder(
 				new TitledBorder(lb, "  Citas  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleCitas.setOpaque(false);
 		panelTitleCitas.setLayout(null);
 		panelCitas.add(panelTitleCitas);
 
-		// ScrollPane para cargar la talbla inventario
+		// ScrollPane para cargar la talbla con las citas
 		JScrollPane menuTableStock = new JScrollPane();
 		menuTableStock.setBorder(BorderFactory.createEmptyBorder());
-		menuTableStock.setBounds(5, 20, 1011, 745);
-		menuTableStock.setBackground(azulito);
+		menuTableStock.setBounds(5, 35, 1006, 750);
+		menuTableStock.setBackground(new Color(148, 220, 219));
 		panelTitleCitas.add(menuTableStock);
-		
+
 		// Tabla de citas
 		DefaultTableModel modelo = new DefaultTableModel();
 		JTable table = new JTable();
-		table.setBounds(5, 20, 1011, 745);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setBounds(5, 30, 1011, 750);
+		// table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(modelo);
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
@@ -289,12 +295,26 @@ public class AdminAppointment extends JFrame {
 		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.setRowHeight(35);
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
-		table.getTableHeader().setBackground(azulito);
-		table.getTableHeader().setBorder(new LineBorder(azulito));
-		panelTitleCitas.add(table);
+		table.getTableHeader().setBackground(new Color(148, 220, 219));
+		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
+
 		menuTableStock.add(table);
 		menuTableStock.setViewportView(table);
-		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Seleccionar row
+					table.addColumnSelectionInterval(0, 2);
+
+					// Cambios en la selección
+					table.setColumnSelectionAllowed(true);
+					table.setCellSelectionEnabled(true);
+
+				}
+			}
+		});
+
 		// Panel para el calendario
 		JPanel panelCalendar = new RoundedPanel(null, 50, azulito);
 		panelCalendar.setBounds(1390, 202, 450, 350);
@@ -311,11 +331,6 @@ public class AdminAppointment extends JFrame {
 		panelCalendar.add(panelTitleCalendar);
 
 		// Calendario
-		JCalendar calendar = new JCalendar();
-		calendar.setBounds(25, 25, 400, 300);
-		calendar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		// panelCalendar.add(calendar);
-
 		CalendarPanel calendarPanel = new CalendarPanel();
 		GridBagLayout gbl_calendarPanel = (GridBagLayout) calendarPanel.getLayout();
 		gbl_calendarPanel.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
@@ -324,11 +339,12 @@ public class AdminAppointment extends JFrame {
 		gbl_calendarPanel.columnWidths = new int[] { 5, 219, 5 };
 		calendarPanel.setBounds(25, 25, 400, 300);
 		calendarPanel.setOpaque(false);
+		calendarPanel.setSelectedDate(LocalDate.now());
 		panelCalendar.add(calendarPanel);
 
 		// Panel para los doctores
-		JPanel panelDoctors = new RoundedPanel(50, azulito);
-		panelDoctors.setBounds(1390, 580, 450, 420);
+		JPanel panelDoctors = new RoundedPanel(50, new Color(148, 220, 219));
+		panelDoctors.setBounds(1390, 602, 450, 420);
 		panelDoctors.setOpaque(false);
 		panelDoctors.setLayout(null);
 		contentPane.add(panelDoctors);
@@ -368,65 +384,83 @@ public class AdminAppointment extends JFrame {
 				radioButton.setOpaque(false);
 				buttonGroup.add(radioButton);
 				panelSCrollDoctors.add(radioButton);
+				if (i == 0) {
+					radioButton.setSelected(true);
+					Query<UserHibernate> consultUs = session.createQuery("FROM UserHibernate where dni=:id",
+							UserHibernate.class);
+					consultUs.setParameter("id", radioButton.getId());
+					List<UserHibernate> user = consultaUsers.getResultList();
+					selUs = user.get(0);
+					actualizarTabla(table, calendarPanel, user.get(0));
+				}
 				radioButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
+						//System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
+						Query<UserHibernate> consulUs = session.createQuery("FROM UserHibernate where dni=:id",
+								UserHibernate.class);
+						consulUs.setParameter("id", radioButton.getId());
+						List<UserHibernate> us = consulUs.getResultList();
+						selUs = us.get(0);
+						actualizarTabla(table, calendarPanel, us.get(0));
 					}
 				});
 			}
 		}
 
-		// Doctores
-		JComboBox cbUsuarios = new JComboBox();
-		cbUsuarios.setBounds(1370, 450, 200, 25);
-		cbUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		// contentPane.add(cbUsuarios);
-		// Query<UserHibernate> consultaUsers = session.createQuery("FROM
-		// UserHibernate", UserHibernate.class);
-		// List<UserHibernate> allUsers = consultaUsers.getResultList();
-		for (int i = 0; i < allUsers.size(); i++) {
-			if (allUsers.get(i).getEspecialidad().getId_especialidad() != 0) {
-				cbUsuarios.addItem(allUsers.get(i));
-			}
-		}
+		// Boton para insertar nuevas citas
+		JButton btnInsert = new JButton();
+		btnInsert.setBorderPainted(false);
+		btnInsert.setBackground(new Color(148, 220, 219));
+		// panelTitleCitas.setBounds(15, 15, 1020, 770);
+		btnInsert.setBounds(975, 13, 40, 20);
+		btnInsert.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
+		panelTitleCitas.add(btnInsert);
+
+		// Boton para modificar las citas
+		JButton btnMod = new JButton();
+		btnMod.setBorderPainted(false);
+		btnMod.setBackground(new Color(148, 220, 219));
+		// panelTitleCitas.setBounds(15, 15, 1020, 770);
+		btnMod.setBounds(935, 13, 40, 20);
+		btnMod.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
+		panelTitleCitas.add(btnMod);
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
-mnNewMenu.addMouseListener(new MouseListener() {
-			
+		mnNewMenu.addMouseListener(new MouseListener() {
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(false);
-				mnNewMenu.setBackground(new Color(0,0,0,0));
-				
+				mnNewMenu.setBackground(new Color(0, 0, 0, 0));
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 				mnNewMenu.setOpaque(true);
 				mnNewMenu.setBackground(Color.LIGHT_GRAY);
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 
-				
 			}
 		});
 		this.addWindowListener(new WindowListener() {
@@ -530,7 +564,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("funciona");
+				//System.out.println("funciona");
 				Login login = new Login(frame);
 				login.setVisible(true);
 				session.close();
@@ -547,7 +581,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 				DChangePass cP = new DChangePass(userHi);
 				cP.setVisible(true);
 				cP.setModal(true);
-				System.out.println("PINCHADO");
+				//System.out.println("PINCHADO");
 				session.close();
 
 			}
@@ -573,116 +607,24 @@ mnNewMenu.addMouseListener(new MouseListener() {
 
 		Calendar fechaCalen = new GregorianCalendar();
 		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
-		Query<CitaHibernate> consultaCitas = session
-				.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
-		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-		consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
-//		System.out.println(formateador.format(fechaCalen.getTime()));
-//		for (int i = 8; i < 15; i++) {
-//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
-//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
-//		}
-//		for (int i = 17; i < 20; i++) {
-//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":00", "" });
-//			modelo.insertRow(modelo.getRowCount(), new Object[] { i + ":30", "" });
-//		}
-//
-//		for (int i = 0; i < allCitas.size(); i++) {
-//			java.util.Date dia = allCitas.get(i).getFecha();
-//			if (formateador.format(fechaCalen.getTime()).equals(formateador.format(dia))) {
-//				for (int j = 0; j < table.getModel().getRowCount(); j++) {
-//					if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
-//						table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
-//					}
-//				}
-//			}
-//		}
+		loadCitas(table, calendarPanel, selUs, formateador);
 
-		loadCitas(table, calendar, (UserHibernate) cbUsuarios.getSelectedItem(), formateador);
-
-		calendar.addPropertyChangeListener("calendar", new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-
-				// TODO Auto-generated method stub
-				for (int j = 1; j < table.getModel().getRowCount(); j++) {
-					table.getModel().setValueAt("", j, 1);
-					table.getModel().setValueAt("", j, 2);
-				}
-
-				Calendar fechaCal = (Calendar) evt.getNewValue();
-				Query<CitaHibernate> consulta = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
-				consulta.setParameter("fech", fechaCal.getTime());
-				consulta.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-				List<CitaHibernate> allCitas = consulta.getResultList();
-
-				System.out.println(allCitas.size());
-
-				for (int i = 0; i < allCitas.size(); i++) {
-					Date dia = (Date) allCitas.get(i).getFecha();
-					if (formateador.format(fechaCal.getTime()).equals(formateador.format(dia))) {
-						for (int j = 0; j < table.getModel().getRowCount(); j++) {
-							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
-								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
-								table.getModel().setValueAt(allCitas.get(i).getTratamiento().getNombre(), j, 2);
-							}
-						}
-					}
-				}
-			}
-		});
-
-		cbUsuarios.addActionListener(new ActionListener() {
+		btnInsert.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				// TODO Auto-generated method stub
-				for (int j = 1; j < table.getModel().getRowCount(); j++) {
-					table.getModel().setValueAt("", j, 1);
-					table.getModel().setValueAt("", j, 2);
-				}
-
-				Query<CitaHibernate> consultaCitas = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
-				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-				consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-				List<CitaHibernate> allCitas = consultaCitas.getResultList();
-
-				System.out.println(allCitas.size());
-
-				for (int i = 0; i < allCitas.size(); i++) {
-					Date dia = (Date) allCitas.get(i).getFecha();
-					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
-						for (int j = 0; j < table.getModel().getRowCount(); j++) {
-							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
-								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
-								table.getModel().setValueAt(allCitas.get(i).getTratamiento().getNombre(), j, 2);
-							}
-						}
-					}
-				}
-
-			}
-		});
-
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent event) {
 				String a = (table.getValueAt(table.getSelectedRow(), 0).toString());
-				if (!event.getValueIsAdjusting()) {// This line prevents double events
-					System.out.println("--");
-					if (fechaCalen.getTime().before(calendar.getCalendar().getTime())
-							|| (fechaCalen.getTime().getDay() == calendar.getCalendar().getTime().getDay())
-									&& (fechaCalen.getTime().getMonth() == calendar.getCalendar().getTime().getMonth())
-									&& (fechaCalen.getTime().getYear() == calendar.getCalendar().getTime().getYear())) {
+				java.util.Date d = Date
+						.from(calendarPanel.getSelectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+				if (table.getSelectedColumn() != -1
+						&& table.getValueAt(table.getSelectedRow(), 1).toString().equals("")) {
+					if (fechaCalen.getTime().before(d) || (fechaCalen.getTime().getDay() == d.getDay())
+							&& (fechaCalen.getTime().getMonth() == d.getMonth())
+							&& (fechaCalen.getTime().getYear() == d.getYear())) {
 
-						UserHibernate u = (UserHibernate) cbUsuarios.getSelectedItem();
-						AdminInsertCita us = new AdminInsertCita(u.getDni(), calendar.getCalendar().getTime(),
+						UserHibernate u = selUs;
+						AdminInsertCita us = new AdminInsertCita(u.getDni(), d,
 								(table.getValueAt(table.getSelectedRow(), 0).toString()));
 						us.setVisible(true);
 						us.addWindowListener(new WindowListener() {
@@ -690,7 +632,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 							@Override
 							public void windowClosed(WindowEvent e) {
 								// TODO Auto-generated method stub
-								actualizarTabla();
+								actualizarTabla(table, calendarPanel, selUs);
 							}
 
 							@Override
@@ -732,51 +674,113 @@ mnNewMenu.addMouseListener(new MouseListener() {
 						});
 					}
 				}
+			}
+
+		});
+
+		btnMod.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String a = (table.getValueAt(table.getSelectedRow(), 0).toString());
+				java.util.Date d = Date
+						.from(calendarPanel.getSelectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+				if (table.getSelectedColumn() != -1
+						&& !table.getValueAt(table.getSelectedRow(), 1).toString().equals("")) {
+					if (fechaCalen.getTime().before(d) || (fechaCalen.getTime().getDay() == d.getDay())
+							&& (fechaCalen.getTime().getMonth() == d.getMonth())
+							&& (fechaCalen.getTime().getYear() == d.getYear())) {
+
+						UserHibernate u = selUs;
+						AdminInsertCita user = new AdminInsertCita(u.getDni(), d,
+								(table.getValueAt(table.getSelectedRow(), 0).toString()));
+						user.setVisible(true);
+						user.addWindowListener(new WindowListener() {
+
+							@Override
+							public void windowClosed(WindowEvent e) {
+								// TODO Auto-generated method stub
+								actualizarTabla(table, calendarPanel, selUs);
+							}
+
+							@Override
+							public void windowOpened(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowClosing(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowIconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeiconified(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowActivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void windowDeactivated(WindowEvent e) {
+								// TODO Auto-generated method stub
+
+							}
+
+						});
+					}
+				}
+			}
+
+		});
+
+		calendarPanel.addCalendarListener(new CalendarListener() {
+
+			@Override
+			public void yearMonthChanged(YearMonthChangeEvent arg0) {
+				// TODO Auto-generated method stub
 
 			}
 
-			public void actualizarTabla() {
-				for (int j = 1; j < table.getModel().getRowCount(); j++) {
-					table.getModel().setValueAt("", j, 1);
-					table.getModel().setValueAt("", j, 2);
-				}
-				Query<CitaHibernate> consultaCitas = session
-						.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
-				consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
-				consultaCitas.setParameter("id", (UserHibernate) cbUsuarios.getSelectedItem());
-				List<CitaHibernate> allCitas = consultaCitas.getResultList();
+			@Override
+			public void selectedDateChanged(CalendarSelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				actualizarTabla(table, calendarPanel, selUs);
 
-				for (int i = 0; i < allCitas.size(); i++) {
-					Date dia = (Date) allCitas.get(i).getFecha();
-					if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
-						for (int j = 0; j < table.getModel().getRowCount(); j++) {
-							if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
-								table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
-								table.getModel().setValueAt(allCitas.get(i).getTratamiento().getNombre(), j, 2);
-							}
-						}
-					}
-				}
 			}
 		});
 
 	}
 
-	public void actualizarTabla(JTable table, JCalendar calendar, UserHibernate us, DateFormat formateador) {
-		for (int j = 1; j < table.getModel().getRowCount(); j++) {
+	public void actualizarTabla(JTable table, CalendarPanel calendar, UserHibernate us) {
+		for (int j = 0; j < table.getModel().getRowCount(); j++) {
 			table.getModel().setValueAt("", j, 1);
 			table.getModel().setValueAt("", j, 2);
 		}
-
+		session = instancia.openSession();
+		DateFormat formateador = new SimpleDateFormat("yyyy-M-dd");
 		Query<CitaHibernate> consultaCitas = session
 				.createQuery("FROM CitaHibernate where fecha=:fech and usuario_cita=:id", CitaHibernate.class);
-		consultaCitas.setParameter("fech", calendar.getCalendar().getTime());
+		java.util.Date d = Date.from(calendar.getSelectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+		consultaCitas.setParameter("fech", d);
 		consultaCitas.setParameter("id", us);
 		List<CitaHibernate> allCitas = consultaCitas.getResultList();
 
 		for (int i = 0; i < allCitas.size(); i++) {
 			Date dia = (Date) allCitas.get(i).getFecha();
-			if (formateador.format(calendar.getCalendar().getTime()).equals(formateador.format(dia))) {
+			if (formateador.format(d).equals(formateador.format(dia))) {
 				for (int j = 0; j < table.getModel().getRowCount(); j++) {
 					if (table.getModel().getValueAt(j, 0).equals(allCitas.get(i).getHora())) {
 						table.getModel().setValueAt(allCitas.get(i).getCliente().getNombre(), j, 1);
@@ -787,7 +791,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 		}
 	}
 
-	public void loadCitas(JTable tabla, JCalendar calendar, UserHibernate us, DateFormat formateador) {
+	public void loadCitas(JTable tabla, CalendarPanel calendar, UserHibernate us, DateFormat formateador) {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
 		// Prepara la tabla
@@ -800,7 +804,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 			}
 		};
 
-		//model.insertRow(0, new Object[] { "Hora", "Cita", "Tratamientos" });
+		// model.insertRow(0, new Object[] { "Hora", "Cita", "Tratamientos" });
 
 		for (int i = 8; i <= 15; i++) {
 			model.insertRow(model.getRowCount(), new Object[] { i + ":00", "" });
@@ -819,7 +823,7 @@ mnNewMenu.addMouseListener(new MouseListener() {
 		JTableHeader header = tabla.getTableHeader();
 
 		// Carga los datos
-		actualizarTabla(tabla, calendar, us, formateador);
+		actualizarTabla(tabla, calendar, us);
 
 		// Se alinea el texto de las columnas
 		Renderer tcr = new Renderer();

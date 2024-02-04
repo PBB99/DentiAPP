@@ -82,10 +82,8 @@ public class UserHibernate  implements Serializable{
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	
-	
 
-    @Override
+	@Override
 	public String toString() {
 		return nombre;
 	}
