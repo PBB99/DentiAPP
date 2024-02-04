@@ -50,11 +50,11 @@ public class ChangeUser extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ChangeUser(SessionFactory instancia, JFrame parent, boolean modal) {
+	public ChangeUser(SessionFactory instancia, JFrame parent, boolean modal,UserHibernate userhi) {
 
 		this.instancia = instancia;
 		this.miSesion = instancia.openSession();
-
+		
 		setModal(modal);
 		setContentPane(contentPanel);
 
@@ -72,11 +72,6 @@ public class ChangeUser extends JDialog {
 		JLabel lblEstado = new JLabel("Estado:");
 		lblEstado.setBounds(30, 350, 165, 30);
 		lblEstado.setFont(new Font("Tahoma", Font.PLAIN, 18));
-
-		JComboBox cbDni = new JComboBox();
-		cbDni.setBounds(250, 50, 150, 25);
-		cbDni.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		cbDni.addItem("");
 
 		JLabel lblNombre = new JLabel("Nombre:");
 		lblNombre.setBounds(30, 100, 200, 20);
@@ -123,7 +118,10 @@ public class ChangeUser extends JDialog {
 		tfContraseña.setColumns(10);
 		tfContraseña.setBounds(250, 300, 150, 25);
 		tfContraseña.setFont(new Font("Tahoma", Font.PLAIN, 18));
-
+		
+		JLabel lblDni = new JLabel("");
+		lblDni.setBounds(250, 50, 150, 20);
+		
 		JButton okButton = new JButton("OK");
 		okButton.setBounds(70, 450, 125, 25);
 		okButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -143,6 +141,7 @@ public class ChangeUser extends JDialog {
 			}
 		});
 		cancelButton.setActionCommand("Cancel");
+		cargarDatos(userhi, miSesion, tfNombre, tfApellido, lEspeAct, cbEstado, lblDni);
 
 		// --------------------------LOGICA--------------------------
 
@@ -163,22 +162,13 @@ public class ChangeUser extends JDialog {
 			// TODO: handle exception
 		}
 
-		try {
-			String hql2 = "From UserHibernate";
-			Query<UserHibernate> consultaDni = miSesion.createQuery(hql2, UserHibernate.class);
-			List<UserHibernate> listaUsuarios = consultaDni.getResultList();
-			for (UserHibernate y : listaUsuarios) {
-				cbDni.addItem(y.getDni());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 
 		// BUtton panel
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String dni = cbDni.getSelectedItem().toString();
+				String dni = lblDNI.getText();
 				String nom = tfNombre.getText();
 				String ape = tfApellido.getText();
 				String contra = tfContraseña.getText();
@@ -199,6 +189,7 @@ public class ChangeUser extends JDialog {
 					usuario1.setApellido(ape);
 					usuario1.setContraseña(contra);
 					usuario1.setEspecialidad(especialidadO);
+					
 					//condicion para dar de alta o baja
 					if(usuario1.getEstado()==0) {
 						if(cbEstado.getSelectedIndex()==0) {
@@ -213,7 +204,7 @@ public class ChangeUser extends JDialog {
 							usuario1.setEstado(0);
 						}
 					}
-
+					
 					miSesion.beginTransaction();
 
 					System.out.println("cambiado");
@@ -231,20 +222,6 @@ public class ChangeUser extends JDialog {
 
 			}
 		});
-
-		cbDni.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				cargarDatos(cbDni.getSelectedItem().toString(), miSesion, tfNombre, tfApellido, lEspeAct,cbEstado);
-
-			}
-		});
-
-		// ----------------------------ADICIONES-----------------------------
-
-		contentPanel.add(cbDni);
 		contentPanel.add(cbEspecialidad);
 		contentPanel.add(lblEspecialidad);
 		contentPanel.add(tfApellido);
@@ -263,26 +240,24 @@ public class ChangeUser extends JDialog {
 		
 		
 		contentPanel.add(cbEstado);
+		
+		
+		contentPanel.add(lblDni);
 
 	}
-
 	// método para poner los datos de las especialidades en los textField
-	public static void cargarDatos(String Dni, Session miSesion, JTextField nombre, JTextField apell, JLabel espeActu,JComboBox estado) {
-		String hql = "From UserHibernate where dni=:Dni";
-		Query<UserHibernate> consulta = miSesion.createQuery(hql, UserHibernate.class);
-		consulta.setParameter("Dni", Dni);
-		UserHibernate x = miSesion.get(UserHibernate.class, Dni);
-		UserHibernate u = consulta.getSingleResult();
-		nombre.setText(u.getNombre());
-		apell.setText(u.getApellido());
-		espeActu.setText(u.getEspecialidad().getEspecialidad());
-		if(u.getEstado()==0) {
-			estado.addItem("Baja");
-			estado.addItem("Alta");
-		}else {
-			estado.addItem("Alta");
-			estado.addItem("Baja");
+		public static void cargarDatos(UserHibernate userHi, Session miSesion, JTextField nombre, JTextField apell, JLabel espeActu,JComboBox estado,JLabel dni) {
+			
+			nombre.setText(userHi.getNombre());
+			apell.setText(userHi.getApellido());
+			espeActu.setText(userHi.getEspecialidad().getEspecialidad());
+			dni.setText(userHi.getDni());
+			if(userHi.getEstado()==0) {
+				estado.addItem("Baja");
+				estado.addItem("Alta");
+			}else {
+				estado.addItem("Alta");
+				estado.addItem("Baja");
+			}
 		}
-
-	}
 }
