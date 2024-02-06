@@ -337,12 +337,11 @@ public class DoctorStock extends JFrame {
 					for (int i = 0; i < tablaPedido.getModel().getRowCount(); i++) {
 						tablaPedido.getModel().setValueAt("", i, 0);
 						tablaPedido.getModel().setValueAt("", i, 1);
-						tableStock.getModel().setValueAt("", i, 0);
-						tableStock.getModel().setValueAt("", i, 1);
 					}
-					secondLoadTableStock(tableStock);
+					listInvent.clear();
+					elegidos.clear();
 					
-				
+					loadTableStock(tableStock);
 			}
 		});
 		// Mostrar las tablas
@@ -634,11 +633,7 @@ public class DoctorStock extends JFrame {
 	
 	//para recargar
 	public void secondLoadTableStock(JTable table) {
-		for (int i = 0; i < table.getModel().getRowCount(); i++) {
-			table.getModel().setValueAt("", i, 0);
-			table.getModel().setValueAt("", i, 1);
-			
-		}
+		
 		// Relaiza la consulta
 		String hql = "FROM InventarioHibernate";
 		Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
