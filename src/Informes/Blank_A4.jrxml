@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="odontograma" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7c94f1bb-ca61-4aae-a946-6fed756a03b7">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<parameter name="dni_cliente" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select * from dentiapp.odontogramas where clientes_dni_cliente= $P{dni_cliente}]]>
+	</queryString>
+	<field name="id_odontogramas" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_odontogramas"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_odontogramas"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="odontogramas"/>
+	</field>
+	<field name="id_diente" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_diente"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_diente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="odontogramas"/>
+	</field>
+	<field name="observaciones" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="observaciones"/>
+		<property name="com.jaspersoft.studio.field.label" value="observaciones"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="odontogramas"/>
+	</field>
+	<field name="fecha" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="odontogramas"/>
+	</field>
+	<field name="clientes_dni_cliente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="clientes_dni_cliente"/>
+		<property name="com.jaspersoft.studio.field.label" value="clientes_dni_cliente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="odontogramas"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="66">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="66" backcolor="#3BE7ED" uuid="a2013de9-ed50-4036-95c0-bc6dd2a9b7dc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="20" y="10" width="450" height="56" forecolor="#FFFFFF" uuid="a65a6b10-b295-4981-ac0e-145f27a23b97"/>
+					<textElement>
+						<font size="36"/>
+					</textElement>
+					<text><![CDATA[Historial Odontograma]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="50" y="30" width="100" height="30" uuid="fce8b762-6f4e-4918-bc70-1a9fe966f98f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="90ac4c0b-753f-4837-942d-c4993989195a"/>
+				</reportElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="29" width="100" height="30" uuid="f4013103-9233-40d0-a5b5-424c9d2432ea">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="eab777c8-af85-4b0a-805e-418c8fd608f1"/>
+				</reportElement>
+				<text><![CDATA[Diente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="29" width="100" height="30" uuid="1816d925-a852-4d89-8480-5e68718288bb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="246b2b1f-fedd-4915-9ad4-08686140292d"/>
+				</reportElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="50" y="0" width="100" height="30" uuid="300ce1d0-2668-4d0c-a720-3149878f57b5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="90ac4c0b-753f-4837-942d-c4993989195a"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="100" height="30" uuid="904471f5-e7f3-4cb4-808e-0ae4075bd671">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="eab777c8-af85-4b0a-805e-418c8fd608f1"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{id_diente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="0" width="100" height="30" uuid="b4f90094-d5ed-4754-bac9-c8698b5e34a1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="246b2b1f-fedd-4915-9ad4-08686140292d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
