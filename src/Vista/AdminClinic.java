@@ -525,6 +525,7 @@ public class AdminClinic extends JFrame {
 
 					// Carga los resultados
 					loadTreatments(tableTreatments, result);
+					sh=result;
 				}
 			}
 		});
@@ -579,7 +580,6 @@ public class AdminClinic extends JFrame {
 					session.getTransaction().commit();
 
 					// Recarga la tabla
-					loadSpecialities(tableSpeciality);
 					if (!txtBuscadorSpeciality.getText().isBlank()) {
 						loadSearchSpecialities(tableSpeciality, txtBuscadorSpeciality.getText());
 					} else {
@@ -689,7 +689,12 @@ public class AdminClinic extends JFrame {
 
 						@Override
 						public void windowClosed(WindowEvent e) {
-							loadTreatments(tableTreatments, sh);
+							if (!txtBuscadorTreatments.getText().isBlank()) {
+								loadSearchTreatments(tableTreatments, sh, txtBuscadorTreatments.getText());
+							} else {
+								// Recargamos la tabla
+								loadTreatments(tableTreatments, sh);
+							}
 						}
 
 						@Override
@@ -699,6 +704,25 @@ public class AdminClinic extends JFrame {
 						}
 					});
 				}
+			}
+		});
+
+		// Acción de buscar en la tabla
+		txtBuscadorTreatments.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				loadSearchTreatments(tableTreatments, sh, txtBuscadorTreatments.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
 			}
 		});
 
@@ -730,8 +754,13 @@ public class AdminClinic extends JFrame {
 							session.update(sh);
 							session.getTransaction().commit();
 
-							// Recargamos la tabla
-							loadSpecialities(tableSpeciality);
+							// Recarga la tabla
+							if (!txtBuscadorSpeciality.getText().isBlank()) {
+								loadSearchSpecialities(tableSpeciality, txtBuscadorSpeciality.getText());
+							} else {
+								// Recargamos la tabla
+								loadSpecialities(tableSpeciality);
+							}
 						}
 					}
 				}
@@ -756,8 +785,9 @@ public class AdminClinic extends JFrame {
 								JOptionPane.ERROR_MESSAGE);
 					} else {
 						// Crea el JDialog para modificar el tratamiento
-						DUpdateTratamiento ut = new DUpdateTratamiento(instancia, th);
+						DUpdateTratamiento ut = new DUpdateTratamiento(th, instancia);
 						ut.setModal(true);
+						ut.setSession(session);
 						ut.setTextSpeciality(th.getEspecialidad().getEspecialidad());
 						ut.setTextName(th.getNombre());
 						ut.setTextPrice(th.getPrecio());
@@ -798,8 +828,12 @@ public class AdminClinic extends JFrame {
 
 							@Override
 							public void windowClosed(WindowEvent e) {
-								loadTreatments(tableTreatments, th.getEspecialidad());
-
+								if (!txtBuscadorTreatments.getText().isBlank()) {
+									loadSearchTreatments(tableTreatments, th.getEspecialidad(), txtBuscadorTreatments.getText());
+								} else {
+									// Recargamos la tabla
+									loadTreatments(tableTreatments, th.getEspecialidad());
+								}
 							}
 
 							@Override
@@ -980,8 +1014,8 @@ public class AdminClinic extends JFrame {
 			JTableHeader header = tableTreatments.getTableHeader();
 			Renderer tcr2 = new Renderer();
 			tableTreatments.setDefaultRenderer(Object.class, tcr2);
-			
-			int[] anchos = { 400, 100};
+
+			int[] anchos = { 400, 100 };
 			for (int i = 0; i < 2; i++) {
 				tableTreatments.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 			}
@@ -1027,8 +1061,8 @@ public class AdminClinic extends JFrame {
 			tableTreatments.getColumnModel().getColumn(0).setCellRenderer(tcr2);
 			tableTreatments.getColumnModel().getColumn(1).setCellRenderer(tcr2);
 			tableTreatments.setDefaultRenderer(Object.class, tcr2);
-			
-			int[] anchos = { 400, 100};
+
+			int[] anchos = { 400, 100 };
 			for (int i = 0; i < 2; i++) {
 				tableTreatments.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 			}
@@ -1044,6 +1078,65 @@ public class AdminClinic extends JFrame {
 			lastlastIdTreatements = 0;
 		}
 
+	}
+
+	public void loadSearchTreatments(JTable tableTreatments, SpecialityHibernate especialidad, String busq) {
+		// Busca en la tabla los tratamientos cuyo atributo objeto especialidad es igual
+		// al que sacamos de la consulta anterior
+		String hql = "FROM TreatmentsHibernate where especialidad_tratamiento=:especialidad and nombre like:busq";
+		Query<TreatmentsHibernate> consulta = session.createQuery(hql, TreatmentsHibernate.class);
+		consulta.setParameter("especialidad", especialidad);
+		consulta.setParameter("busq", "%" + busq + "%");
+
+		// Guarda los datos en una lista
+		List<TreatmentsHibernate> results = consulta.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Tratamiento", "Precio" }) {
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tableTreatments.setModel(model);
+		JTableHeader header = tableTreatments.getTableHeader();
+		if (results.size() < 20) {
+			model.setRowCount(19);
+		} else {
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (TreatmentsHibernate tratamiento : results) {
+			model.setValueAt(tratamiento.getNombre(), fila, columna);
+			model.setValueAt(tratamiento.getPrecio(), fila, columna + 1);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr2 = new Renderer();
+		tcr2.setHorizontalAlignment(SwingConstants.CENTER);
+		tableTreatments.getColumnModel().getColumn(0).setCellRenderer(tcr2);
+		tableTreatments.getColumnModel().getColumn(1).setCellRenderer(tcr2);
+		tableTreatments.setDefaultRenderer(Object.class, tcr2);
+
+		int[] anchos = { 400, 100 };
+		for (int i = 0; i < 2; i++) {
+			tableTreatments.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+		}
+
+		// Guarda el último id de los tratamientos
+		String hql2 = "FROM TreatmentsHibernate";
+		Query<TreatmentsHibernate> consulta2 = session.createQuery(hql2, TreatmentsHibernate.class);
+		List<TreatmentsHibernate> results2 = consulta2.getResultList();
+		if (!results2.isEmpty()) {
+			lastlastIdTreatements = results2.getLast().getCodigo_tratamiento();
+		} else {
+			lastlastIdTreatements = 0;
+		}
 	}
 
 	// Clase para cambiar el color de las filas
