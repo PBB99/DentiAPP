@@ -481,7 +481,6 @@ public class AdminCustomers extends JFrame {
 					// Cambios en la selección
 					table.setColumnSelectionAllowed(true);
 					table.setCellSelectionEnabled(true);
-					if (table.getSelectedRow() != 0) {
 						// selección del tratamiento
 						selected = table.getValueAt(table.getSelectedRow(), 0).toString() + " "
 								+ table.getValueAt(table.getSelectedRow(), 1).toString() + " "
@@ -489,9 +488,6 @@ public class AdminCustomers extends JFrame {
 								+ table.getValueAt(table.getSelectedRow(), 3).toString() + " ";
 						loadCita(tableHis);
 						System.out.println(selected);
-					} else {
-						selected = null;
-					}
 
 				}
 			}
