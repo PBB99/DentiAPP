@@ -82,13 +82,22 @@ public class UserHibernate  implements Serializable{
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	
-	
 
-    @Override
+	@Override
 	public String toString() {
 		return nombre;
 	}
+    @OneToMany(mappedBy="usuario_pedido",cascade=CascadeType.ALL)
+    private List<PedidosHibernate>pedidos;
+    public List<PedidosHibernate>getPedidos(){
+    	return pedidos;
+    }
+    
+    public void addPedido(PedidosHibernate p) {
+    	if(pedidos==null)pedidos=new ArrayList<>();
+    	pedidos.add(p);
+    	p.setUser(this);
+    }
     
     @ManyToOne() 
     @JoinColumn(name = "especialidades_id_especialidad")

@@ -72,9 +72,9 @@ public class AdminUsers extends JFrame {
 	private SessionFactory instancia;
 	private Session miSesion;
 	private JTable tabla;
-
+	private String dni;
 	private int control = 0;
-
+	private UserHibernate selected;
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private Color azulito = new Color(148, 220, 219);
@@ -320,6 +320,8 @@ public class AdminUsers extends JFrame {
 		btnUpadate.setToolTipText("Modificar Producto");
 		panelTitleUsers.add(btnUpadate);
 
+
+
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		// lblLogo.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -526,61 +528,73 @@ public class AdminUsers extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				ChangeUser c = new ChangeUser(instancia, frame, true);
-				c.setVisible(true);
-				c.addWindowListener(new WindowListener() {
+				if(dni!=null) {
+					String hql = "From UserHibernate where dni=:Dni";
+					Query<UserHibernate> consulta = miSesion.createQuery(hql, UserHibernate.class);
+					consulta.setParameter("Dni", dni);
+					
+					 selected = consulta.getSingleResult();
+					 ChangeUser c = new ChangeUser(instancia, frame, true,selected);
+					 c.setVisible(true);
+						c.addWindowListener(new WindowListener() {
 
-					@Override
-					public void windowOpened(WindowEvent e) {
-						// TODO Auto-generated method stub
+							@Override
+							public void windowOpened(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-					}
+							}
 
-					@Override
-					public void windowIconified(WindowEvent e) {
-						// TODO Auto-generated method stub
+							@Override
+							public void windowIconified(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-					}
+							}
 
-					@Override
-					public void windowDeiconified(WindowEvent e) {
-						// TODO Auto-generated method stub
+							@Override
+							public void windowDeiconified(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-					}
+							}
 
-					@Override
-					public void windowDeactivated(WindowEvent e) {
-						// TODO Auto-generated method stub
+							@Override
+							public void windowDeactivated(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-					}
+							}
 
-					@Override
-					public void windowClosing(WindowEvent e) {
-						// TODO Auto-generated method stub
+							@Override
+							public void windowClosing(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-					}
+							}
 
-					@Override
-					public void windowClosed(WindowEvent e) {
-						// TODO Auto-generated method stub
+							@Override
+							public void windowClosed(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-						if (control == 0) {
-							cargarTabla("admin", tabla);
-							System.out.println("CARGA");
-						} else {
+								if (control == 0) {
+									cargarTabla("admin", tabla);
+									System.out.println("CARGA");
+								} else {
 
-							cargarTabla("doctor", tabla);
-							System.out.println("SIGUE CARGANDO");
-						}
+									cargarTabla("doctor", tabla);
+									System.out.println("SIGUE CARGANDO");
+								}
 
-					}
+							}
 
-					@Override
-					public void windowActivated(WindowEvent e) {
-						// TODO Auto-generated method stub
+							@Override
+							public void windowActivated(WindowEvent e) {
+								// TODO Auto-generated method stub
 
-					}
-				});
+							}
+						});
+				}else {
+					JOptionPane.showMessageDialog(null, "No se encuentra usuario", "WARNING_MESSAGE",
+							JOptionPane.WARNING_MESSAGE);
+				}
+				
+				
 
 			}
 		});
@@ -688,6 +702,31 @@ public class AdminUsers extends JFrame {
 
 			}
 		});
+		
+		//logica sacar usuario de la tabla
+		tabla.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Seleccionar row
+					tabla.addColumnSelectionInterval(0, 4);
+
+					// Cambios en la selección
+					tabla.setColumnSelectionAllowed(true);
+					tabla.setCellSelectionEnabled(true);
+					
+						// selección del usuario
+							 dni=tabla.getValueAt(tabla.getSelectedRow(),0).toString();
+							 //para evitar excepcion y controlar cuando se selecciona una fila vacia
+							 if(dni.equals("")) {
+								 dni=null;
+							 }
+							
+					
+				}
+			}
+			
+		});
 
 		// logica click cambiar contraseña
 
@@ -758,6 +797,7 @@ public class AdminUsers extends JFrame {
 		// preparacion de la tabla
 
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+
 				new String[] { "DNI", "Nombre", "Apellido", "Especialidad", "Estado" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -834,6 +874,11 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
 				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
+				if(y.getEstado()==0) {
+					model.setValueAt("Baja", fila, 4);
+				}else {
+					model.setValueAt("Alta", fila, 4);
+				}
 				fila++;
 			}
 
@@ -893,6 +938,13 @@ public class AdminUsers extends JFrame {
 				model.setValueAt(y.getNombre(), fila, 1);
 				model.setValueAt(y.getApellido(), fila, 2);
 				model.setValueAt(y.getEspecialidad().getEspecialidad(), fila, 3);
+
+        if(y.getEstado()==0) {
+					model.setValueAt("Baja", fila, 4);
+				}else {
+					model.setValueAt("Alta", fila, 4);
+				}
+
 				fila++;
 			}
 
