@@ -73,4 +73,23 @@ public class InventarioHibernate implements Serializable{
     public void setProveedores(List<ProveedorHibernate> proveedores) {
         this.proveedores = proveedores;
     }
+    
+    @ManyToMany()
+    @JoinTable(name = "usuarios_has_inventario",
+        joinColumns = {@JoinColumn(name = "inventario_id_producto")},
+        inverseJoinColumns = {@JoinColumn(name = "usuarios_dni_usuario")}
+    )
+    private List<UserHibernate> usuarios= new ArrayList<UserHibernate>();
+    
+    public List<UserHibernate> getUsuarios() {
+    	return usuarios;
+    }
+    public void addUser(UserHibernate p)
+    {
+        this.usuarios.add(p);
+        p.getProductos().add(this);
+    }
+    public void setUsuarios(List<UserHibernate> usuarios) {
+        this.usuarios = usuarios;
+    }
 }

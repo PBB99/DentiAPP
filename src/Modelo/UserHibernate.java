@@ -123,4 +123,21 @@ public class UserHibernate  implements Serializable{
         citas.add(c);
         c.setUser(this);
     }
+	
+	@ManyToMany(mappedBy = "usuarios")
+    private List<InventarioHibernate> productos = new ArrayList<InventarioHibernate>();
+
+    public List<InventarioHibernate> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<InventarioHibernate> productos) {
+        this.productos = productos;
+    }
+    
+    public void addProducto(InventarioHibernate i)
+    {
+        this.productos.add(i);
+        i.getUsuarios().add(this);
+    }
 }
