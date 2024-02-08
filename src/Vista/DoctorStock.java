@@ -348,7 +348,6 @@ public class DoctorStock extends JFrame {
 						
 						if(listInvent.contains(x)) {
 							listInvent.get(x.getId_producto()).setCantidad(x.getCantidad()+borrado.getCantidad());
-							System.out.println("si entra");
 						}
 						elegidos.remove(x);
 						
@@ -356,6 +355,7 @@ public class DoctorStock extends JFrame {
 					}
 					
 				}
+				
 				for(InventarioHibernate y: listInvent) {
 					if(y.getId_producto()==borrado.getId_producto()) {
 						y.setCantidad(y.getCantidad()+borrado.getCantidad());
@@ -389,6 +389,7 @@ public class DoctorStock extends JFrame {
 					loadSearchStock(tablaPedido, txtInventario.getText(), listInvent);
 			}
 		});
+		
 		// Mostrar las tablas
 		listInvent = loadTableStock(tableStock);
 		// Acción de seleccionar elemento de la tabla Inventario
