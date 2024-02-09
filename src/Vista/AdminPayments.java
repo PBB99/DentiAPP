@@ -484,11 +484,11 @@ public class AdminPayments extends JFrame {
 				if (tableHis.getSelectedRow() != -1
 						&& tableHis.getValueAt(table.getSelectedRow(), 0).toString().equals("") == false) {
 					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
-					java.sql.Date date = java.sql.Date.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
+					java.sql.Date date = java.sql.Date
+							.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
 					System.out.println(date);
 					Query<CitaHibernate> consultaCitaHibernate = session.createQuery(
-							"FROM CitaHibernate where clientes_dni_cliente=:dni and fecha=:fech",
-							CitaHibernate.class);
+							"FROM CitaHibernate where clientes_dni_cliente=:dni and fecha=:fech", CitaHibernate.class);
 					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
 					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
 					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
@@ -532,6 +532,35 @@ public class AdminPayments extends JFrame {
 		});
 		btnNewButton.setBounds(279, 148, 89, 23);
 		contentPane.add(btnNewButton);
+
+		JButton btnInforme = new JButton("New button");
+		btnInforme.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (tableHis.getSelectedRow() != -1
+						&& tableHis.getValueAt(table.getSelectedRow(), 0).toString().equals("") == false) {
+					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
+					java.sql.Date date = java.sql.Date
+							.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
+					System.out.println(date);
+					Query<CitaHibernate> consultaCitaHibernate = session.createQuery(
+							"FROM CitaHibernate where clientes_dni_cliente=:dni and fecha=:fech", CitaHibernate.class);
+					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
+					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
+					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
+					
+					Double pagado = cita.get(0).getPagado() + Double.valueOf(cita.get(0).getTratamiento().getPrecio()) / Double.valueOf(cita.get(0).getMensualidades());
+					cita.get(0).setPagado(pagado);
+					session.beginTransaction();
+					session.update(cita.get(0));
+					session.getTransaction().commit();
+					System.out.println(pagado+"asdyubasigvyudasbhasdyugvshbdasdyhvbusdaagyubh");
+					loadCita(tableHis);
+
+				}
+			}
+		});
+		btnInforme.setBounds(400, 148, 89, 23);
+		contentPane.add(btnInforme);
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
@@ -630,9 +659,9 @@ public class AdminPayments extends JFrame {
 			}
 			if (cita.getPagado() == 0) {
 				model.setValueAt("No pagado", fila, 3);
-			} else if(cita.getPagado() > 0 && cita.getPagado()<cita.getTratamiento().getPrecio()) {
+			} else if (cita.getPagado() > 0 && cita.getPagado() < cita.getTratamiento().getPrecio()) {
 				model.setValueAt("En proceso", fila, 3);
-			}else {
+			} else {
 				model.setValueAt("Pagado", fila, 3);
 			}
 			fila++;
