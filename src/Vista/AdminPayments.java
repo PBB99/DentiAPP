@@ -17,6 +17,8 @@ import java.awt.event.WindowListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -479,41 +481,51 @@ public class AdminPayments extends JFrame {
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tableHis.getSelectedRow() != -1 && tableHis.getValueAt(table.getSelectedRow(), 0).toString().equals("") == false) {
-					//System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
-
+				if (tableHis.getSelectedRow() != -1
+						&& tableHis.getValueAt(table.getSelectedRow(), 0).toString().equals("") == false) {
+					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
+					java.sql.Date date = java.sql.Date.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
+					System.out.println(date);
+					Query<CitaHibernate> consultaCitaHibernate = session.createQuery(
+							"FROM CitaHibernate where clientes_dni_cliente=:dni and fecha=:fech",
+							CitaHibernate.class);
+					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
+					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
+					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
 					if (comboBox.getSelectedIndex() == 0) {
-						
-						DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-						Date date = null;
-						try {
-							date = formatter.parse(tableHis.getValueAt(table.getSelectedRow(), 0).toString());
-						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						System.out.println(date);
-						Query<CitaHibernate> consultaCitaHibernate = session.createQuery(
-								"FROM CitaHibernate where usuarios_dni_usuario=:dni and fecha=:fech",
-								CitaHibernate.class);
-						consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
-						consultaCitaHibernate.setParameter("fech", date);
-						List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
-						CitaHibernate citaEx = consultaCitaHibernate.getSingleResult();
-						citaEx.setMensualidades(999);
+
 						cita.get(0).setMensualidades(1);
 						session.beginTransaction();
-						session.update(citaEx);
+						session.update(cita.get(0));
 						session.getTransaction().commit();
-						System.out.println(citaEx.getIdcita());
-						//loadCita(tableHis);
+						System.out.println(cita.get(0).getIdcita());
+						System.out.println(cita.get(0).getFecha());
+						loadCita(tableHis);
 
 					} else if (comboBox.getSelectedIndex() == 1) {
-
+						cita.get(0).setMensualidades(3);
+						session.beginTransaction();
+						session.update(cita.get(0));
+						session.getTransaction().commit();
+						System.out.println(cita.get(0).getIdcita());
+						System.out.println(cita.get(0).getFecha());
+						loadCita(tableHis);
 					} else if (comboBox.getSelectedIndex() == 2) {
-
+						cita.get(0).setMensualidades(6);
+						session.beginTransaction();
+						session.update(cita.get(0));
+						session.getTransaction().commit();
+						System.out.println(cita.get(0).getIdcita());
+						System.out.println(cita.get(0).getFecha());
+						loadCita(tableHis);
 					} else if (comboBox.getSelectedIndex() == 3) {
-
+						cita.get(0).setMensualidades(12);
+						session.beginTransaction();
+						session.update(cita.get(0));
+						session.getTransaction().commit();
+						System.out.println(cita.get(0).getIdcita());
+						System.out.println(cita.get(0).getFecha());
+						loadCita(tableHis);
 					}
 				}
 			}
@@ -549,7 +561,7 @@ public class AdminPayments extends JFrame {
 		// Relaiza la consulta
 		this.session = instancia.openSession();
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "Fecha", "Doctor", "Tratamiento" }) {
+				new String[] { "Fecha", "Doctor", "Tratamiento", "Pago" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -589,7 +601,7 @@ public class AdminPayments extends JFrame {
 
 		// Prepara la tabla
 		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] { "Fecha", "Doctor", "Tratamiento" }) {
+				new String[] { "Fecha", "Mensualidad", "Tratamiento", "Pago" }) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -615,6 +627,13 @@ public class AdminPayments extends JFrame {
 				model.setValueAt("No escogida", fila, 1);
 			} else {
 				model.setValueAt(cita.getMensualidades(), fila, 1);
+			}
+			if (cita.getPagado() == 0) {
+				model.setValueAt("No pagado", fila, 3);
+			} else if(cita.getPagado() > 0 && cita.getPagado()<cita.getTratamiento().getPrecio()) {
+				model.setValueAt("En proceso", fila, 3);
+			}else {
+				model.setValueAt("Pagado", fila, 3);
 			}
 			fila++;
 		}
