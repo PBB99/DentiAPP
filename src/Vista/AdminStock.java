@@ -444,7 +444,7 @@ public class AdminStock extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(lblCorreo.isEnabled()) {
-					MakeDelivery mk=new MakeDelivery(auxiList);
+					MakeDelivery mk=new MakeDelivery();
 					mk.setVisible(true);
 					mk.setModal(true);
 				}

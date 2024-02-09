@@ -92,4 +92,22 @@ public class InventarioHibernate implements Serializable{
     public void setUsuarios(List<UserHibernate> usuarios) {
         this.usuarios = usuarios;
     }
+    
+
+    @OneToMany(mappedBy = "producto_pedido")
+	private List<PedidosHibernate> pedidos;
+
+	public List<PedidosHibernate> getProductos() {
+		return pedidos;
+	}
+
+	public void addPedido(PedidosHibernate th) {
+		if (pedidos == null) {
+			pedidos = new ArrayList<>();
+			pedidos.add(th);
+			th.setProducto(this);
+		}
+    
+   
 }
+	}
