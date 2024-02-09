@@ -419,8 +419,40 @@ public class AdminStock extends JFrame {
 		tableProveedor.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 		menuTableProveedor.add(tableProveedor);
 		menuTableProveedor.setViewportView(tableProveedor);
+		
+		JLabel lblCorreo = new JLabel("");
+		lblCorreo.setIcon(new ImageIcon(AdminStock.class.getResource("/Resources/images/mail.png")));
+		lblCorreo.setBounds(230, 120, 123, 69);
+		String hql2="From InventarioHibernate where cantidad<0";
+		Query<InventarioHibernate> consulta2 = session.createQuery(hql2, InventarioHibernate.class);
+		List<InventarioHibernate>auxiList=consulta2.getResultList();
+		if(auxiList.isEmpty()==false) {
+			lblCorreo.setVisible(true);
+			lblCorreo.setEnabled(true);
+		}else {
+			lblCorreo.setVisible(false);
+			lblCorreo.setEnabled(false);
+		}
+		
+		contentPane.add(lblCorreo);
+
 
 		// -------------------- Lógica --------------------
+		//correo
+		lblCorreo.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(lblCorreo.isEnabled()) {
+					MakeDelivery mk=new MakeDelivery(auxiList);
+					mk.setVisible(true);
+					mk.setModal(true);
+				}
+				
+
+			}
+		});
+		
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
 
@@ -969,10 +1001,12 @@ public class AdminStock extends JFrame {
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-
+		
+		
 	}
 
 	// -------------------- Métodos y funciones --------------------
+	
 	public void loadTableStock(JTable table) {
 		// Relaiza la consulta
 		String hql = "FROM InventarioHibernate";
