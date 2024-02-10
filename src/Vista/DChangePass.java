@@ -169,17 +169,17 @@ public class DChangePass extends JDialog {
 		}
 		
 		JLabel LoldPass = new JLabel("CONTRASEÑA ACTUAL");
-		LoldPass.setFont(new Font("Gentium Book Basic", Font.BOLD, 30));
+		LoldPass.setFont(new Font("Dialog", Font.BOLD, 25));
 		LoldPass.setBounds(49, 42, 339, 38);
 		getContentPane().add(LoldPass);
 		
 		JLabel lnewPass1 = new JLabel("NUEVA CONTRASEÑA");
-		lnewPass1.setFont(new Font("Gentium Book Basic", Font.BOLD, 30));
+		lnewPass1.setFont(new Font("Dialog", Font.BOLD, 25));
 		lnewPass1.setBounds(49, 148, 339, 38);
 		getContentPane().add(lnewPass1);
 		
 		JLabel lnewPass2 = new JLabel("REPITA CONTRASEÑA");
-		lnewPass2.setFont(new Font("Gentium Book Basic", Font.BOLD, 30));
+		lnewPass2.setFont(new Font("Dialog", Font.BOLD, 25));
 		lnewPass2.setBounds(49, 268, 379, 38);
 		getContentPane().add(lnewPass2);
 		

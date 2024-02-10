@@ -1,33 +1,122 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Manual de Ayuda</title>
+    <!-- CSS -->
     <style>
         .header {
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #1FC0BF;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        h2 {
+            background-color: #5DCACA;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 25px;
+        }
+
+        p {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 45px;
+        }
+
+        ul li {
+            line-height: 2;
+            margin-left: 45px;
+        }
+
+        .sangria {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 100px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            height: 2px;
+            background-color: #F45559;
+            border: transparent;
+        }
+
+        .numeros {
+            background-color: #F45559;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 6px;
+        }
+
+        .imagen {
+            display: block;
+            margin: auto;
+            border: 3px solid #a1a1a1;
+        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <img src="../imagenes/logoMenu.png" alt="Imagen" />
         <h1>Manual de Ayuda</h1>
     </div>
-    <p>Este manual de ayuda está diseñado para ayudar a los usuarios a utilizar la aplicación DentiAPP.<br>
-    En DentiAPP podremos gestionar la información de las citas y los distintos materiales que se utilizan en la clínica, <br>
-    así como la información de los pacientes y los doctores.</p>
+
+    <hr><br>
+
+    <p>Este manual de ayuda está diseñado para ayudar a los usuarios a utilizar la aplicación DentiAPP.
+        En DentiAPP podremos gestionar la información de las citas y los distintos materiales que se utilizan en la
+        clínica, así como la información de los pacientes y los doctores.</p>
+
+    <br>
+
     <h2>Modulos:</h2>
+
     <ul>
-        <li><a href="#citas">Citas</a></li>
-        <li><a href="#usuarios">Usuarios</a></li>
-        <li><a href="#pacientes">Pacientes</a></li>
-        <li><a href="#inventario">Inventario</a></li>
-        <li><a href="#clinica">Clínica</a></li>
-        <li><a href="#pagos">Pagos</a></li>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#citasA">Módulo Citas Administrador</a></li>
+        <li><a href="#citasD">Módulo Citas Doctor</a></li>
+        <li><a href="#usuarios">Módulo Usuarios</a></li>
+        <li><a href="#pacientesA">Módulo Pacientes Administrador</a></li>
+        <li><a href="#pacientesD">Módulo Pacientes Doctor</a></li>
+        <li><a href="#inventarioA">Módulo Inventario Administrador</a></li>
+        <li><a href="#inventarioD">Módulo Inventario Doctor</a></li>
+        <li><a href="#clinica">Módulo Clínica</a></li>
+        <li><a href="#pagos">Módulo Pagos</a></li>
     </ul>
 </body>
-</html>
 
- 
+</html>
