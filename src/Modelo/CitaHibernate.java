@@ -19,18 +19,26 @@ public class CitaHibernate implements Serializable{
 	@Column(name = "hora", nullable = false)
 	private String hora;
 	
-	@Column(name = "observaciones", nullable = false)
+	@Column(name = "observaciones")
 	private String observaciones;
+	
+	@Column(name = "pagado", nullable = false)
+	private double pagado;
+	
+	@Column(name = "mensualidades", nullable = false)
+	private int mensualidades;
 	
 	public CitaHibernate() {}
 	
-	public CitaHibernate(Integer idcita, Date fecha, String hora, String observaciones) {
+	public CitaHibernate(Integer idcita, Date fecha, String hora, String observaciones, double pagado, int mensualidades) {
 		super();
 		this.idcita = idcita;
 //		this.especialidad = especialidad;
 		this.fecha = fecha;
 		this.hora = hora;
 		this.observaciones = observaciones;
+		this.pagado = pagado;
+		this.mensualidades = mensualidades;
 	}
 
 	public Integer getIdcita() {
@@ -68,6 +76,28 @@ public class CitaHibernate implements Serializable{
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
+
+	
+	
+
+
+
+	public double getPagado() {
+		return pagado;
+	}
+
+	public void setPagado(double pagado) {
+		this.pagado = pagado;
+	}
+
+	public int getMensualidades() {
+		return mensualidades;
+	}
+
+	public void setMensualidades(int mensualidades) {
+		this.mensualidades = mensualidades;
+	}
+
 
 
 

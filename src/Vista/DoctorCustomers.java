@@ -11,6 +11,7 @@ import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -76,6 +77,7 @@ public class DoctorCustomers extends JFrame {
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
+
 	/**
 	 * Launch the application.
 	 */
@@ -118,28 +120,28 @@ public class DoctorCustomers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes --------------------
-		//nombre esquina
-		
+		// nombre esquina
+
 		JPanel panelTitleAdmin = new JPanel();
 		panelTitleAdmin.setBounds(1, 2, 170, 90);
-		panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
+		panelTitleAdmin
+				.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
 		panelTitleAdmin.setOpaque(false);
 		panelTitleAdmin.setLayout(null);
-		
-		//rounded panel de fomdo para el nombre 
+
+		// rounded panel de fomdo para el nombre
 		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
 		panelnombre.setBounds(136, 0, 150, 60);
 		panelnombre.setOpaque(false);
 		panelnombre.setLayout(null);
 		contentPane.add(panelnombre);
 		panelnombre.add(panelTitleAdmin);
-		String htmlString = "<html><body><sup>" 
-		+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
-		"</span></body></html>";
+		String htmlString = "<html><body><sup>" + userHi.getNombre() + "</sup><span>" + userHi.getApellido()
+				+ "</span></body></html>";
 		JLabel lblNAdmin = new JLabel(htmlString);
 		lblNAdmin.setToolTipText("Nombre & Apellido");
 		lblNAdmin.setBounds(10, 5, 150, 60);
-		lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
+		lblNAdmin.setFont(new Font("metropolis", Font.PLAIN, 20));
 		panelTitleAdmin.add(lblNAdmin);
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
@@ -354,7 +356,7 @@ public class DoctorCustomers extends JFrame {
 
 		// Panel secundario para los clientes
 		JPanel panelTitleCliente = new JPanel();
-		panelTitleCliente.setBounds(10, 50, 480, 670);
+		panelTitleCliente.setBounds(10, 0, 480, 720);
 		panelTitleCliente.setBorder(
 				new TitledBorder(lb, "  Cliente  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleCliente.setOpaque(false);
@@ -364,7 +366,7 @@ public class DoctorCustomers extends JFrame {
 		// ScrollPane para cargar la talbla con los clientes
 		JScrollPane menuTableCliente = new JScrollPane();
 		menuTableCliente.setBorder(BorderFactory.createEmptyBorder());
-		menuTableCliente.setBounds(10, 25, 460, 634);
+		menuTableCliente.setBounds(5, 75, 470, 640);
 		menuTableCliente.setBackground(new Color(148, 220, 219));
 		panelTitleCliente.add(menuTableCliente);
 
@@ -427,14 +429,15 @@ public class DoctorCustomers extends JFrame {
 
 		loadClientes(table);
 		loadCitaStart(tableHis);
-
-		JPanel panel = new JPanel();
+		
+		JPanel panel = new RoundedPanel(null, 50, new Color(148, 220, 219));
+		panel.setOpaque(false);
 		panel.setLayout(null);
-		panel.setBounds(1350, 350, 443, 225);
+		panel.setBounds(1450, 350, 443, 225);
 		contentPane.add(panel);
 
 		JLabel lblNewLabel = new JLabel("Parece que has tenido una consulta con (nombre del cliente)");
-		lblNewLabel.setBounds(26, 5, 355, 14);
+		lblNewLabel.setBounds(32, 5, 355, 14);
 		panel.add(lblNewLabel);
 
 		table.addMouseListener(new MouseAdapter() {
@@ -447,17 +450,13 @@ public class DoctorCustomers extends JFrame {
 					// Cambios en la selección
 					table.setColumnSelectionAllowed(true);
 					table.setCellSelectionEnabled(true);
-					if (table.getSelectedRow() != 0) {
-						// selección del tratamiento
-						selected = table.getValueAt(table.getSelectedRow(), 0).toString() + " "
-								+ table.getValueAt(table.getSelectedRow(), 1).toString() + " "
-								+ table.getValueAt(table.getSelectedRow(), 2).toString() + " "
-								+ table.getValueAt(table.getSelectedRow(), 3).toString() + " ";
-						loadCita(tableHis);
-						System.out.println(selected);
-					} else {
-						selected = null;
-					}
+					// selección del tratamiento
+					selected = table.getValueAt(table.getSelectedRow(), 0).toString() + " "
+							+ table.getValueAt(table.getSelectedRow(), 1).toString() + " "
+							+ table.getValueAt(table.getSelectedRow(), 2).toString() + " "
+							+ table.getValueAt(table.getSelectedRow(), 3).toString() + " ";
+					loadCita(tableHis);
+					System.out.println(selected);
 					LocalDate localDate = LocalDate.now();
 					java.sql.Date dia = Date.valueOf(
 							LocalDate.of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth()));
@@ -509,23 +508,32 @@ public class DoctorCustomers extends JFrame {
 		contentPane.add(btnOdonto);
 
 		JTextField txt = new JTextField();
-		txt.setBounds(44, 9, 180, 30);
-		txt.addActionListener(new ActionListener() {
+		txt.setBounds(44, 30, 180, 30);
+		txt.addKeyListener(new KeyListener() {
 
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void keyTyped(KeyEvent e) {
 
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
 				loadSearch(table, txt.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
 
 			}
 		});
-		panelClientes.add(txt);
-		
+		panelTitleCliente.add(txt);
+
 		JLabel jlLupa = new JLabel();
 		jlLupa.setBackground(new Color(148, 220, 219));
-		jlLupa.setBounds(10, 11, 36, 28);
+		jlLupa.setBounds(10, 30, 36, 28);
 		jlLupa.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
-		panelClientes.add(jlLupa);
-
+		panelTitleCliente.add(jlLupa);
 
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(138, 30, 162, 22);
@@ -553,7 +561,7 @@ public class DoctorCustomers extends JFrame {
 		panel.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_2 = new JLabel("Observaciones:");
-		lblNewLabel_2.setBounds(38, 65, 126, 14);
+		lblNewLabel_2.setBounds(32, 65, 126, 14);
 		panel.add(lblNewLabel_2);
 
 		JButton btnNewButton = new JButton("Actualizar");
