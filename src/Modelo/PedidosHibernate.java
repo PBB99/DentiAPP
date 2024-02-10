@@ -12,18 +12,21 @@ import javax.persistence.*;
 public class PedidosHibernate implements Serializable {
 
 	@Id
-	@Column(name = "id_pedidos", nullable = false)
+	@Column(name = "id_pedido", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id_pedido;
 
 	@Column(name = "fecha", nullable = false)
 	private Date fecha;
 
-	@Column(name = "estado", nullable = false)
-	private String estado;
-
-	public PedidosHibernate(Integer id_odontograma, Date fecha) {
+	public PedidosHibernate() {
 		super();
-		this.id_pedido = id_odontograma;
+		
+
+	}
+
+	public PedidosHibernate(Date fecha) {
+		super();
 		this.fecha = fecha;
 
 	}
@@ -37,7 +40,7 @@ public class PedidosHibernate implements Serializable {
 	}
 
 	@ManyToOne()
-	@JoinColumn(name = "pedidos_id_pedido")
+	@JoinColumn(name = "pedidos_id_producto")
 	private InventarioHibernate producto_pedido;
 
 	public InventarioHibernate getProducto() {
@@ -48,16 +51,6 @@ public class PedidosHibernate implements Serializable {
 		this.producto_pedido = especialidad_tratamiento;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "usuarios_dni_usuario")
-	private UserHibernate usuario_pedido; // Este atributo va a @OneToMany en Cliente
-
-	public UserHibernate getUser() {
-		return usuario_pedido;
-	}
-
-	public void setUser(UserHibernate usuario_pedido) {
-		this.usuario_pedido = usuario_pedido;
-	}
+	
 
 }

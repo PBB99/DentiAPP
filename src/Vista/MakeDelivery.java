@@ -84,7 +84,7 @@ public class MakeDelivery extends JDialog {
 		getContentPane().setLayout(null);
 
 		JPanel buttonPane = new JPanel();
-		buttonPane.setBounds(0, 728, 800, 33);
+		buttonPane.setBounds(0, 800, 800, 33);
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane);
 
@@ -92,10 +92,18 @@ public class MakeDelivery extends JDialog {
 
 		buttonPane.add(okButton);
 
-		JButton cancelButton = new JButton("Cancel");
+		JButton cancelButton = new JButton("Cancelar");
 		cancelButton.setActionCommand("Cancel");
 		buttonPane.add(cancelButton);
-
+		cancelButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				setModal(false);
+				dispose();
+			}
+		});
 		okButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -105,13 +113,20 @@ public class MakeDelivery extends JDialog {
 				java.util.Date fecha = new Date();
 				java.sql.Date dia = new java.sql.Date(fecha.getTime());
 				
-				PedidosHibernate pedido=new PedidosHibernate(lastIdpedido,dia);
+				
 				
 				for(InventarioHibernate y:pedidoList) {
+					PedidosHibernate pedido=new PedidosHibernate(dia);
 					y.addPedido(pedido);
+					pedido.setProducto(y);
 					session.update(y);
+					session.saveOrUpdate(pedido);
 				}
+				
 				session.getTransaction().commit();
+				setModal(false);
+				dispose();
+				
 			}
 		});
 
@@ -188,7 +203,11 @@ public class MakeDelivery extends JDialog {
 				// recorrer y encontrar el id, a traves de for each con una lista local que se
 				// carga cada vez que cargamos la lista por que buscar por nombre puede dar
 				// problemas
-				int resultado = mostrarInputDialog(selectedProduct);
+				int resultado;
+				do {
+					resultado = mostrarInputDialog(selectedProduct);
+				}while(resultado<0);
+				
 				tableStock.setValueAt(resultado,tableStock.getSelectedRow(),tableStock.getSelectedColumn()+1);
 				pedidoList.get(tableStock.getSelectedRow()).setCantidad(resultado);
 				
@@ -240,7 +259,7 @@ public class MakeDelivery extends JDialog {
 	public static int mostrarInputDialog(String producto) {
 		// Crear un cuadro de diálogo de entrada
 		int numero = 0;
-		String input = JOptionPane.showInputDialog("Ingrese cuantas cantidades vas a utilizar de : " + producto);
+		String input = JOptionPane.showInputDialog("Ingrese cuantas cantidades vas a pedir : " + producto);
 
 		try {
 			// Intenta convertir la entrada a un entero
