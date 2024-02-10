@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,9 +33,11 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -75,6 +79,7 @@ public class AdminPayments extends JFrame {
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
+	private Color azulito = new Color(148, 220, 219);
 
 	/**
 	 * Launch the application.
@@ -388,14 +393,14 @@ public class AdminPayments extends JFrame {
 
 		// Panel para los clientes
 		JPanel panelClientes = new RoundedPanel(null, 50, new Color(148, 220, 219));
-		panelClientes.setBounds(200, 200, 500, 735);
+		panelClientes.setBounds(232, 200, 500, 735);
 		panelClientes.setOpaque(false);
 		panelClientes.setLayout(null);
 		contentPane.add(panelClientes);
 
 		// Panel secundario para los clientes
 		JPanel panelTitleCliente = new JPanel();
-		panelTitleCliente.setBounds(10, 50, 480, 670);
+		panelTitleCliente.setBounds(10, 0, 480, 720);
 		panelTitleCliente.setBorder(
 				new TitledBorder(lb, "  Cliente  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleCliente.setOpaque(false);
@@ -405,9 +410,45 @@ public class AdminPayments extends JFrame {
 		// ScrollPane para cargar la talbla con los clientes
 		JScrollPane menuTableCliente = new JScrollPane();
 		menuTableCliente.setBorder(BorderFactory.createEmptyBorder());
-		menuTableCliente.setBounds(10, 25, 460, 634);
+		menuTableCliente.setBounds(5, 75, 470, 640);
 		menuTableCliente.setBackground(new Color(148, 220, 219));
 		panelTitleCliente.add(menuTableCliente);
+
+		JTextField txt = new JTextField();
+		txt.setBounds(44, 30, 180, 30);
+//		txt.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//
+//				loadSearch(table, txt.getText());
+//
+//			}
+//		});
+		txt.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				loadSearch(table, txt.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		panelTitleCliente.add(txt);
+
+		JLabel jlLupa = new JLabel();
+		jlLupa.setBackground(new Color(148, 220, 219));
+		jlLupa.setBounds(10, 30, 36, 28);
+		jlLupa.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
+		panelTitleCliente.add(jlLupa);
 
 		// tabla con los clientes
 		table = new JTable();
@@ -429,14 +470,14 @@ public class AdminPayments extends JFrame {
 
 		// Panel para los historiales
 		JPanel panelHist = new RoundedPanel(null, 50, new Color(148, 220, 219));
-		panelHist.setBounds(900, 200, 500, 735);
+		panelHist.setBounds(900, 200, 750, 735);
 		panelHist.setOpaque(false);
 		panelHist.setLayout(null);
 		contentPane.add(panelHist);
 
 		// Panel secundario para los historiales
 		JPanel panelTitleHist = new JPanel();
-		panelTitleHist.setBounds(10, 11, 480, 705);
+		panelTitleHist.setBounds(10, 0, 730, 720);
 		panelTitleHist.setBorder(new TitledBorder(lb, "  Historial  ", TitledBorder.LEFT, TitledBorder.TOP, font,
 				new Color(51, 51, 51)));
 		panelTitleHist.setOpaque(false);
@@ -446,7 +487,7 @@ public class AdminPayments extends JFrame {
 		// ScrollPane para cargar la talbla con los historiales
 		JScrollPane menuTableHist = new JScrollPane();
 		menuTableHist.setBorder(BorderFactory.createEmptyBorder());
-		menuTableHist.setBounds(10, 25, 460, 670);
+		menuTableHist.setBounds(5, 75, 720, 640);
 		menuTableHist.setBackground(new Color(148, 220, 219));
 		panelTitleHist.add(menuTableHist);
 
@@ -470,19 +511,77 @@ public class AdminPayments extends JFrame {
 		loadClientes(table);
 		loadCitaStart(tableHis);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(269, 115, 96, 22);
-		comboBox.addItem("Pago Inmediato");
-		comboBox.addItem("Tres meses");
-		comboBox.addItem("Seis meses");
-		comboBox.addItem("Doce meses");
-		contentPane.add(comboBox);
+//		JComboBox comboBox = new JComboBox();
+//		comboBox.setBounds(269, 115, 96, 22);
+//		comboBox.addItem("Pago Inmediato");
+//		comboBox.addItem("Tres meses");
+//		comboBox.addItem("Seis meses");
+//		comboBox.addItem("Doce meses");
+//		contentPane.add(comboBox);
 
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener() {
+//		JButton btnNewButton = new JButton("New button");
+//		btnNewButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				if (tableHis.getSelectedRow() != -1
+//						&& tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString().equals("") == false) {
+//					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
+//					java.sql.Date date = java.sql.Date
+//							.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
+//					System.out.println(date);
+//					Query<CitaHibernate> consultaCitaHibernate = session.createQuery(
+//							"FROM CitaHibernate where clientes_dni_cliente=:dni and fecha=:fech", CitaHibernate.class);
+//					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
+//					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
+//					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
+//					if (comboBox.getSelectedIndex() == 0) {
+//
+//						cita.get(0).setMensualidades(1);
+//						session.beginTransaction();
+//						session.update(cita.get(0));
+//						session.getTransaction().commit();
+//						System.out.println(cita.get(0).getIdcita());
+//						System.out.println(cita.get(0).getFecha());
+//						loadCita(tableHis);
+//
+//					} else if (comboBox.getSelectedIndex() == 1) {
+//						cita.get(0).setMensualidades(3);
+//						session.beginTransaction();
+//						session.update(cita.get(0));
+//						session.getTransaction().commit();
+//						System.out.println(cita.get(0).getIdcita());
+//						System.out.println(cita.get(0).getFecha());
+//						loadCita(tableHis);
+//					} else if (comboBox.getSelectedIndex() == 2) {
+//						cita.get(0).setMensualidades(6);
+//						session.beginTransaction();
+//						session.update(cita.get(0));
+//						session.getTransaction().commit();
+//						System.out.println(cita.get(0).getIdcita());
+//						System.out.println(cita.get(0).getFecha());
+//						loadCita(tableHis);
+//					} else if (comboBox.getSelectedIndex() == 3) {
+//						cita.get(0).setMensualidades(12);
+//						session.beginTransaction();
+//						session.update(cita.get(0));
+//						session.getTransaction().commit();
+//						System.out.println(cita.get(0).getIdcita());
+//						System.out.println(cita.get(0).getFecha());
+//						loadCita(tableHis);
+//					}
+//				}
+//			}
+//		});
+//		btnNewButton.setBounds(279, 148, 89, 23);
+//		contentPane.add(btnNewButton);
+
+		JButton btnInforme = new JButton("<html><u>Realizar pago</u></html>");
+		btnInforme.setFont(font);
+		btnInforme.setBackground(azulito);
+		btnInforme.setBorder(null);
+		btnInforme.setOpaque(true);
+		btnInforme.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tableHis.getSelectedRow() != -1
-						&& tableHis.getValueAt(table.getSelectedRow(), 0).toString().equals("") == false) {
+				if (tableHis.getSelectedRow() != -1 && tableHis.getValueAt(tableHis.getSelectedRow(), 0) != null) {
 					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
 					java.sql.Date date = java.sql.Date
 							.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
@@ -492,75 +591,80 @@ public class AdminPayments extends JFrame {
 					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
 					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
 					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
-					if (comboBox.getSelectedIndex() == 0) {
-
-						cita.get(0).setMensualidades(1);
+					if (cita.get(0).getMensualidades() != 0) {
+						Double pagado = cita.get(0).getPagado()
+								+ Double.valueOf(cita.get(0).getTratamiento().getPrecio())
+										/ Double.valueOf(cita.get(0).getMensualidades());
+						cita.get(0).setPagado(pagado);
 						session.beginTransaction();
 						session.update(cita.get(0));
 						session.getTransaction().commit();
-						System.out.println(cita.get(0).getIdcita());
-						System.out.println(cita.get(0).getFecha());
-						loadCita(tableHis);
-
-					} else if (comboBox.getSelectedIndex() == 1) {
-						cita.get(0).setMensualidades(3);
-						session.beginTransaction();
-						session.update(cita.get(0));
-						session.getTransaction().commit();
-						System.out.println(cita.get(0).getIdcita());
-						System.out.println(cita.get(0).getFecha());
-						loadCita(tableHis);
-					} else if (comboBox.getSelectedIndex() == 2) {
-						cita.get(0).setMensualidades(6);
-						session.beginTransaction();
-						session.update(cita.get(0));
-						session.getTransaction().commit();
-						System.out.println(cita.get(0).getIdcita());
-						System.out.println(cita.get(0).getFecha());
-						loadCita(tableHis);
-					} else if (comboBox.getSelectedIndex() == 3) {
-						cita.get(0).setMensualidades(12);
-						session.beginTransaction();
-						session.update(cita.get(0));
-						session.getTransaction().commit();
-						System.out.println(cita.get(0).getIdcita());
-						System.out.println(cita.get(0).getFecha());
+						System.out.println(pagado + "asdyubasigvyudasbhasdyugvshbdasdyhvbusdaagyubh");
 						loadCita(tableHis);
 					}
 				}
 			}
 		});
-		btnNewButton.setBounds(279, 148, 89, 23);
-		contentPane.add(btnNewButton);
+		btnInforme.setBounds(600, 30, 120, 23);
+		panelTitleHist.add(btnInforme);
 
-		JButton btnInforme = new JButton("New button");
-		btnInforme.addActionListener(new ActionListener() {
+		JButton btnMensualidades = new JButton("<html><u>Asignar tipo de mensualidad</u></html>");
+		btnMensualidades.setFont(font);
+		btnMensualidades.setBackground(azulito);
+		btnMensualidades.setBorder(null);
+		btnMensualidades.setOpaque(true);
+		// btnMensualidades.setText("Asignar tipo de pago");
+		btnMensualidades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (tableHis.getSelectedRow() != -1
-						&& tableHis.getValueAt(table.getSelectedRow(), 0).toString().equals("") == false) {
-					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
+				if (tableHis.getValueAt(tableHis.getSelectedRow(), 0)!=null) {
+
+					// Obtenemos la fecha de la tabla
 					java.sql.Date date = java.sql.Date
 							.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
-					System.out.println(date);
+
 					Query<CitaHibernate> consultaCitaHibernate = session.createQuery(
 							"FROM CitaHibernate where clientes_dni_cliente=:dni and fecha=:fech", CitaHibernate.class);
 					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
 					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
 					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
-					
-					Double pagado = cita.get(0).getPagado() + Double.valueOf(cita.get(0).getTratamiento().getPrecio()) / Double.valueOf(cita.get(0).getMensualidades());
-					cita.get(0).setPagado(pagado);
-					session.beginTransaction();
-					session.update(cita.get(0));
-					session.getTransaction().commit();
-					System.out.println(pagado+"asdyubasigvyudasbhasdyugvshbdasdyhvbusdaagyubh");
-					loadCita(tableHis);
 
+					if (cita.get(0).getPagado() == 0) {
+						String[] mensualidades = { "Pago Inmediato", "Tres meses", "Seis meses", "Doce meses" };
+						Icon icon = new javax.swing.ImageIcon(getClass().getResource("/Resources/images/money.png"));
+						Object opcion = JOptionPane.showInputDialog(null, "Selecciona el tipo de mensualidad", "Elegir",
+								JOptionPane.QUESTION_MESSAGE, icon, mensualidades, mensualidades[0]);
+						if (opcion != null) {
+							if (cita.get(0).getPagado() == 0) {
+								if (opcion.toString().equals(mensualidades[0])) {
+									cita.get(0).setMensualidades(1);
+									session.beginTransaction();
+									session.update(cita.get(0));
+									session.getTransaction().commit();
+								} else if (opcion.toString().equals(mensualidades[1])) {
+									cita.get(0).setMensualidades(3);
+									session.beginTransaction();
+									session.update(cita.get(0));
+									session.getTransaction().commit();
+								} else if (opcion.toString().equals(mensualidades[2])) {
+									cita.get(0).setMensualidades(6);
+									session.beginTransaction();
+									session.update(cita.get(0));
+									session.getTransaction().commit();
+								} else if (opcion.toString().equals(mensualidades[3])) {
+									cita.get(0).setMensualidades(12);
+									session.beginTransaction();
+									session.update(cita.get(0));
+									session.getTransaction().commit();
+								}
+							}
+						}
+						loadCita(tableHis);
+					}
 				}
 			}
 		});
-		btnInforme.setBounds(400, 148, 89, 23);
-		contentPane.add(btnInforme);
+		btnMensualidades.setBounds(10, 30, 200, 23);
+		panelTitleHist.add(btnMensualidades);
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
@@ -580,6 +684,20 @@ public class AdminPayments extends JFrame {
 					loadCita(tableHis);
 					// System.out.println(selected);
 
+				}
+			}
+		});
+
+		tableHis.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Seleccionar row
+					tableHis.addColumnSelectionInterval(0, 3);
+
+					// Cambios en la selección
+					tableHis.setColumnSelectionAllowed(true);
+					tableHis.setCellSelectionEnabled(true);
 				}
 			}
 		});
@@ -700,6 +818,51 @@ public class AdminPayments extends JFrame {
 			model.setRowCount(18);
 		} else {
 			System.out.println("oooooooooooooooo");
+			model.setRowCount(results.size());
+		}
+		int fila = 0, columna = 0;
+
+		// Carga los datos
+		for (ClienteHibernate especialidad : results) {
+			model.setValueAt(especialidad.getDni_cliente(), fila, 0);
+			model.setValueAt(especialidad.getNombre(), fila, 1);
+			model.setValueAt(especialidad.getApellidos(), fila, 2);
+			model.setValueAt(especialidad.getEdad(), fila, 3);
+			fila++;
+		}
+
+		// Se alinea el texto de las columnas
+		Renderer tcr = new Renderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		tabla.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		tabla.setDefaultRenderer(Object.class, tcr);
+
+	}
+
+	public void loadSearch(JTable tabla, String busq) {
+		// Relaiza la consulta
+		this.session = instancia.openSession();
+		String hql = "FROM ClienteHibernate where nombre like :busq or apellidos like :busq or edad like :busq or dni_cliente like :busq";
+		Query<ClienteHibernate> consulta = session.createQuery(hql, ClienteHibernate.class);
+		consulta.setParameter("busq", "%" + busq + "%");
+
+		// Guarda los datos en una lista
+		List<ClienteHibernate> results = consulta.getResultList();
+
+		// Prepara la tabla
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] { "DNI", "Nombre", "Apellido", "Años" }) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		tabla.setModel(model);
+		JTableHeader header = tabla.getTableHeader();
+		if (results.size() < 19) {
+			model.setRowCount(18);
+		} else {
 			model.setRowCount(results.size());
 		}
 		int fila = 0, columna = 0;

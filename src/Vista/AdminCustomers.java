@@ -11,6 +11,7 @@ import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -71,7 +72,6 @@ public class AdminCustomers extends JFrame {
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 
-
 	/**
 	 * Launch the application.
 	 */
@@ -116,30 +116,30 @@ public class AdminCustomers extends JFrame {
 		// -------------------- Componentes Gráficos --------------------
 		// menubar
 
-		//nombre esquina
-		
-				JPanel panelTitleAdmin = new JPanel();
-				panelTitleAdmin.setBounds(1, 2, 170, 90);
-				panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
-				panelTitleAdmin.setOpaque(false);
-				panelTitleAdmin.setLayout(null);
-				
-				//rounded panel de fomdo para el nombre 
-				JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
-				panelnombre.setBounds(136, 0, 150, 60);
-				panelnombre.setOpaque(false);
-				panelnombre.setLayout(null);
-				contentPane.add(panelnombre);
-				panelnombre.add(panelTitleAdmin);
-				String htmlString = "<html><body><sup>" 
-				+ userHi.getNombre() + "</sup><span>" + userHi.getApellido() + 
-				"</span></body></html>";
-				JLabel lblNAdmin = new JLabel(htmlString);
-				lblNAdmin.setToolTipText("Nombre & Apellido");
-				lblNAdmin.setBounds(10, 5, 150, 60);
-				lblNAdmin.setFont(new Font("metropolis",Font.PLAIN,20));
-				panelTitleAdmin.add(lblNAdmin);
-		
+		// nombre esquina
+
+		JPanel panelTitleAdmin = new JPanel();
+		panelTitleAdmin.setBounds(1, 2, 170, 90);
+		panelTitleAdmin
+				.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
+		panelTitleAdmin.setOpaque(false);
+		panelTitleAdmin.setLayout(null);
+
+		// rounded panel de fomdo para el nombre
+		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
+		panelnombre.setBounds(136, 0, 150, 60);
+		panelnombre.setOpaque(false);
+		panelnombre.setLayout(null);
+		contentPane.add(panelnombre);
+		panelnombre.add(panelTitleAdmin);
+		String htmlString = "<html><body><sup>" + userHi.getNombre() + "</sup><span>" + userHi.getApellido()
+				+ "</span></body></html>";
+		JLabel lblNAdmin = new JLabel(htmlString);
+		lblNAdmin.setToolTipText("Nombre & Apellido");
+		lblNAdmin.setBounds(10, 5, 150, 60);
+		lblNAdmin.setFont(new Font("metropolis", Font.PLAIN, 20));
+		panelTitleAdmin.add(lblNAdmin);
+
 		// barra oculat de arriba
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 1900, 50);
@@ -396,9 +396,9 @@ public class AdminCustomers extends JFrame {
 
 		// Panel secundario para los clientes
 		JPanel panelTitleCliente = new JPanel();
-		panelTitleCliente.setBounds(10, 50, 480, 670);
-		panelTitleCliente.setBorder(new TitledBorder(lb, "  Cliente  ", TitledBorder.LEFT, TitledBorder.TOP, font,
-				new Color(51, 51, 51)));
+		panelTitleCliente.setBounds(10, 0, 480, 720);
+		panelTitleCliente.setBorder(
+				new TitledBorder(lb, "  Cliente  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleCliente.setOpaque(false);
 		panelClientes.add(panelTitleCliente);
 		panelTitleCliente.setLayout(null);
@@ -406,7 +406,7 @@ public class AdminCustomers extends JFrame {
 		// ScrollPane para cargar la talbla con los clientes
 		JScrollPane menuTableCliente = new JScrollPane();
 		menuTableCliente.setBorder(BorderFactory.createEmptyBorder());
-		menuTableCliente.setBounds(10, 25, 460, 634);
+		menuTableCliente.setBounds(5, 75, 470, 640);
 		menuTableCliente.setBackground(new Color(148, 220, 219));
 		panelTitleCliente.add(menuTableCliente);
 
@@ -423,7 +423,7 @@ public class AdminCustomers extends JFrame {
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		table.setBounds(0, 0, 450, 675);
+		table.setBounds(0, 50, 450, 725);
 		menuTableCliente.add(table);
 		menuTableCliente.setViewportView(table);
 
@@ -446,10 +446,9 @@ public class AdminCustomers extends JFrame {
 		// ScrollPane para cargar la talbla con los historiales
 		JScrollPane menuTableHist = new JScrollPane();
 		menuTableHist.setBorder(BorderFactory.createEmptyBorder());
-		menuTableHist.setBounds(10, 25, 460, 670);
+		menuTableHist.setBounds(5, 25, 470, 675);
 		menuTableHist.setBackground(new Color(148, 220, 219));
 		panelTitleHist.add(menuTableHist);
-		
 
 		tableHis = new JTable();
 		tableHis.setShowVerticalLines(false);
@@ -481,13 +480,13 @@ public class AdminCustomers extends JFrame {
 					// Cambios en la selección
 					table.setColumnSelectionAllowed(true);
 					table.setCellSelectionEnabled(true);
-						// selección del tratamiento
-						selected = table.getValueAt(table.getSelectedRow(), 0).toString() + " "
-								+ table.getValueAt(table.getSelectedRow(), 1).toString() + " "
-								+ table.getValueAt(table.getSelectedRow(), 2).toString() + " "
-								+ table.getValueAt(table.getSelectedRow(), 3).toString() + " ";
-						loadCita(tableHis);
-						System.out.println(selected);
+					// selección del tratamiento
+					selected = table.getValueAt(table.getSelectedRow(), 0).toString() + " "
+							+ table.getValueAt(table.getSelectedRow(), 1).toString() + " "
+							+ table.getValueAt(table.getSelectedRow(), 2).toString() + " "
+							+ table.getValueAt(table.getSelectedRow(), 3).toString() + " ";
+					loadCita(tableHis);
+					System.out.println(selected);
 
 				}
 			}
@@ -496,7 +495,7 @@ public class AdminCustomers extends JFrame {
 		JButton btnInsert = new JButton();
 		btnInsert.setBorderPainted(false);
 		btnInsert.setBackground(new Color(148, 220, 219));
-		btnInsert.setBounds(450, 9, 40, 30);
+		btnInsert.setBounds(390, 30, 40, 30);
 		btnInsert.setIcon(new ImageIcon(getClass().getResource("/Resources/images/add.png")));
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -550,7 +549,7 @@ public class AdminCustomers extends JFrame {
 
 			}
 		});
-		panelClientes.add(btnInsert);
+		panelTitleCliente.add(btnInsert);
 
 		btnOdonto = new JButton("Odontograma");
 		btnOdonto.addActionListener(new ActionListener() {
@@ -573,30 +572,38 @@ public class AdminCustomers extends JFrame {
 		contentPane.add(btnOdonto);
 
 		JTextField txt = new JTextField();
-		txt.setBounds(44, 9, 180, 30);
-		txt.addActionListener(new ActionListener() {
+		txt.setBounds(44, 30, 180, 30);
+		txt.addKeyListener(new KeyListener() {
 
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void keyTyped(KeyEvent e) {
 
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
 				loadSearch(table, txt.getText());
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
 
 			}
 		});
-		panelClientes.add(txt);
+		panelTitleCliente.add(txt);
 
 		JLabel jlLupa = new JLabel();
 		jlLupa.setBackground(new Color(148, 220, 219));
-		jlLupa.setBounds(10, 11, 36, 28);
+		jlLupa.setBounds(10, 30, 36, 28);
 		jlLupa.setIcon(new ImageIcon(getClass().getResource("/Resources/images/lookFor.png")));
-		panelClientes.add(jlLupa);
+		panelTitleCliente.add(jlLupa);
 
 		JButton btnUpdateCliente = new JButton();
 		btnUpdateCliente.setBorderPainted(false);
 		btnUpdateCliente.setBackground(new Color(148, 220, 219));
-		btnUpdateCliente.setBounds(400, 9, 40, 30);
+		btnUpdateCliente.setBounds(420, 30, 40, 30);
 		btnUpdateCliente.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
-		panelClientes.add(btnUpdateCliente);
-
 		btnUpdateCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
@@ -654,6 +661,8 @@ public class AdminCustomers extends JFrame {
 				}
 			}
 		});
+		panelTitleCliente.add(btnUpdateCliente);
+
 
 	}
 

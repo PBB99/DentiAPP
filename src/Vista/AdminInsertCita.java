@@ -98,6 +98,7 @@ public class AdminInsertCita extends JDialog {
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
+		setModal(true);
 
 		setLocationRelativeTo(null);
 		// -----------------------COMPONENTES-------------------
@@ -291,6 +292,9 @@ public class AdminInsertCita extends JDialog {
 										.dispatchEvent(new WindowEvent(AdminInsertCita.this, WindowEvent.WINDOW_CLOSING));
 							}
 						}
+						setModal(false);
+						setVisible(false);
+						dispose();
 					}
 				});
 
