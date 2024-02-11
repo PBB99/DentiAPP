@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,8 +16,11 @@ import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,6 +43,7 @@ import org.hibernate.cfg.Configuration;
 
 import Modelo.InventarioHibernate;
 import Modelo.ProveedorHibernate;
+import Modelo.UserHibernate;
 import Otros.RoundedPanel;
 import Vista.AdminStock.Renderer;
 
@@ -64,9 +69,11 @@ public class MakeDelivery extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public MakeDelivery() {
+	public MakeDelivery(UserHibernate userHi, JFrame parent) {
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setUndecorated(true);
+		setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(InventarioHibernate.class).addAnnotatedClass(ProveedorHibernate.class).addAnnotatedClass(PedidosHibernate.class)
@@ -80,12 +87,14 @@ public class MakeDelivery extends JDialog {
 		}else {
 			lastIdpedido=auxPed.getLast().getId_pedido();
 		}
-		
-		setBounds(470, 50, 750, 1000);
+		JLabel imagen=new JLabel();
+		imagen.setBounds(5, 5, 500, 500);
+		imagen.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logoFinal.png")));
+		getContentPane().add(imagen);
 		getContentPane().setLayout(null);
 
 		JPanel buttonPane = new JPanel();
-		buttonPane.setBounds(0, 820, 700, 33);
+		buttonPane.setBounds(630, 970, 700, 33);
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane);
 
@@ -102,7 +111,10 @@ public class MakeDelivery extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				setModal(false);
+				AdminStock as=new AdminStock(userHi, parent);
+				as.setVisible(true);
 				dispose();
+				
 			}
 		});
 		okButton.addActionListener(new ActionListener() {
@@ -131,7 +143,10 @@ public class MakeDelivery extends JDialog {
 				if(listaconf.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Pedido Realizado","Se ha realizado el pedido correctamente",JOptionPane.INFORMATION_MESSAGE);
 					setModal(false);
+					AdminStock as=new AdminStock(userHi, parent);
+					as.setVisible(true);
 					dispose();
+					
 				}else {
 					JOptionPane.showMessageDialog(null, "ERROR","Algo ha ido mal, comprueba que las cantidades sean superior a 0",JOptionPane.WARNING_MESSAGE);
 				}
@@ -140,14 +155,14 @@ public class MakeDelivery extends JDialog {
 			}
 		});
 
-		contentPanel.setBounds(0, 0, 784, 728);
+		contentPanel.setBounds(0,0,0,0);
 		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBorder(new EmptyBorder(0,0,0,0));
 		// Inventario
 
 		// Panel fondo de stock
 		JPanel panelBackStock = new RoundedPanel(50, azulito);
-		panelBackStock.setBounds(5, 5, 660, 785);
+		panelBackStock.setBounds(630, 150, 660, 785);
 		panelBackStock.setOpaque(false);
 		panelBackStock.setLayout(null);
 		getContentPane().add(panelBackStock);
@@ -155,7 +170,7 @@ public class MakeDelivery extends JDialog {
 		// Panel titulo de stock
 		JPanel panelTitleStock = new JPanel();
 		panelTitleStock.setBounds(25, 15, 610, 745);
-		panelTitleStock.setBorder(new TitledBorder(lb, "  Inventario  ", TitledBorder.LEFT, TitledBorder.TOP, font,
+		panelTitleStock.setBorder(new TitledBorder(lb, "  PEDIDO  ", TitledBorder.LEFT, TitledBorder.TOP, font,
 				new Color(51, 51, 51)));
 		panelTitleStock.setOpaque(false);
 		panelTitleStock.setLayout(null);

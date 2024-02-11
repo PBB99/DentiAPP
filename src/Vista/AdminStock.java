@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -444,9 +445,11 @@ public class AdminStock extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(lblCorreo.isEnabled()) {
-					MakeDelivery mk=new MakeDelivery();
+					MakeDelivery mk=new MakeDelivery(userHi,parent);
 					mk.setVisible(true);
-					mk.setModal(true);
+					dispose();
+						
+					
 				}
 				
 
@@ -1206,7 +1209,11 @@ public class AdminStock extends JFrame {
 			tabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 		}
 	}
-
+	public void actualizarPantalla(){
+		JPanel temp=(JPanel) this.getContentPane();
+		SwingUtilities.updateComponentTreeUI(temp);
+		temp.validate();
+		}
 	// Clase para cambiar el color de las filas
 	public class Renderer extends DefaultTableCellRenderer {
 
