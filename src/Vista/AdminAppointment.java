@@ -439,7 +439,7 @@ lblNAdmin.setFont(new Font("metropolis", Font.PLAIN, 20));
 		btnHelp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Mostrar ayuda");
+				
 				try {
                     File fichero = new File("src/help/help_set.hs");
                     //Con esto cargo el fichero de ayuda
