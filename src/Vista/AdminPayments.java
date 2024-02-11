@@ -636,7 +636,6 @@ public class AdminPayments extends JFrame {
 		btnInforme.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tableHis.getSelectedRow() != -1 && tableHis.getValueAt(tableHis.getSelectedRow(), 0) != null) {
-					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
 					java.sql.Date date = java.sql.Date
 							.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
 					System.out.println(date);
@@ -645,7 +644,8 @@ public class AdminPayments extends JFrame {
 					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
 					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
 					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
-					if (cita.get(0).getMensualidades() != 0) {
+					Icon icon = new javax.swing.ImageIcon(getClass().getResource("/Resources/images/money.png"));
+					if (cita.get(0).getMensualidades() != 0 && cita.get(0).getPagado() < cita.get(0).getTratamiento().getPrecio()) {
 						Double pagado = cita.get(0).getPagado()
 								+ Double.valueOf(cita.get(0).getTratamiento().getPrecio())
 										/ Double.valueOf(cita.get(0).getMensualidades());
@@ -653,6 +653,9 @@ public class AdminPayments extends JFrame {
 						session.beginTransaction();
 						session.update(cita.get(0));
 						session.getTransaction().commit();
+						JOptionPane.showMessageDialog(null, "Pago Realizado",
+			                    "Informacion Pago", JOptionPane.INFORMATION_MESSAGE, icon);
+						loadCita(tableHis);
 						try {
 							
 							Map parametros = new HashMap();
@@ -678,10 +681,13 @@ public class AdminPayments extends JFrame {
 							e1.printStackTrace();
 						}
 						System.out.println(pagado + "asdyubasigvyudasbhasdyugvshbdasdyhvbusdaagyubh");
-						loadCita(tableHis);
+					}else if(cita.get(0).getMensualidades() == 0){
+						JOptionPane.showMessageDialog(null, "No se ha asignado un tipo de mensualidad",
+			                    "Informacion Pago", JOptionPane.ERROR_MESSAGE);
+					}else if(cita.get(0).getPagado() >= cita.get(0).getTratamiento().getPrecio()){
+						JOptionPane.showMessageDialog(null, "Este pago ya ha sido completado",
+			                    "Informacion Pago", JOptionPane.ERROR_MESSAGE);
 					}
-				}else {
-					
 				}
 				
 
