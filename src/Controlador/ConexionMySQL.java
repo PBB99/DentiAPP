@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class ConexionMySQL {
 	private static String CONTROLADOR = "com.mysql.jdbc.Driver";
-	private static String URL = "jdbc:mysql://byprip7xk9sybmhhq0jf?useSSL=false";
+	private static String URL = "jdbc:mysql://127.0.0.1:33065?useSSL=false";
 	private static final String USUARIO = "root";
 	private static final String CLAVE = "1234";
 	private boolean conectado = false;

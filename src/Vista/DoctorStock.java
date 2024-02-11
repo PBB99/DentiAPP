@@ -70,14 +70,15 @@ public class DoctorStock extends JFrame {
 	private InventarioHibernate ph;
 	private JTable tablaPedido;
 	private List<InventarioHibernate> elegidos = new ArrayList<>();
-	private boolean paso=false;
+	private boolean paso = false;
 	private int filaPedido = 0;
 	private Color azulito = new Color(148, 220, 219);
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private List<InventarioHibernate> listInvent;
-	private String selectedProductPedido=null; 
-	private Boolean borradoFila=false;
+	private String selectedProductPedido = null;
+	private Boolean borradoFila = false;
+
 	/**
 	 * Launch the application.
 	 */
@@ -286,8 +287,8 @@ public class DoctorStock extends JFrame {
 		// Panel titulo de Proveedores
 		JPanel panelTitleUsers = new JPanel();
 		panelTitleUsers.setBounds(25, 15, 810, 745);
-		panelTitleUsers.setBorder(new TitledBorder(lb, "  Pedido  ", TitledBorder.LEFT, TitledBorder.TOP, font,
-				new Color(51, 51, 51)));
+		panelTitleUsers.setBorder(
+				new TitledBorder(lb, "  Pedido  ", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleUsers.setOpaque(false);
 		panelTitleUsers.setLayout(null);
 		panelBackUser.add(panelTitleUsers);
@@ -339,73 +340,129 @@ public class DoctorStock extends JFrame {
 		});
 		contentPane.add(btnHelp);		
 		// -------------------- Lógica --------------------
-		
+
 		tablaPedido.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evnt) {
-				if(evnt.getClickCount()==1){
+				if (evnt.getClickCount() == 1) {
 					tablaPedido.addColumnSelectionInterval(0, 1);
 				}
 			}
 		});
-		
+
 		jBorrarSeleccion.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				InventarioHibernate borrado=new InventarioHibernate();
-				selectedProductPedido = tablaPedido.getValueAt(tablaPedido.getSelectedRow(), tablaPedido.getSelectedColumn())
-						.toString();
-				int cantidadproducto=Integer.parseInt(tablaPedido.getValueAt(tablaPedido.getSelectedRow(), tablaPedido.getSelectedColumn()+1)
-						.toString());
+				InventarioHibernate borrado = new InventarioHibernate();
+				selectedProductPedido = tablaPedido
+						.getValueAt(tablaPedido.getSelectedRow(), tablaPedido.getSelectedColumn()).toString();
+				int cantidadproducto = Integer.parseInt(tablaPedido
+						.getValueAt(tablaPedido.getSelectedRow(), tablaPedido.getSelectedColumn() + 1).toString());
 				for (InventarioHibernate x : elegidos) {
 					// encontramos el objeto InventarioHibernate para facilitar su update en la base
 					// de datos y pasar este objeto a la otra tabla directamente
 					if (selectedProductPedido.equalsIgnoreCase(x.getNombre())) {
-						borrado.setId_producto(x.getId_producto());
-						borrado.setNombre(x.getNombre());
-						borrado.setCantidad(cantidadproducto);
-						
-						if(listInvent.contains(x)) {
-							listInvent.get(x.getId_producto()).setCantidad(x.getCantidad()+borrado.getCantidad());
+
+						borrado = x;
+
+						if (listInvent.contains(x)) {
+							listInvent.get(x.getId_producto()).setCantidad(x.getCantidad() + borrado.getCantidad());
+							System.out.println("si entra");
+
 						}
-						elegidos.remove(x);
-						
-						
+
 					}
+
+				}
+
+				elegidos.remove(borrado);
+				recorrerLista(listInvent);
+				for (InventarioHibernate y : listInvent) {
+					if (y.getId_producto() == borrado.getId_producto()) {
+						y.setCantidad(y.getCantidad() + borrado.getCantidad());
+
+					}
+				}
+				recorrerLista(listInvent);
+
+				loadSearchStock(tablaPedido, "", listInvent);
+				loadTablePedidos(tablaPedido, elegidos);
+
+			}
+		});
+		//esta funcionalidad actualizara la base de datos de inventario y almacenando dicha acción en otra tabla
+		jConfirmarPedido.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				session.beginTransaction();
+				
+				
+				for(InventarioHibernate x: listInvent) {
+					session.update(x);
+					
 					
 				}
 				
-				for(InventarioHibernate y: listInvent) {
-					if(y.getId_producto()==borrado.getId_producto()) {
-						y.setCantidad(y.getCantidad()+borrado.getCantidad());
-					}
-				}
 				
+				
+					for(InventarioHibernate y:elegidos) {
+						for(InventarioHibernate c:listInvent) {
+							if(y.getId_producto()==c.getId_producto()) {
+								y=c;
+								c.getUsuarios().add(userHi);
+								
+								
+							}
+						}
+						
+						session.update(y);
+						
+					   
+					
+				}
+					userHi.setProductos(elegidos);
+					session.update(userHi);
+				
+				
+					
+				
+				session.getTransaction().commit();
+				
+				for (int i = 0; i < tablaPedido.getModel().getRowCount(); i++) {
+					tablaPedido.getModel().setValueAt("", i, 0);
+					tablaPedido.getModel().setValueAt("", i, 1);
+				}
+				elegidos.clear();
+				listInvent=loadTableStock(tableStock);
 				loadSearchStock(tablaPedido, "", listInvent);
 				loadTablePedidos(tablaPedido, elegidos);
-				borradoFila=true;	
 			}
 		});
 		
 		jResetearPedido.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-					
-					for (int i = 0; i < tablaPedido.getModel().getRowCount(); i++) {
-						tablaPedido.getModel().setValueAt("", i, 0);
-						tablaPedido.getModel().setValueAt("", i, 1);
+
+				for (int i = 0; i < tablaPedido.getModel().getRowCount(); i++) {
+					tablaPedido.getModel().setValueAt("", i, 0);
+					tablaPedido.getModel().setValueAt("", i, 1);
+				}
+
+				for (InventarioHibernate x : listInvent) {
+
+					for (InventarioHibernate y : elegidos) {
+						if (x.getId_producto() == y.getId_producto()) {
+							x.setCantidad(x.getCantidad() + y.getCantidad());
+
+						}
 					}
-					if(borradoFila==false) {listInvent.clear();}
-					
-					
-					elegidos.clear();
-					paso=false;
-					//carga de nuevo la tabla stock desde la base de datos, sin los cambios dinámicos no confirmados
-					//para recargar la lista
-					listInvent=loadTableStock(tableStock);
-					txtInventario.setText(" ");
-					loadSearchStock(tablaPedido, txtInventario.getText(), listInvent);
+
+				}
+				elegidos.clear();
+
+				loadSearchStock(tablaPedido, "", listInvent);
+				loadTablePedidos(tablaPedido, elegidos);
+
 			}
 		});
 		
@@ -415,7 +472,7 @@ public class DoctorStock extends JFrame {
 		tableStock.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
 				if (evnt.getClickCount() == 1) {
-					InventarioHibernate solicitado=new InventarioHibernate();
+					InventarioHibernate solicitado = new InventarioHibernate();
 					// Seleccionar row
 					tableStock.addColumnSelectionInterval(0, 1);
 
@@ -439,12 +496,11 @@ public class DoctorStock extends JFrame {
 							solicitado.setId_producto(x.getId_producto());
 							solicitado.setNombre(x.getNombre());
 							solicitado.setCantidad(resultado);
-							x.setCantidad(x.getCantidad()-resultado);
+							x.setCantidad(x.getCantidad() - resultado);
 						}
 
 					}
 
-				
 					// contemplar si la cantidad elegida es posible o no. En caso de que quedara en
 					// negativo se quedarie en 0 aparentemente y en negativo en la base de datos
 					// pasando si esta por debajo de cero a ser contemplado por el administrador que
@@ -455,8 +511,8 @@ public class DoctorStock extends JFrame {
 					// la lista elegido tendra dentro objetos de inventario hibernate
 					elegidos.add(solicitado);
 					loadTablePedidos(tablaPedido, elegidos);
-					paso=true;
-					//recarga con las cantidades bien puestas
+					paso = true;
+					// recarga con las cantidades bien puestas
 					reloadTableStock(tableStock, listInvent);
 				}
 			}
@@ -472,13 +528,13 @@ public class DoctorStock extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(paso==true) {
-					loadSearchStock(tableStock, txtInventario.getText(),listInvent);
-				}else {
-					
+				if (paso == true) {
+					loadSearchStock(tableStock, txtInventario.getText(), listInvent);
+				} else {
+
 					loadSearchStock(tableStock, txtInventario.getText());
 				}
-				
+
 			}
 
 			@Override
@@ -702,10 +758,10 @@ public class DoctorStock extends JFrame {
 		}
 		return results;
 	}
-	
-	//para recargar
+
+	// para recargar
 	public void secondLoadTableStock(JTable table) {
-		
+
 		// Relaiza la consulta
 		String hql = "FROM InventarioHibernate";
 		Query<InventarioHibernate> consulta = session.createQuery(hql, InventarioHibernate.class);
@@ -760,8 +816,9 @@ public class DoctorStock extends JFrame {
 		} else {
 			lastIdProducto = 0;
 		}
-		
+
 	}
+
 	// Recarga de la tabla
 	public void reloadTableStock(JTable table, List<InventarioHibernate> results) {
 
@@ -811,7 +868,7 @@ public class DoctorStock extends JFrame {
 		} else {
 			lastIdProducto = 0;
 		}
-		
+
 	}
 
 	// Método para hacer consulta en el buscador
@@ -865,7 +922,8 @@ public class DoctorStock extends JFrame {
 			tableStock.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 		}
 	}
-	public void loadSearchStock(JTable tabla, String busq,List<InventarioHibernate>lista) {
+
+	public void loadSearchStock(JTable tabla, String busq, List<InventarioHibernate> lista) {
 //		// Relaiza la consulta
 //		this.session = instancia.openSession();
 //		String hql = "FROM InventarioHibernate where nombre like :busq";
@@ -873,9 +931,9 @@ public class DoctorStock extends JFrame {
 //		consulta.setParameter("busq", "%" + busq + "%");
 
 		// Guarda los datos en una lista
-		List<InventarioHibernate> results =new ArrayList<InventarioHibernate>();
-		for(InventarioHibernate x:lista) {
-			if(x.getNombre().toLowerCase().contains(busq.toLowerCase())) {
+		List<InventarioHibernate> results = new ArrayList<InventarioHibernate>();
+		for (InventarioHibernate x : lista) {
+			if (x.getNombre().toLowerCase().contains(busq.toLowerCase())) {
 				results.add(x);
 			}
 		}
@@ -898,8 +956,7 @@ public class DoctorStock extends JFrame {
 
 		// Carga los datos
 		for (InventarioHibernate producto : results) {
-			
-			
+
 			model.setValueAt(producto.getNombre(), fila, columna);
 			if (producto.getCantidad() < 0) {
 				model.setValueAt(0, fila, columna + 1);
@@ -921,6 +978,7 @@ public class DoctorStock extends JFrame {
 			tableStock.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 		}
 	}
+
 	public static int mostrarInputDialog(String producto) {
 		// Crear un cuadro de diálogo de entrada
 		int numero = 0;
@@ -936,6 +994,13 @@ public class DoctorStock extends JFrame {
 
 		}
 		return numero;
+	}
+
+	// imprimir cantidad de los productos para comprobar si se cambia o no
+	public static void recorrerLista(List<InventarioHibernate> lista) {
+		for (InventarioHibernate x : lista) {
+			System.out.println(x.getCantidad() + ",");
+		}
 	}
 
 	public void loadTablePedidos(JTable table, List<InventarioHibernate> productos) {

@@ -87,17 +87,7 @@ public class UserHibernate  implements Serializable{
 	public String toString() {
 		return nombre;
 	}
-    @OneToMany(mappedBy="usuario_pedido",cascade=CascadeType.ALL)
-    private List<PedidosHibernate>pedidos;
-    public List<PedidosHibernate>getPedidos(){
-    	return pedidos;
-    }
-    
-    public void addPedido(PedidosHibernate p) {
-    	if(pedidos==null)pedidos=new ArrayList<>();
-    	pedidos.add(p);
-    	p.setUser(this);
-    }
+  
     
     @ManyToOne() 
     @JoinColumn(name = "especialidades_id_especialidad")
@@ -122,5 +112,22 @@ public class UserHibernate  implements Serializable{
         if (citas == null) citas=new ArrayList<>();
         citas.add(c);
         c.setUser(this);
+    }
+	
+	@ManyToMany(mappedBy = "usuarios")
+    private List<InventarioHibernate> productos = new ArrayList<InventarioHibernate>();
+
+    public List<InventarioHibernate> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<InventarioHibernate> productos) {
+        this.productos = productos;
+    }
+    
+    public void addProducto(InventarioHibernate i)
+    {
+        this.productos.add(i);
+        i.getUsuarios().add(this);
     }
 }

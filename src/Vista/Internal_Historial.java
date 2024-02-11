@@ -195,8 +195,8 @@ public class Internal_Historial extends JDialog {
 		contentPanel.add(lblNombrePaciente);
 		contentPanel.add(lblimagenDiente);
 		contentPanel.add(lblidDiente);
-		bpBotonera.add(bImprimir);
-		bpBotonera.add(bRecargar);
+		//bpBotonera.add(bImprimir);
+		//bpBotonera.add(bRecargar);
 
 	}
 
@@ -205,10 +205,10 @@ public class Internal_Historial extends JDialog {
 	// metodo para poner la imagen correspondiente al diente seleccionado
 	public static void imagenDiente(int id_diente, JLabel imagen) {
 		switch (id_diente) {
-		case 11:
+		case 21:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_5.png")));
 			break;
-		case 15:
+		case 14:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_2.png")));
 			break;
 		case 17:

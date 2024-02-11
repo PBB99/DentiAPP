@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -419,6 +420,24 @@ public class AdminStock extends JFrame {
 		tableProveedor.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 		menuTableProveedor.add(tableProveedor);
 		menuTableProveedor.setViewportView(tableProveedor);
+		
+		JLabel lblCorreo = new JLabel();
+		lblCorreo.setToolTipText("Pedido Pendiente");
+		lblCorreo.setIcon(new ImageIcon(AdminStock.class.getResource("/Resources/images/mail.png")));
+		lblCorreo.setBounds(230, 120, 123, 69);
+		String hql2="From InventarioHibernate where cantidad<0";
+		Query<InventarioHibernate> consulta2 = session.createQuery(hql2, InventarioHibernate.class);
+		List<InventarioHibernate>auxiList=consulta2.getResultList();
+		if(auxiList.isEmpty()==false) {
+			lblCorreo.setVisible(true);
+			lblCorreo.setEnabled(true);
+		}else {
+			lblCorreo.setVisible(false);
+			lblCorreo.setEnabled(false);
+		}
+		
+		contentPane.add(lblCorreo);
+
 
 		// Ayuda
 		JButton btnHelp = new JButton();
@@ -440,6 +459,23 @@ public class AdminStock extends JFrame {
 		});
 		contentPane.add(btnHelp);		
 		// -------------------- Lógica --------------------
+		//correo
+		lblCorreo.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(lblCorreo.isEnabled()) {
+					MakeDelivery mk=new MakeDelivery(userHi,parent);
+					mk.setVisible(true);
+					dispose();
+						
+					
+				}
+				
+
+			}
+		});
+		
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
 		this.addWindowListener(new WindowListener() {
 
@@ -988,10 +1024,12 @@ public class AdminStock extends JFrame {
 		mnNewMenu.add(ItemName);
 		mnNewMenu.add(ItemPass);
 		mnNewMenu.add(ItemOut);
-
+		
+		
 	}
 
 	// -------------------- Métodos y funciones --------------------
+	
 	public void loadTableStock(JTable table) {
 		// Relaiza la consulta
 		String hql = "FROM InventarioHibernate";
@@ -1191,7 +1229,11 @@ public class AdminStock extends JFrame {
 			tabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
 		}
 	}
-
+	public void actualizarPantalla(){
+		JPanel temp=(JPanel) this.getContentPane();
+		SwingUtilities.updateComponentTreeUI(temp);
+		temp.validate();
+		}
 	// Clase para cambiar el color de las filas
 	public class Renderer extends DefaultTableCellRenderer {
 

@@ -103,7 +103,7 @@ public class AdminAppointment extends JFrame {
 	private UserHibernate selUs;
 
 	private Color azulito = new Color(148, 220, 219);
-	private Font metropolis;
+
 
 	/**
 	 * Launch the application.
@@ -134,16 +134,7 @@ public class AdminAppointment extends JFrame {
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
-		// ----FUENTE
-		try {
-			// crea la fuente
-			metropolis = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("/Resources/fonts/metropolis.thin.otf"))
-					.deriveFont(80f);
-			// la registra en el entorno grafico
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(metropolis);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 		// -------------------- JFrame --------------------
 		this.parent = parent;
 		this.frame = this;
@@ -181,7 +172,7 @@ public class AdminAppointment extends JFrame {
 		mnNewMenu.setBackground(new Color(0, 0, 0, 0));
 
 		// nombre del doctor o admin
-		JMenuItem ItemName = new JMenuItem("");
+		JMenuItem ItemName = new JMenuItem(userHi.getNombre());
 		// ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña
@@ -248,12 +239,14 @@ public class AdminAppointment extends JFrame {
 		panelnombre.setLayout(null);
 		contentPane.add(panelnombre);
 		panelnombre.add(panelTitleAdmin);
-		String htmlString = "<html><body style='font_size:30px;'><pre>" + userHi.getNombre().toUpperCase() + "\n    "
-				+ userHi.getApellido().toUpperCase() + "</pre></body></html>";
-		JLabel lblNAdmin = new JLabel(htmlString);
-		lblNAdmin.setToolTipText("Nombre & Apellido");
-		lblNAdmin.setBounds(10, 5, 150, 60);
-		lblNAdmin.setFont(metropolis);
+
+		String htmlString = "<html><body><sup>" + userHi.getNombre() + "</sup><span>" + userHi.getApellido()
+		+ "</span></body></html>";
+JLabel lblNAdmin = new JLabel(htmlString);
+lblNAdmin.setToolTipText("Nombre & Apellido");
+lblNAdmin.setBounds(10, 5, 150, 60);
+lblNAdmin.setFont(new Font("metropolis", Font.PLAIN, 20));
+
 		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas

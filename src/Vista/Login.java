@@ -555,14 +555,14 @@ public class Login extends JFrame {
 									System.out.println(ex);
 								}
 							} else {// esta dado de baja
-								JOptionPane.showMessageDialog(btnLogin, "Cuidado", "Este usuario ya no es válido",
+								JOptionPane.showMessageDialog(frame, "Cuidado", "Este usuario ya no es válido",
 										JOptionPane.WARNING_MESSAGE);
 								break;
 							}
 						}
 					}
 					if (aux2 == true) {
-						JOptionPane.showMessageDialog(btnLogin, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
+						JOptionPane.showMessageDialog(frame, "Su usuario o contraseña no coincide.\n Intentelo de nuevo",
 								"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
