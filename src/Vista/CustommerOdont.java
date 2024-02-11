@@ -465,7 +465,7 @@ public class CustommerOdont extends JDialog {
 					ih.setVisible(true);
 				} else {
 
-					loadSearch(table, cliente, 11, session);
+					loadSearch(table, cliente, 21, session);
 				}
 
 			}
@@ -541,7 +541,7 @@ public class CustommerOdont extends JDialog {
 					ih.setVisible(true);
 				} else {
 
-					loadSearch(table, cliente, 15, session);
+					loadSearch(table, cliente, 14, session);
 				}
 
 			}
