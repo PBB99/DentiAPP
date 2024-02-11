@@ -487,7 +487,7 @@ public class DoctorCustomers extends JFrame {
 			}
 		});
 
-		btnOdonto = new JButton("Odontograma");
+		btnOdonto = new JButton();
 		btnOdonto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
@@ -501,10 +501,16 @@ public class DoctorCustomers extends JFrame {
 				}
 			}
 		});
-		btnOdonto.setBackground(new Color(148, 220, 219));
-		btnOdonto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOdonto.setBounds(1398, 800, 100, 100);
+		btnOdonto.setIcon(new ImageIcon(getClass().getResource("/Resources/images/odontoboton.png")));
+		btnOdonto.setToolTipText("Odontograma");
+		btnOdonto.setBounds(1378, 200, 100, 100);
 		btnOdonto.setBorder(null);
+		btnOdonto.setBorder(null);
+		btnOdonto.setFocusPainted(false);
+		btnOdonto.setBorderPainted(false);
+		btnOdonto.setContentAreaFilled(false);
+		btnOdonto.setOpaque(false);
+		btnOdonto.setBackground(null);
 		contentPane.add(btnOdonto);
 
 		JTextField txt = new JTextField();

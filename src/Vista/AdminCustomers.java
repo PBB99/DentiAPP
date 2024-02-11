@@ -115,14 +115,16 @@ public class AdminCustomers extends JFrame {
 
 		// -------------------- Componentes Gráficos --------------------
 		
-		JButton BinformeTotal=new JButton("<html><u>Imprimir historial completo</u></html>");
+		JButton BinformeTotal=new JButton();
+		BinformeTotal.setToolTipText("Imprimir historial completo");
+		BinformeTotal.setIcon(new ImageIcon(getClass().getResource("/Resources/images/generarpdf.png")));
 		BinformeTotal.setBorder(null);
 		BinformeTotal.setFocusPainted(false);
 		BinformeTotal.setBorderPainted(false);
 		BinformeTotal.setContentAreaFilled(false);
 		BinformeTotal.setOpaque(false);
 		BinformeTotal.setBackground(null);
-		BinformeTotal.setBounds(1650,200,200,60);
+		BinformeTotal.setBounds(1378, 250, 100, 100);
 		contentPane.add(BinformeTotal);
 		// menubar
 
@@ -561,7 +563,7 @@ public class AdminCustomers extends JFrame {
 		});
 		panelTitleCliente.add(btnInsert);
 
-		btnOdonto = new JButton("Odontograma");
+		btnOdonto = new JButton();
 		btnOdonto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
@@ -575,10 +577,16 @@ public class AdminCustomers extends JFrame {
 				}
 			}
 		});
-		btnOdonto.setBackground(new Color(148, 220, 219));
-		btnOdonto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOdonto.setBounds(1398, 800, 100, 100);
+		btnOdonto.setIcon(new ImageIcon(getClass().getResource("/Resources/images/odontoboton.png")));
+		btnOdonto.setToolTipText("Odontograma");
+		btnOdonto.setBounds(1378, 200, 100, 50);
 		btnOdonto.setBorder(null);
+		btnOdonto.setBorder(null);
+		btnOdonto.setFocusPainted(false);
+		btnOdonto.setBorderPainted(false);
+		btnOdonto.setContentAreaFilled(false);
+		btnOdonto.setOpaque(false);
+		btnOdonto.setBackground(null);
 		contentPane.add(btnOdonto);
 
 		JTextField txt = new JTextField();

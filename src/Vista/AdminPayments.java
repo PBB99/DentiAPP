@@ -528,7 +528,7 @@ public class AdminPayments extends JFrame {
 		BinformeTotal.setContentAreaFilled(false);
 		BinformeTotal.setOpaque(false);
 		BinformeTotal.setBackground(null);
-		BinformeTotal.setBounds(1650,200,200,60);
+		BinformeTotal.setBounds(1650,200,100,50);
 		
 		contentPane.add(BinformeTotal);
 		BinformeTotal.addActionListener(new ActionListener() {

@@ -253,7 +253,7 @@ public class AdminAppointment extends JFrame {
 		JLabel lblNAdmin = new JLabel(htmlString);
 		lblNAdmin.setToolTipText("Nombre & Apellido");
 		lblNAdmin.setBounds(10, 5, 150, 60);
-		lblNAdmin.setFont(metropolis);
+		lblNAdmin.setFont(new Font("metropolis", Font.PLAIN, 20));
 		panelTitleAdmin.add(lblNAdmin);
 
 		// Panel para las citas
