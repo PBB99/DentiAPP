@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Manual de Ayuda</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Citas Doctor</title>
+
     <!-- CSS -->
     <style>
         .header {
@@ -34,7 +37,6 @@
             background-color: #5DCACA;
             padding-top: 5px;
             padding-bottom: 5px;
-            padding-left: 25px;
         }
 
         p {
@@ -44,11 +46,6 @@
             margin-left: 45px;
             margin-right: 15px;
             text-align: justify;
-        }
-
-        ul li {
-            line-height: 2;
-            margin-left: 45px;
         }
 
         .sangria {
@@ -92,33 +89,29 @@
 </head>
 
 <body>
+    <!-- Titulo de la página -->
     <div class="header">
         <img src="../imagenes/logoMenu.png" alt="Imagen" />
-        <h1>Manual de Ayuda</h1>
+        <h1>Módulo Citas Doctor</h1>
     </div>
 
     <hr><br>
 
-    <p>Este manual de ayuda está diseñado para ayudar a los usuarios a utilizar la aplicación DentiAPP.
-        En DentiAPP podremos gestionar la información de las citas y los distintos materiales que se utilizan en la
-        clínica, así como la información de los pacientes y los doctores.</p>
+    <!-- Visualizar citas -->
+    <h2><span class="numeros">1</span> Visualizar citas</h2>
+
+    <p>
+        En este módulo un doctor podrá consultar citas que tiene programadas en su calendario. Las citas se pueden
+        visualizar en la tabla principal que aparece en el centro de la pantalla llamada citas. A la derecha de la tabla
+        de citas se puede modificar en el calendario el día de las citas a visualizar. En él se
+        pueden modificar el día, el mes o el año. Además, si seleccionamos "Hoy: fecha actual" volverá automáticamente a
+        su fecha actual.
+    </p>
 
     <br>
 
-    <h2>Modulos:</h2>
-
-    <ul>
-        <li><a href="#inicio">Inicio</a></li>
-        <li><a href="#citasA">Módulo Citas Administrador</a></li>
-        <li><a href="#citasD">Módulo Citas Doctor</a></li>
-        <li><a href="#usuarios">Módulo Usuarios</a></li>
-        <li><a href="#pacientesA">Módulo Pacientes Administrador</a></li>
-        <li><a href="#pacientesD">Módulo Pacientes Doctor</a></li>
-        <li><a href="#inventarioA">Módulo Inventario Administrador</a></li>
-        <li><a href="#inventarioD">Módulo Inventario Doctor</a></li>
-        <li><a href="#clinica">Módulo Clínica</a></li>
-        <li><a href="#pagos">Módulo Pagos</a></li>
-    </ul>
+    <!-- citas -->
+    <img class="imagen" src="../imagenes/citas_doctor.PNG" alt="Imagen" width="640" height="340" />
 </body>
 
 </html>

@@ -319,6 +319,25 @@ public class DoctorStock extends JFrame {
 		tablaPedido.getTableHeader().setBackground(new Color(148, 220, 219));
 		tablaPedido.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
 
+		// Ayuda
+		JButton btnHelp = new JButton();
+		btnHelp.setBounds(300, 10, 40, 40);
+		btnHelp.setBorder(null);
+		btnHelp.setFocusPainted(false);
+		btnHelp.setBorderPainted(false);
+		btnHelp.setContentAreaFilled(false);
+		btnHelp.setOpaque(false);
+		btnHelp.setBackground(null);
+		btnHelp.setIcon(new ImageIcon(getClass().getResource("/Resources/images/help.png")));
+		btnHelp.setToolTipText("Ayuda (Alt+H)");
+		btnHelp.setMnemonic(KeyEvent.VK_H);
+		btnHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Mostrar ayuda");
+			}
+		});
+		contentPane.add(btnHelp);		
 		// -------------------- Lógica --------------------
 		
 		tablaPedido.addMouseListener(new MouseAdapter() {
@@ -348,7 +367,6 @@ public class DoctorStock extends JFrame {
 						
 						if(listInvent.contains(x)) {
 							listInvent.get(x.getId_producto()).setCantidad(x.getCantidad()+borrado.getCantidad());
-							System.out.println("si entra");
 						}
 						elegidos.remove(x);
 						
@@ -356,6 +374,7 @@ public class DoctorStock extends JFrame {
 					}
 					
 				}
+				
 				for(InventarioHibernate y: listInvent) {
 					if(y.getId_producto()==borrado.getId_producto()) {
 						y.setCantidad(y.getCantidad()+borrado.getCantidad());
@@ -389,6 +408,7 @@ public class DoctorStock extends JFrame {
 					loadSearchStock(tablaPedido, txtInventario.getText(), listInvent);
 			}
 		});
+		
 		// Mostrar las tablas
 		listInvent = loadTableStock(tableStock);
 		// Acción de seleccionar elemento de la tabla Inventario
