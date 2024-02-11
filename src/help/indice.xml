@@ -1,5 +1,13 @@
 <index version="1.0">
-    <indexitem text="Manual" target="principal"></indexitem>
-    <indexitem text="introduccion" target="introduccion"></indexitem>
-    <indexitem text="Menu Principal" target="v2"></indexitem>
+    <indexitem text="Manual" target="manual"></indexitem>
+    <indexitem text="Login" target="login"></indexitem>
+    <indexitem text="Usuarios" target="usuarios"></indexitem>
+    <indexitem text="Clinica" target="clinica"></indexitem>
+    <indexitem text="PacientesAdmin" target="pacientesAdmin"></indexitem>
+    <indexitem text="CitasAdmin" target="citasAdmin"></indexitem>
+    <indexitem text="Pagos" target="pagos"></indexitem>
+    <indexitem text="StockAdmin" target="adminStock"></indexitem>
+    <indexitem text="PacientesDoctor" target="pacientesDoctor"></indexitem>
+    <indexitem text="CitasDoctor" target="citasDoctor"></indexitem>
+    <indexitem text="StockDoctor" target="doctorStock"></indexitem>
 </index>

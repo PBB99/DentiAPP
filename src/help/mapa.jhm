@@ -1,5 +1,13 @@
 <map version="1.0">
-    <mapID target="principal" url="html/manual.html"></mapID>
-    <mapID target="introduccion" url="html/p2.html"></mapID>
-    <mapID target="v2" url="html/32.html"></mapID>
+    <mapID target="adminStock" url="html/adminStock.html"></mapID>
+    <mapID target="citasAdmin" url="html/citasAdmin.html"></mapID>
+    <mapID target="citasDoctor" url="html/citasDoctor.html"></mapID>
+    <mapID target="clinica" url="html/clinica.html"></mapID>
+    <mapID target="doctorStock" url="html/doctorStock.html"></mapID>
+    <mapID target="login" url="html/login.html"></mapID>
+    <mapID target="manual" url="html/manual.html"></mapID>
+    <mapID target="pacientesAdmin" url="html/pacientesAdmin.html"></mapID>
+    <mapID target="pacientesDoctor" url="html/pacientesDoctor.html"></mapID>
+    <mapID target="pagos" url="html/pagos.html"></mapID>
+    <mapID target="usuarios" url="html/usuarios.html"></mapID>
 </map>
