@@ -647,6 +647,8 @@ public class AdminAppointment extends JFrame {
 						UserHibernate u = selUs;
 						AdminInsertCita us = new AdminInsertCita(u.getDni(), d,
 								(table.getValueAt(table.getSelectedRow(), 0).toString()));
+						us.setModal(true);
+						us.setLocationRelativeTo(null);
 						us.setVisible(true);
 						us.addWindowListener(new WindowListener() {
 
@@ -715,6 +717,8 @@ public class AdminAppointment extends JFrame {
 						UserHibernate u = selUs;
 						AdminInsertCita user = new AdminInsertCita(u.getDni(), d,
 								(table.getValueAt(table.getSelectedRow(), 0).toString()));
+						user.setModal(true);
+						user.setLocationRelativeTo(null);
 						user.setVisible(true);
 						user.addWindowListener(new WindowListener() {
 

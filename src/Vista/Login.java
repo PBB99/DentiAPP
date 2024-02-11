@@ -219,7 +219,7 @@ public class Login extends JFrame {
 		// ----------------------------------------------LOGICA----------------------------------------------------------
 		
 		//Mostrar o no contraseña
-		
+		             
 		lblOjo.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e)  
 		    {  
