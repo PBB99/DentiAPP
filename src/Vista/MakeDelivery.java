@@ -141,14 +141,14 @@ public class MakeDelivery extends JDialog {
 				Query<InventarioHibernate> consulta6 = session.createQuery(hql5, InventarioHibernate.class);
 				List<InventarioHibernate> listaconf = consulta6.getResultList();
 				if(listaconf.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Pedido Realizado","Se ha realizado el pedido correctamente",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Se ha realizado el pedido correctamente", "Pedido Realizado",JOptionPane.INFORMATION_MESSAGE);
 					setModal(false);
 					AdminStock as=new AdminStock(userHi, parent);
 					as.setVisible(true);
 					dispose();
 					
 				}else {
-					JOptionPane.showMessageDialog(null, "ERROR","Algo ha ido mal, comprueba que las cantidades sean superior a 0",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Algo ha ido mal, comprueba que las cantidades sean superior a 0", "ERROR",JOptionPane.WARNING_MESSAGE);
 				}
 				
 				

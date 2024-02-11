@@ -558,7 +558,47 @@ public class AdminPayments extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				if (tableHis.getSelectedRow() != -1 && tableHis.getValueAt(tableHis.getSelectedRow(), 0) != null) {
+					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
+					java.sql.Date date = java.sql.Date
+							.valueOf(tableHis.getValueAt(tableHis.getSelectedRow(), 0).toString());
+					System.out.println(date);
+					Query<CitaHibernate> consultaCitaHibernate = session.createQuery(
+							"FROM CitaHibernate where clientes_dni_cliente=:dni and fecha=:fech", CitaHibernate.class);
+					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
+					consultaCitaHibernate.setParameter("fech", new java.util.Date(date.getTime()));
+					List<CitaHibernate> cita = consultaCitaHibernate.getResultList();
+					
+//						try {
+//							
+//							Map parametros = new HashMap();
+//							//la clave es el mismo parametro que he creado en el informe, el 1 es el id que quiero buscar y del que me haga el informe
+//							parametros.put("dni_cliente",cita.get(0).getCliente().getDni_cliente() );
+//							
+//							// Cual es el tipo de informe que quiero realizar (lo visual)
+//							reporte = JasperCompileManager.compileReport("src/Pagos_clienteTotal.jrxml");
+//							// Parametros a meter: donde lo tengo el informe, de que parametros lo hago y la conexion
+//							JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, cn.conectar());
+//							// Muestro el reporte
+//							JasperViewer.viewReport(jp,true);
+//							
+//							//Para guardar el informe (lo pudo exportar a muchos formatos pero vamos a hacerlo en PDF) / Poner la extension en el nombre sino no lo guarda en ese formato
+//	
+//							//En caso de querer guardarlo en una ruta especifica
+//							String nombre=cita.get(0).getCliente().getApellidos();
+//							JasperExportManager.exportReportToPdfFile(jp, "C:\\Users\\Pablo\\Escritorio\\"+nombre+cita.get(0).getFecha()+".pdf");
+//							
+//							
+//							
+//						} catch (Exception e1) {
+//							e1.printStackTrace();
+//						}
+						
+					
+					
+				}else {
+					JOptionPane.showMessageDialog(parent, "No has seleccionado ningun cliente", "ERRRO",JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 //		JComboBox comboBox = new JComboBox();
@@ -656,30 +696,30 @@ public class AdminPayments extends JFrame {
 						JOptionPane.showMessageDialog(null, "Pago Realizado",
 			                    "Informacion Pago", JOptionPane.INFORMATION_MESSAGE, icon);
 						loadCita(tableHis);
-						try {
-							
-							Map parametros = new HashMap();
-							//la clave es el mismo parametro que he creado en el informe, el 1 es el id que quiero buscar y del que me haga el informe
-							parametros.put("id_cita",cita.get(0).getIdcita() );
-							
-							// Cual es el tipo de informe que quiero realizar (lo visual)
-							reporte = JasperCompileManager.compileReport("src/Pagos_cita.jrxml");
-							// Parametros a meter: donde lo tengo el informe, de que parametros lo hago y la conexion
-							JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, cn.conectar());
-							// Muestro el reporte
-							JasperViewer.viewReport(jp,true);
-							
-							//Para guardar el informe (lo pudo exportar a muchos formatos pero vamos a hacerlo en PDF) / Poner la extension en el nombre sino no lo guarda en ese formato
-							//JasperExportManager.exportReportToPdfFile(jp, "Informensito.pdf");
-							//En caso de querer guardarlo en una ruta especifica
-							String nombre=cita.get(0).getCliente().getApellidos();
-							JasperExportManager.exportReportToPdfFile(jp, "C:\\Users\\Pablo\\Escritorio\\"+nombre+cita.get(0).getFecha()+".pdf");
-							
-							
-							
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
+//						try {
+//							
+//							Map parametros = new HashMap();
+//							//la clave es el mismo parametro que he creado en el informe, el 1 es el id que quiero buscar y del que me haga el informe
+//							parametros.put("id_cita",cita.get(0).getIdcita() );
+//							
+//							// Cual es el tipo de informe que quiero realizar (lo visual)
+//							reporte = JasperCompileManager.compileReport("src/Pagos_cita.jrxml");
+//							// Parametros a meter: donde lo tengo el informe, de que parametros lo hago y la conexion
+//							JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, cn.conectar());
+//							// Muestro el reporte
+//							JasperViewer.viewReport(jp,true);
+//							
+//							//Para guardar el informe (lo pudo exportar a muchos formatos pero vamos a hacerlo en PDF) / Poner la extension en el nombre sino no lo guarda en ese formato
+//							//JasperExportManager.exportReportToPdfFile(jp, "Informensito.pdf");
+//							//En caso de querer guardarlo en una ruta especifica
+//							String nombre=cita.get(0).getCliente().getApellidos();
+//							JasperExportManager.exportReportToPdfFile(jp, "C:\\Users\\Pablo\\Escritorio\\"+nombre+cita.get(0).getFecha()+".pdf");
+//							
+//							
+//							
+//						} catch (Exception e1) {
+//							e1.printStackTrace();
+//						}
 						System.out.println(pagado + "asdyubasigvyudasbhasdyugvshbdasdyhvbusdaagyubh");
 					}else if(cita.get(0).getMensualidades() == 0){
 						JOptionPane.showMessageDialog(null, "No se ha asignado un tipo de mensualidad",
@@ -688,6 +728,9 @@ public class AdminPayments extends JFrame {
 						JOptionPane.showMessageDialog(null, "Este pago ya ha sido completado",
 			                    "Informacion Pago", JOptionPane.ERROR_MESSAGE);
 					}
+				}else {
+					JOptionPane.showMessageDialog(parent, "No has seleccionado ningun cliente", "ERRRO",JOptionPane.WARNING_MESSAGE);
+
 				}
 				
 

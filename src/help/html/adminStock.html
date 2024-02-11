@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Móduo de Inventario Administrador</title>
+    <!-- CSS -->
+    <style>
+        .header {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #1FC0BF;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        h2 {
+            background-color: #5DCACA;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 45px;
+            margin-right: 15px;
+            text-align: justify;
+        }
+
+        .sangria {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 100px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            height: 2px;
+            background-color: #F45559;
+            border: transparent;
+        }
+
+        .numeros {
+            background-color: #F45559;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 6px;
+        }
+
+        .imagen {
+            display: block;
+            margin: auto;
+            border: 3px solid #a1a1a1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Titulo de la página -->
+    <div class="header">
+        <img src="../imagenes/logoMenu.png" alt="Imagen" />
+        <h1>Módulo Inventario Administrador</h1>
+    </div>
+
+    <hr><br>
+
+    <!-- Explicación del módulo -->
+    <p> En este módulo el Doctor podrá gestionar las siguientes operaciones referentes al inventario de la clínica:
+    <div class="sangria">
+        <strong><a href="#1">1. Agregar un nuevo producto</a></strong><br>
+        <strong><a href="#2">2. Modificar un producto existente</a></strong><br>
+        <strong><a href="#3">3. Agregar un nuevo proveedor</a></strong><br>
+        <strong><a href="#4">4. Modificar un proveedor</a></strong><br>
+        <strong><a href="#5">5. Hacer pedidos</a></strong><br>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- Seleccionar producto -->
+    <h2><span class="numeros" id="1">1</span> Agregar un nuevo producto</h2>
+
+    <p>
+        Los productos disponibles en el inventario se pueden observar en la tabla que lleva este nombre, especificando que producto es y el número de unidades de las que se dispone.
+        Esta dispone de una herramienta buscador, para facilitar la localización de los mismos <img src="../imagenes/buscador.PNG"/>
+        Para añadir un nuevo producto al sistema, debemos hacer click en el siguiente icono <img src="../imagenes/add.png"/>
+        Apareciendo la siguiente ventana de creación de producto
+    </p>
+
+    <br>
+
+    <!-- elegir producto -->
+    <img class="imagen" src="../imagenes/crear_producto.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+    En esta pantalla debemos elegir el nombre de nuestro nuevo producto, la cantidad que se tiene de ese nuevo producto y el proveedor de este producto.
+       Para ello debemos elegirlo del listado disponible y pulsar <img src="../imagenes/add.png"/> . Se pueden añadir tantos como sean necesarios. <br>
+       Si el proveedor del procuto no existe aún debemos <a href="#3">crearlo</a>
+    </p>
+
+    <br>
+
+    <!-- Modificar producto -->
+    <h2><span class="numeros" id="2">2</span> Modificar un producto existente</h2>
+
+    <p>
+        Para modificar un producto existente debemos de hacer click en él en la tabla inventario y hacer click en <img src="../imagenes/edit.png"/>. 
+        Se nos abrirá la siguiente pantalla
+    </p>
+
+    <br>
+
+    <!-- modificar producto -->
+    <img class="imagen" src="../imagenes/modificar_producto.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        En esta pantalla podremos modificar el nombre y las cantidades que tenemos de ese producto, pero no se podrán modificar proveedores.
+    </p>
+
+    
+
+    <!-- Agregar un nuevo proveedor citas -->
+    <h2><span class="numeros" id="3">3</span> Agregar un nuevo proveedor</h2>
+
+    <p>
+      Para agregar un nuevo proveedor debemos de hacer click en <img src="../imagenes/add.png"/> dentro de la tabla proveedores.
+      Lo cual nos dará paso al siguiente menu.
+    </p>
+
+    <br>
+     <!-- agregar proveedor-->
+     <img class="imagen" src="../imagenes/agregar_proveedor.PNG" alt="Imagen" width="640" height="340" />
+
+     <p>
+        En esta pantalla rellenaremos la información de nuestro nuevo proveedor para introducirlo dentro del sistema.
+    </p>
+
+
+    <h2><span class="numeros" id="4">4</span> Modificar un  proveedor</h2>
+    <p>
+        Para modificar un proveedor existente en el sistema debemos hacer un click en él en la tabla para seleccionarlo y posteriormente debemos pulsar
+        <img src="../imagenes/edit.png"/> que está situado dentro de la tabla proveedores. Apareciendo el siguiente menú.
+        
+    </p>
+
+    <br>
+     <!-- modificar proveedor-->
+     <img class="imagen" src="../imagenes/modificar_proveedor.PNG" alt="Imagen" width="640" height="340" />
+    <p>
+        Este menú es igual al de crear un proveedor, pero en este caso nos cargará la información del que hayamos hecho selección. Pudiendo alterarla en caso de que sea necesario.
+    </p>
+    <h2><span class="numeros" id="5">5</span>Hacer pedidos</h2>
+    <p>
+        Para hacer un pedido, es necesario que se de una condición de falta de inventario de un producto en concreto. En ese caso cuando iniciemos sesión con nuestro usuario administrador <br>
+        y entremos en el módulo de inventario, nos aparecerá el siguiente icono <img src="../imagenes/mail.png"/><br>
+        Haciendo click en él nos aparecerá la pantalla de creación de pedido.
+    </p>
+    <!-- hacer pedido-->
+    <img class="imagen" src="../imagenes/hacer_pedido.PNG" alt="Imagen" width="640" height="340" />
+    <br>
+    <p>
+        En esta pantalla nos cargará una tabla con todos aquellos productos cuyas unidades sean cero, es decir, no se tenga existencias para su uso. <br>
+        Para elegir cuantas unidades se van a pedir, se debe hacer click en el producto en custión dando paso al siguiente menu interactivo. 
+    
+    </p>
+    <img class="imagen" src="../imagenes/cantidad_pedidas.PNG" alt="Imagen" />
+    <br>
+    <p>
+        Una vez elegida una cantidad aceptada por el sistema (mayor que 0) podremos confirmar nuestro pedido, y se cargarán dichas unidades dentro del sistema. 
+        Apareciendo el siguiente mensaje:
+        <img class="imagen" src="../imagenes/pedido_realizado.PNG" alt="Imagen" />
+    <br>
+    </p>
+    </body>
+</body>
+
+</html>

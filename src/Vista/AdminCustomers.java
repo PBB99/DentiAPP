@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -28,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -114,8 +116,8 @@ public class AdminCustomers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
-		
-		JButton BinformeTotal=new JButton();
+
+		JButton BinformeTotal = new JButton();
 		BinformeTotal.setToolTipText("Imprimir historial completo");
 		BinformeTotal.setIcon(new ImageIcon(getClass().getResource("/Resources/images/generarpdf.png")));
 		BinformeTotal.setBorder(null);
@@ -126,6 +128,55 @@ public class AdminCustomers extends JFrame {
 		BinformeTotal.setBackground(null);
 		BinformeTotal.setBounds(1378, 250, 100, 100);
 		contentPane.add(BinformeTotal);
+
+		BinformeTotal.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (table.getSelectedRow() != -1 && table.getValueAt(table.getSelectedRow(), 0) != null) {
+					// System.out.println("asigugiasdgvhiasdgyugyuosdayguiodsaygdsagyiasdygiadsgyudsaasyvuhasdvyuh5sadyvhusavyusadvyuh");
+					java.sql.Date date = java.sql.Date.valueOf(table.getValueAt(table.getSelectedRow(), 0).toString());
+
+					Query<ClienteHibernate> consultaCitaHibernate = session
+							.createQuery("FROM CitaHibernate where clientes_dni_cliente=:dni", ClienteHibernate.class);
+					consultaCitaHibernate.setParameter("dni", selected.split(" ")[0]);
+
+					ClienteHibernate cita = consultaCitaHibernate.getSingleResult();
+
+//						try {
+//							
+//							Map parametros = new HashMap();
+//							//la clave es el mismo parametro que he creado en el informe, el 1 es el id que quiero buscar y del que me haga el informe
+//							parametros.put("dni_cliente",cita.getDni_cliente() );
+//							
+//							// Cual es el tipo de informe que quiero realizar (lo visual)
+//							reporte = JasperCompileManager.compileReport("src/Historial.jrxml");
+//							// Parametros a meter: donde lo tengo el informe, de que parametros lo hago y la conexion
+//							JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, cn.conectar());
+//							// Muestro el reporte
+//							JasperViewer.viewReport(jp,true);
+//							
+//							//Para guardar el informe (lo pudo exportar a muchos formatos pero vamos a hacerlo en PDF) / Poner la extension en el nombre sino no lo guarda en ese formato
+//	
+//							//En caso de querer guardarlo en una ruta especifica
+//							String nombre=cita.getApellidos();
+//					java.util.Date fecha = new Date();
+//					java.sql.Date dia = new java.sql.Date(fecha.getTime());
+//							JasperExportManager.exportReportToPdfFile(jp, "C:\\Users\\Pablo\\Escritorio\\"+nombre+"_"+dia".pdf");
+//							
+//							
+//							
+//						} catch (Exception e1) {
+//							e1.printStackTrace();
+//						}
+
+				} else {
+					JOptionPane.showMessageDialog(parent, "No has seleccionado ningun cliente", "ERRROR",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
 		// menubar
 
 		// nombre esquina
@@ -511,13 +562,11 @@ public class AdminCustomers extends JFrame {
 					// Cambios en la selección
 					tableHis.setColumnSelectionAllowed(true);
 					tableHis.setCellSelectionEnabled(true);
-					
 
 				}
 			}
 		});
-		
-		
+
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
 				if (evnt.getClickCount() == 1) {
@@ -716,7 +765,6 @@ public class AdminCustomers extends JFrame {
 			}
 		});
 		panelTitleCliente.add(btnUpdateCliente);
-
 
 	}
 
