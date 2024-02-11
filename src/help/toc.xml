@@ -1,6 +1,14 @@
 <toc version="1.0">
-    <tocitem text="Manual" target="principal">
-        <tocitem text="introduccion" target="introduccion"></tocitem>
-        <tocitem text="Menu Principal" target="v2"></tocitem>
+    <tocitem text="Manual" target="manual">
+        <tocitem text="Login" target="login"></tocitem>
+        <tocitem text="Usuarios" target="usuarios"></tocitem>
+        <tocitem text="Clinica" target="clinica"></tocitem>
+        <tocitem text="PacientesAdmin" target="pacientesAdmin"></tocitem>
+        <tocitem text="CitasAdmin" target="citasAdmin"></tocitem>
+        <tocitem text="Pagos" target="pagos"></tocitem>
+        <tocitem text="StockAdmin" target="adminStock"></tocitem>
+        <tocitem text="PacientesDoctor" target="pacientesDoctor"></tocitem>
+        <tocitem text="CitasDoctor" target="citasDoctor"></tocitem>
+        <tocitem text="StockDoctor" target="doctorStock"></tocitem>
     </tocitem>
 </toc>
