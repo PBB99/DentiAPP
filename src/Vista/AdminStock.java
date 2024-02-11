@@ -439,6 +439,25 @@ public class AdminStock extends JFrame {
 		contentPane.add(lblCorreo);
 
 
+		// Ayuda
+		JButton btnHelp = new JButton();
+		btnHelp.setBounds(300, 10, 40, 40);
+		btnHelp.setBorder(null);
+		btnHelp.setFocusPainted(false);
+		btnHelp.setBorderPainted(false);
+		btnHelp.setContentAreaFilled(false);
+		btnHelp.setOpaque(false);
+		btnHelp.setBackground(null);
+		btnHelp.setIcon(new ImageIcon(getClass().getResource("/Resources/images/help.png")));
+		btnHelp.setToolTipText("Ayuda (Alt+H)");
+		btnHelp.setMnemonic(KeyEvent.VK_H);
+		btnHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Mostrar ayuda");
+			}
+		});
+		contentPane.add(btnHelp);		
 		// -------------------- Lógica --------------------
 		//correo
 		lblCorreo.addMouseListener(new MouseAdapter() {

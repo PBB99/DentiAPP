@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <!-- CSS -->
+    <style>
+        .header {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #1FC0BF;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        h2 {
+            background-color: #5DCACA;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 45px;
+            margin-right: 15px;
+            text-align: justify;
+        }
+
+        .sangria {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 100px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            height: 2px;
+            background-color: #F45559;
+            border: transparent;
+        }
+
+        .numeros {
+            background-color: #F45559;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 6px;
+        }
+
+        .imagen {
+            display: block;
+            margin: auto;
+            border: 3px solid #a1a1a1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Titulo de la página-->
+    <div class="header">
+        <img src="../imagenes/logoMenu.png" alt="Imagen" />
+        <h1>Pantalla de Inicio</h1>
+    </div>
+
+    <hr><br>
+
+    <p>
+        Acciones básicas que puedes realizar en la aplicación de DentiApp
+    <div class="sangria">
+        <strong><a href="1">1. ¿Cómo acceder a DentiApp?</a></strong>
+        <strong><a href="2">2. ¿Cómo saber que usuario a iniciado sesión?</a></strong>
+        <strong><a href="3">3. ¿Cómo cambiar la cotraseña o cerrar sesión?</a></strong>
+        <strong><a href="4">4. ¿Cómo cambiar de módulo?</a></strong>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- Rellenar campos del login -->
+    <h2><span class="numeros" id="1">1</span> ¿Cómo acceder a DentiApp?</h2>
+
+    <p>
+        Para acceder a esta aplicación rellena el formulario, con las creedenciales correspondientes, que se muestra a
+        continuación:
+    </p>
+
+    <br>
+
+    <!-- Formulario_login -->
+    <img class="imagen" src="../imagenes/formulario_login.PNG" alt="Imagen" width="303" height="389" />
+
+    <br>
+
+    <p>
+        Vea cada uno de los componenetes del formulario, empezando desde arriba:<br>
+    </p>
+
+    <div class="sangria">
+        <strong>Usuario:</strong> Se trata del nombre de usuario proporcionado para acceder a la aplicación.<br>
+        <strong>Password:</strong> Contraseña asociada al usuario para acceder a la aplicación.<br>
+        <strong>Iniciar sesión:</strong> Botón para acceder a la aplicación.
+    </div>
+
+    <p> Una vez rellenado los campos "Usuario" y "Contraseña" pulse el botón de "Iniciar Sesión" o pulse la tecla
+        "Enter" del teclado.</p>
+
+    <br>
+
+    <!-- Usuario -->
+    <h2><span class="numeros" id="2">2</span> ¿Cómo saber que usuario a iniciado sesión?</h2>
+
+    <p>
+        Los datos del usuario que halla iniciado sesión apareceran en la parte superior izquierda de la pantalla:
+    </p>
+
+    <br>
+
+    <!-- Identificación -->
+    <img class="imagen" src="../imagenes/identificacion.png" alt="Imagen" width="640" height="360" />
+
+    <br>
+
+    <!-- Cambiar contraseña -->
+    <h2><span class="numeros" id="3">3</span> ¿Cómo cambiar la cotraseña o cerrar sesión?</h2>
+
+    <p>
+        Para cambiar la contraseña debe hacer click en la parte superior derecha de la pantalla y se desplegaran dos
+        opciones:
+    </p>
+
+    <br>
+
+    <!-- Logout -->
+    <img class="imagen" src="../imagenes/logout.PNG" alt="Imagen" width="640" height="360" />
+
+    <br>
+
+    <p>
+        <strong>Cerrar Sesión:</strong> Cerrara la sesión y volvera a la pantalla de Inicio.<br>
+        <strong>Cambiar contraseña:</strong> Abrirá una ventana que le permitirá cambiar la contraseña de acceso a la
+        aplicación rellenando todos los campos y pulsando el botón de cambiar contraseña.
+    </p>
+
+    <!-- Cambiar contraseña -->
+    <img class="imagen" src="../imagenes/change_password.PNG" alt="Imagen" width="350" height="360" />
+
+    <!-- Cambiar contraseña -->
+    <h2><span class="numeros" id="4">4</span> ¿Cómo cambiar de módulo?</h2>
+
+    <p>
+        Para cambiar módulo haga click en el modulo al que quiera cambiar en el menú que aparece a la izquierda de la
+        pantalla, también puede acceder a los módulos a través de una combinación de teclas rápidas asociadas a cada
+        módulo, si posiciona el cursor encima del módulo podrá ver la combinación de teclas asociada. Mediante este menú
+        tendrá acceso a los módulos permitidos por su nivel de usuario. Podra saber en
+        que modulo está por que este queda resaltado en un color distinto a los otros:
+    </p>
+
+    <br>
+
+    <!-- Logout -->
+    <img class="imagen" src="../imagenes/menu.png" alt="Imagen" width="640" height="360" />
+
+    <p>
+
+    </p>
+</body>
+
+</html>

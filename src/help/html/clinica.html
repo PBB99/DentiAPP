@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Clinica</title>
+    <!-- CSS -->
+    <style>
+        .header {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #1FC0BF;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        h2 {
+            background-color: #5DCACA;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 45px;
+            margin-right: 15px;
+            text-align: justify;
+        }
+
+        .sangria {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 100px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            height: 2px;
+            background-color: #F45559;
+            border: transparent;
+        }
+
+        .numeros {
+            background-color: #F45559;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 6px;
+        }
+
+        .imagen {
+            display: block;
+            margin: auto;
+            border: 3px solid #a1a1a1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Titulo de la página -->
+    <div class="header">
+        <img src="../imagenes/logoMenu.png" alt="Imagen" />
+        <h1>Módulo Clínica</h1>
+    </div>
+
+    <hr><br>
+
+    <!-- Explicación del módulo -->
+    <p> En este módulo se podrá gestionar las operaciones referentes a la clínica:
+    <div class="sangria">
+        <strong><a href="#1">1. Visualizar especialidades y tratamientos</a></strong><br>
+        <strong><a href="#2">2. Añadir una especialidad</a></strong><br>
+        <strong><a href="#3">3. Modificar una especialidad</a></strong><br>
+        <strong><a href="#4">4. Modificar un tratamiento</a></strong><br>
+        <strong><a href="#5">5. Modificar un tratamiento</a></strong><br>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- Visualizar especialidades y tratamientos -->
+    <h2><span class="numeros" id="1">1</span> Visualizar especialidades y tratamientos</h2>
+
+    <p>
+        Las especialidades se pueden ver en la tabla de la izquierda, mientras que los tratamientos se pueden visualizar
+        en la tabla de la derecha cuando se selecciona con click izquierdo una especialidad. Se pueden usar los
+        buscadores para buscar por los nombres en sus respectivas tablas.
+    </p>
+
+    <br>
+
+    <!-- especialidades y tratamientos -->
+    <img class="imagen" src="../imagenes/clinica.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Añadir Especialidad -->
+    <h2><span class="numeros" id="2">2</span> Añadir especialidad</h2>
+
+    <p>
+        Para añadir especialidades se pulsará el botón representado por una cruz verde
+        que se encuentra en la esquina superior derecha de la tabla de especialidades.
+    </p>
+
+    <br>
+
+    <!-- añadir usuario -->
+    <img class="imagen" src="../imagenes/clinica.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana donde poner el nombre de la nueva especialidad. Una vez que se haya
+        introducido el nombre pulsando el botón “OK” de la parte inferior se
+        añadirá la especialidad y se actualizará la tabla de especialidades con la nueva información.
+        También se puede cancelar en cualquier momento la operación de añadir especialidad pulsando el botón de “Cancel”
+        de la parte inferior.
+    </p>
+
+    <br>
+
+    <!-- ventana añadir especialidad -->
+    <img class="imagen" src="../imagenes/añadir_especialidad.PNG" alt="Imagen" width="300" height="150" />
+
+    <br>
+
+    <!-- Modificar especialidad -->
+    <h2><span class="numeros" id="3">3</span> Modificar especialidad</h2>
+
+    <p>
+        Para modificar una especialidad es necesario seleccionar haciendo click izquierdo en una especialidad ya
+        existente, posteriormente se pulsara el botón representado por un lápiz negro
+        que se encuentra en la esquina superior derecha de la tabla de especialidades.
+    </p>
+
+    <br>
+
+    <!-- modificar especialidad -->
+    <img class="imagen" src="../imagenes/modificar_especialidad.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana para introducir el nuevo nombre de la especialidad. Una vez que se haya
+        introducido el nombre pulsando el botón “OK” de la parte inferior se
+        modificará la especialidad y se actualizará la tabla de especialidades con la nueva información.
+        También se puede cancelar en cualquier momento la operación de añadir especialidad pulsando el botón de “Cancel”
+        de la parte inferior.
+    </p>
+
+    <br>
+
+    <!-- ventana modificar especialidad -->
+    <img class="imagen" src="../imagenes/modificar_especialidad_ventana.PNG" alt="Imagen" width="300" height="150" />
+
+    <br>
+
+    <!-- Añadir tratamiento -->
+    <h2><span class="numeros" id="4">4</span> Añadir tratamiento</h2>
+
+    <p>
+        Para añadir tratamiento es necesario tner una especialidad seleccionada a la que se asociará. Se pulsará el
+        botón representado por una cruz verde
+        que se encuentra en la esquina superior derecha de la tabla de tratamientos.
+    </p>
+
+    <br>
+
+    <!-- añadir tratamiento -->
+    <img class="imagen" src="../imagenes/modificar_especialidad.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana para completar la siguiente información del tratamiento. <br>
+    <div class="sangria">
+        Especialidad que será la que seleccionada anteriormente a la hora de añadir el tratamiento. <br>
+        Nombre del tratamiento. <br>
+        Precio que tendrá el tratamiento. <br>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- ventana añadir tratamiento -->
+    <img class="imagen" src="../imagenes/añadir_tratamiento.PNG" alt="Imagen" width="300" height="200" />
+
+    <br>
+
+    <p>
+        Una vez que los campos hayan sido relleneados pulsando el botón “OK” de la parte inferior se
+        añadirá el tratamietno y se actualizará la tabla de tratamientos con la nueva información. <br><br>
+        También se puede cancelar en cualquier momento la operación de añadir usuario pulsando el botón de “Cancel” de
+        la parte inferior.
+    </p>
+
+    <br>
+
+    <!-- Modificar usuario -->
+    <h2><span class="numeros" id="5">5</span> Modificar tratamiento</h2>
+
+    <p>
+        Para modificar un tratamiento es necesario seleccionar haciendo click izquierdo en un tratamiento ya existente,
+        posteriormente se pulsara el botón representado por un lápiz negro
+        que se encuentra en la esquina superior derecha de la tabla de tratamientos.
+    </p>
+
+    <br>
+
+    <!-- Modificar usuario -->
+    <img class="imagen" src="../imagenes/modificar_tratamiento.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana para completar la siguiente información del tratamiento. <br>
+    <div class="sangria">
+        Especialidad que será la que seleccionada anteriormente a la hora de añadir el tratamiento. <br>
+        Nombre del tratamiento. <br>
+        Precio que tendrá el tratamiento. <br>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- ventana modificar usuario -->
+    <img class="imagen" src="../imagenes/modificar_tratamiento_ventana.PNG" alt="Imagen" width="300" height="200" />
+
+    <br>
+
+    <p>
+        Una vez que los campos hayan sido modificados pulsando el botón “OK” de la parte inferior se
+        modificara el tratamientp y se actualizará la tabla de tratamientos con la nueva información. <br><br>
+        También se puede cancelar en cualquier momento la operación de modificar tratamiento pulsando el botón de
+        “Cancel” de la parte inferior.
+    </p>
+</body>
+
+</html>
