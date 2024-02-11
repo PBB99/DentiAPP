@@ -227,9 +227,10 @@ public class Login extends JFrame {
                     hb.enableHelpOnButton(btnHelp, "manual", helpset);
 
                     //Para colocarlo en la mitad de la pantlla
-                    Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
-                    Point p = new Point((int) pantalla.getWidth()/3, (int) pantalla.getHeight()/4);
+                    Dimension pantalla = new Dimension(1000,860);
+                    Point p = new Point(200, 200);
                     hb.setLocation(p);
+                    hb.setSize(pantalla);
                 } catch (Exception e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
