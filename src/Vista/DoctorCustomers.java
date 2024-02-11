@@ -202,6 +202,8 @@ public class DoctorCustomers extends JFrame {
 		ItemOut.setIcon(new ImageIcon(getClass().getResource("/Resources/images/logout.png")));
 
 		// -------------------- Lógica --------------------
+		
+		
 		// logica click item salir
 		ItemOut.addActionListener(new ActionListener() {
 
@@ -439,7 +441,23 @@ public class DoctorCustomers extends JFrame {
 		JLabel lblNewLabel = new JLabel("Parece que has tenido una consulta con (nombre del cliente)");
 		lblNewLabel.setBounds(32, 5, 355, 14);
 		panel.add(lblNewLabel);
+		
+		tableHis.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
 
+					// Seleccionar row
+					table.addColumnSelectionInterval(0, 3);
+
+					// Cambios en la selección
+					table.setColumnSelectionAllowed(true);
+					table.setCellSelectionEnabled(true);
+					
+
+				}
+			}
+		});
+		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
 				if (evnt.getClickCount() == 1) {
@@ -486,7 +504,7 @@ public class DoctorCustomers extends JFrame {
 				}
 			}
 		});
-
+		
 		btnOdonto = new JButton();
 		btnOdonto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -521,14 +521,16 @@ public class AdminPayments extends JFrame {
 
 		loadClientes(table);
 		loadCitaStart(tableHis);
-		JButton BinformeTotal=new JButton("<html><u>Imprimir informe completo</u></html>");
+		JButton BinformeTotal=new JButton();
+		BinformeTotal.setToolTipText("Imprimir informe de pago completo");
 		BinformeTotal.setBorder(null);
 		BinformeTotal.setFocusPainted(false);
 		BinformeTotal.setBorderPainted(false);
 		BinformeTotal.setContentAreaFilled(false);
 		BinformeTotal.setOpaque(false);
 		BinformeTotal.setBackground(null);
-		BinformeTotal.setBounds(1650,200,100,50);
+		BinformeTotal.setBounds(1650,300,100,50);
+		BinformeTotal.setIcon(new ImageIcon(getClass().getResource("/Resources/images/generarpdf.png")));
 		
 		contentPane.add(BinformeTotal);
 		BinformeTotal.addActionListener(new ActionListener() {
@@ -602,11 +604,15 @@ public class AdminPayments extends JFrame {
 //		btnNewButton.setBounds(279, 148, 89, 23);
 //		contentPane.add(btnNewButton);
 
-		JButton btnInforme = new JButton("<html><u>Realizar pago</u></html>");
-		btnInforme.setFont(font);
-		btnInforme.setBackground(azulito);
+		JButton btnInforme = new JButton();
+		btnInforme.setToolTipText("Realizar pago");
+		btnInforme.setFocusPainted(false);
+		btnInforme.setBorderPainted(false);
+		btnInforme.setContentAreaFilled(false);
+		btnInforme.setBackground(null);
 		btnInforme.setBorder(null);
-		btnInforme.setOpaque(true);
+		btnInforme.setOpaque(false);
+		btnInforme.setIcon(new ImageIcon(getClass().getResource("/Resources/images/hacerpago.png")));
 		btnInforme.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tableHis.getSelectedRow() != -1 && tableHis.getValueAt(tableHis.getSelectedRow(), 0) != null) {
@@ -661,14 +667,18 @@ public class AdminPayments extends JFrame {
 
 			}
 		});
-		btnInforme.setBounds(600, 30, 120, 23);
-		panelTitleHist.add(btnInforme);
+		btnInforme.setBounds(1650,250,100,50);
+		contentPane.add(btnInforme);
 
-		JButton btnMensualidades = new JButton("<html><u>Asignar tipo de mensualidad</u></html>");
-		btnMensualidades.setFont(font);
-		btnMensualidades.setBackground(azulito);
+		JButton btnMensualidades = new JButton();
+		btnMensualidades.setToolTipText("Asignar tipo de mensualidad");
+		btnMensualidades.setFocusPainted(false);
+		btnMensualidades.setBorderPainted(false);
+		btnMensualidades.setContentAreaFilled(false);
+		btnMensualidades.setBackground(null);
 		btnMensualidades.setBorder(null);
-		btnMensualidades.setOpaque(true);
+		btnMensualidades.setOpaque(false);
+		btnMensualidades.setIcon(new ImageIcon(getClass().getResource("/Resources/images/ingremensu.png")));
 		// btnMensualidades.setText("Asignar tipo de pago");
 		btnMensualidades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -719,8 +729,8 @@ public class AdminPayments extends JFrame {
 				}
 			}
 		});
-		btnMensualidades.setBounds(10, 30, 200, 23);
-		panelTitleHist.add(btnMensualidades);
+		btnMensualidades.setBounds(1650,200,100,50);
+		contentPane.add(btnMensualidades);
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {

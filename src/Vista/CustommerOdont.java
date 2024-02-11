@@ -96,22 +96,23 @@ public class CustommerOdont extends JDialog {
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.getTableHeader().setBackground(new Color(148, 220, 219));
 		table.getTableHeader().setBorder(new LineBorder(new Color(148, 220, 219)));
-		
+
 		table.setBounds(883, 70, 506, 608);
-		//Label historial
+		// Label historial
+
 		JLabel lblHistorial = new JLabel("Historial");
 		lblHistorial.setBounds(883, -40, 6000, 150);
-		Font font=lblHistorial.getFont();
-		Font fuenteNueva=new Font(font.getFontName(),Font.BOLD,33);
+		Font font = lblHistorial.getFont();
+		Font fuenteNueva = new Font(font.getFontName(), Font.BOLD, 33);
 		lblHistorial.setFont(fuenteNueva);
-		
+
 		// Panel del Menú
 		JPanel menuPane = new JPanel();
 		menuPane.setBackground(new Color(148, 220, 219));
 		menuPane.setBounds(0, 0, 135, 1080);
 
 		menuPane.setLayout(null);
-		
+
 		// Label del Logo del Menú
 		JLabel lblLogo = new JLabel();
 		lblLogo.setBounds(0, 0, 135, 135);
@@ -121,8 +122,7 @@ public class CustommerOdont extends JDialog {
 		panelOdonto.setBounds(174, 70, 579, 650);
 
 		panelOdonto.setLayout(null);
-		
-		
+
 		// fondo del panel de odontograma
 		JLabel lFondo = new JLabel("");
 		lFondo.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/odontograma.png")));
@@ -130,7 +130,7 @@ public class CustommerOdont extends JDialog {
 		// ----------------DIENTES-----------------------
 		JButton bDiente17 = new JButton("");
 		bDiente17.setToolTipText("Diente 17");
-		//bDiente17.setBorderPainted(false);
+		// bDiente17.setBorderPainted(false);
 		bDiente17.setBorder(null);
 		bDiente17.setBackground(new Color(128, 64, 0));
 		bDiente17.setBounds(46, 138, 90, 123);
@@ -1013,13 +1013,13 @@ public class CustommerOdont extends JDialog {
 
 			}
 		});
-		
-	
-	
 
 		// ---------------ADICIONES-----------------
-		contentPane.add(lblHistorial);
-		
+		if (admin) {
+
+			contentPane.add(lblHistorial);
+		}
+
 		JLabel lblDiente21 = new JLabel("21");
 		lblDiente21.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente21.setBounds(222, 6, 46, 24);
@@ -1041,47 +1041,47 @@ public class CustommerOdont extends JDialog {
 		panelOdonto.add(bDiente41);
 		panelOdonto.add(bDiente45);
 		panelOdonto.add(bDiente35);
-		
+
 		JLabel lblDiente17 = new JLabel("17");
 		lblDiente17.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente17.setBounds(38, 170, 46, 14);
 		panelOdonto.add(lblDiente17);
-		
+
 		JLabel lblDiente14 = new JLabel("14");
 		lblDiente14.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente14.setBounds(90, 42, 46, 14);
 		panelOdonto.add(lblDiente14);
-		
+
 		JLabel lblDiente25 = new JLabel("25");
 		lblDiente25.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente25.setBounds(350, 95, 46, 14);
 		panelOdonto.add(lblDiente25);
-		
+
 		JLabel lblDiente27 = new JLabel("27");
 		lblDiente27.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente27.setBounds(381, 189, 46, 14);
 		panelOdonto.add(lblDiente27);
-		
+
 		JLabel lblDiente41 = new JLabel("41");
 		lblDiente41.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente41.setBounds(189, 629, 46, 14);
 		panelOdonto.add(lblDiente41);
-		
+
 		JLabel lblDiente37 = new JLabel("37");
 		lblDiente37.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente37.setBounds(381, 453, 46, 14);
 		panelOdonto.add(lblDiente37);
-		
+
 		JLabel lblDiente35 = new JLabel("35");
 		lblDiente35.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente35.setBounds(350, 541, 46, 14);
 		panelOdonto.add(lblDiente35);
-		
+
 		JLabel lblDiente45 = new JLabel("45");
 		lblDiente45.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente45.setBounds(38, 544, 46, 14);
 		panelOdonto.add(lblDiente45);
-		
+
 		JLabel lblDiente47 = new JLabel("47");
 		lblDiente47.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblDiente47.setBounds(22, 453, 46, 14);
@@ -1116,10 +1116,10 @@ public class CustommerOdont extends JDialog {
 				return false;
 			}
 		};
-		
+
 		tabla.setModel(model);
 		model.setRowCount(1);
-	
+
 		JTableHeader header = tabla.getTableHeader();
 		if (odonList.size() < 19) {
 			model.setRowCount(18);
@@ -1127,8 +1127,6 @@ public class CustommerOdont extends JDialog {
 			model.setRowCount(odonList.size() + 1);
 		}
 		int fila = 0, columna = 0;
-		
-		
 
 		// Carga los datos
 		for (OdontogramaHibernate x : odonList) {
@@ -1156,7 +1154,7 @@ public class CustommerOdont extends JDialog {
 
 			// Evalua en que fila esta
 
-			 if (row % 2 == 0) {
+			if (row % 2 == 0) {
 				setBackground(new Color(220, 220, 220));
 			} else {
 				setBackground(new Color(250, 250, 250));
