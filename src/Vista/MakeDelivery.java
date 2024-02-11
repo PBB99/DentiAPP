@@ -155,9 +155,7 @@ public class MakeDelivery extends JDialog {
 			}
 		});
 
-		contentPanel.setBounds(0,0,0,0);
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(0,0,0,0));
+	
 		// Inventario
 
 		// Panel fondo de stock
@@ -208,7 +206,7 @@ public class MakeDelivery extends JDialog {
 		menuTableStock.add(tableStock);
 		menuTableStock.setViewportView(tableStock);
 		pedidoList=loadTableStock(tableStock);
-		getContentPane().add(contentPanel);
+	
 		
 		tableStock.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {

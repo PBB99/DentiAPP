@@ -421,7 +421,8 @@ public class AdminStock extends JFrame {
 		menuTableProveedor.add(tableProveedor);
 		menuTableProveedor.setViewportView(tableProveedor);
 		
-		JLabel lblCorreo = new JLabel("");
+		JLabel lblCorreo = new JLabel();
+		lblCorreo.setToolTipText("Pedido Pendiente");
 		lblCorreo.setIcon(new ImageIcon(AdminStock.class.getResource("/Resources/images/mail.png")));
 		lblCorreo.setBounds(230, 120, 123, 69);
 		String hql2="From InventarioHibernate where cantidad<0";
