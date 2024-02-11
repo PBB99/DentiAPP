@@ -522,7 +522,14 @@ public class AdminPayments extends JFrame {
 		loadClientes(table);
 		loadCitaStart(tableHis);
 		JButton BinformeTotal=new JButton("<html><u>Imprimir informe completo</u></html>");
-		BinformeTotal.setBounds(1700,200,60,20);
+		BinformeTotal.setBorder(null);
+		BinformeTotal.setFocusPainted(false);
+		BinformeTotal.setBorderPainted(false);
+		BinformeTotal.setContentAreaFilled(false);
+		BinformeTotal.setOpaque(false);
+		BinformeTotal.setBackground(null);
+		BinformeTotal.setBounds(1650,200,200,60);
+		
 		contentPane.add(BinformeTotal);
 		BinformeTotal.addActionListener(new ActionListener() {
 			

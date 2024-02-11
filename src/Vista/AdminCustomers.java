@@ -114,6 +114,16 @@ public class AdminCustomers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
+		
+		JButton BinformeTotal=new JButton("<html><u>Imprimir historial completo</u></html>");
+		BinformeTotal.setBorder(null);
+		BinformeTotal.setFocusPainted(false);
+		BinformeTotal.setBorderPainted(false);
+		BinformeTotal.setContentAreaFilled(false);
+		BinformeTotal.setOpaque(false);
+		BinformeTotal.setBackground(null);
+		BinformeTotal.setBounds(1650,200,200,60);
+		contentPane.add(BinformeTotal);
 		// menubar
 
 		// nombre esquina
