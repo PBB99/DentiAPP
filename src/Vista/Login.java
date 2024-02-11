@@ -3,6 +3,7 @@ package Vista;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Toolkit;
 
 import Modelo.CitaHibernate;
@@ -30,6 +31,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -41,6 +44,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -211,6 +216,24 @@ public class Login extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Mostrar ayuda");
+				try {
+                    File fichero = new File("src/help/help_set.hs");
+                    //Con esto cargo el fichero de ayuda
+                    URL hsURL = fichero.toURI().toURL();
+
+                    HelpSet helpset = new HelpSet(getClass().getClassLoader(), hsURL);
+                    HelpBroker hb = helpset.createHelpBroker();
+
+                    hb.enableHelpOnButton(btnHelp, "manual", helpset);
+
+                    //Para colocarlo en la mitad de la pantlla
+                    Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+                    Point p = new Point((int) pantalla.getWidth()/3, (int) pantalla.getHeight()/4);
+                    hb.setLocation(p);
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
 			}
 		});
 		loginPane.add(btnHelp);
