@@ -180,7 +180,7 @@ public class AdminAppointment extends JFrame {
 		mnNewMenu.setBackground(new Color(0, 0, 0, 0));
 
 		// nombre del doctor o admin
-		JMenuItem ItemName = new JMenuItem("");
+		JMenuItem ItemName = new JMenuItem(userHi.getNombre());
 		// ItemName.setText(userHi.getNombre());
 
 		// item cambio contraseña

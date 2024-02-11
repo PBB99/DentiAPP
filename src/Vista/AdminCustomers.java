@@ -482,6 +482,23 @@ public class AdminCustomers extends JFrame {
 		loadClientes(table);
 		loadCitaStart(tableHis);
 
+		tableHis.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Seleccionar row
+					tableHis.addColumnSelectionInterval(0, 3);
+
+					// Cambios en la selección
+					tableHis.setColumnSelectionAllowed(true);
+					tableHis.setCellSelectionEnabled(true);
+					
+
+				}
+			}
+		});
+		
+		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
 				if (evnt.getClickCount() == 1) {

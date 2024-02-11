@@ -447,11 +447,11 @@ public class DoctorCustomers extends JFrame {
 				if (evnt.getClickCount() == 1) {
 
 					// Seleccionar row
-					table.addColumnSelectionInterval(0, 3);
+					tableHis.addColumnSelectionInterval(0, 3);
 
 					// Cambios en la selección
-					table.setColumnSelectionAllowed(true);
-					table.setCellSelectionEnabled(true);
+					tableHis.setColumnSelectionAllowed(true);
+					tableHis.setCellSelectionEnabled(true);
 					
 
 				}

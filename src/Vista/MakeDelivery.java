@@ -65,7 +65,8 @@ public class MakeDelivery extends JDialog {
 	 * Create the dialog.
 	 */
 	public MakeDelivery() {
-		
+		setResizable(false);
+	
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(InventarioHibernate.class).addAnnotatedClass(ProveedorHibernate.class).addAnnotatedClass(PedidosHibernate.class)
@@ -84,7 +85,7 @@ public class MakeDelivery extends JDialog {
 		getContentPane().setLayout(null);
 
 		JPanel buttonPane = new JPanel();
-		buttonPane.setBounds(0, 800, 800, 33);
+		buttonPane.setBounds(0, 820, 750, 33);
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane);
 
@@ -239,7 +240,7 @@ public class MakeDelivery extends JDialog {
 		// Carga los datos
 		for (InventarioHibernate producto : auxiList) {
 			model.setValueAt(producto.getNombre(), fila, columna);
-			model.setValueAt(producto.getCantidad(), fila, columna + 1);
+			model.setValueAt(0, fila, columna + 1);
 			fila++;
 		}
 
