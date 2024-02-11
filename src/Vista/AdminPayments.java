@@ -729,8 +729,7 @@ public class AdminPayments extends JFrame {
 			                    "Informacion Pago", JOptionPane.ERROR_MESSAGE);
 					}
 				}else {
-					JOptionPane.showMessageDialog(parent, "No has seleccionado ningun cliente", "ERRRO",JOptionPane.WARNING_MESSAGE);
-
+					JOptionPane.showMessageDialog(parent, "No has seleccionado ningun cliente", "ERRROR",JOptionPane.WARNING_MESSAGE);
 				}
 				
 
