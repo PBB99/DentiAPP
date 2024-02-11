@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulo Pacientes Doctor</title>
+
+    <!-- CSS -->
+    <style>
+        .header {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #1FC0BF;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        h2 {
+            background-color: #5DCACA;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 45px;
+            margin-right: 15px;
+            text-align: justify;
+        }
+
+        .sangria {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 100px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            height: 2px;
+            background-color: #F45559;
+            border: transparent;
+        }
+
+        .numeros {
+            background-color: #F45559;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 6px;
+        }
+
+        .imagen {
+            display: block;
+            margin: auto;
+            border: 3px solid #a1a1a1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Titulo de la página -->
+    <div class="header">
+        <img src="../imagenes/logoMenu.png" alt="Imagen" />
+        <h1>Módulo Pacientes Doctor</h1>
+    </div>
+
+    <hr><br>
+
+    <!-- Explicación del módulo -->
+    <p> En este módulo se podrá gestionar las operaciones referentes a los pacientes:
+    <div class="sangria">
+        <strong><a href="#1">1. Visualizar historial de los pacientes</a></strong><br>
+        <strong><a href="#2">2. Añadir Observaciones</a></strong><br>
+        <strong><a href="#3">3. Visualizar Odontograma</a></strong><br>
+        <strong><a href="#4">4. Añadir tratamiento en el Odontograma</a></strong><br>
+        <strong><a href="#5">5. Visualizar tratamiento en el Odontograma</a></strong><br>
+    </div>
+    </p>
+    <br>
+
+    <!-- Visualizar Historial -->
+    <h2><span class="numeros" id="1">1</span> Visualizar historial de los pacientes</h2>
+
+    <p>
+        El historial de un paciente se puede visualizar en la tabla de la derecha cuando se hace click izquierdo sobre
+        un paciente. Se puede usar el buscador para buscar un paciente por DNI, nombre, apellido, años.
+    </p>
+
+    <br>
+
+    <!-- Usuarios -->
+    <img class="imagen" src="../imagenes/pacientes_doctor.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Añadir observación -->
+    <h2><span class="numeros" id="2">2</span> Añadir Observaciones</h2>
+
+    <p>
+        Cuando seleccioné un paciente con una cita prevista para la fecha actual y seleccioné con click izquierdo en la
+        tabla de historial dicha cita aparecerá un panel a la derecha de la tabla proveedores para así poder añadir las
+        observaciones a dicha cita. También se podrá cambiar el tratamiento.
+    </p>
+
+    <br>
+
+    <!-- Observaciones -->
+    <img class="imagen" src="../imagenes/añadir_observaciones_doctos.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Añadir observación -->
+    <h2><span class="numeros" id="3">3</span> Visualizar Odontograma</h2>
+
+    <p>
+        Para visualizar el odontograma de un paciente seleccione al paciente en la tabla de los pacientes y luego pulse
+        el icono (Odontograma) para mostrar el odontograma.
+    </p>
+
+    <br>
+
+    <!-- Observaciones -->
+    <img class="imagen" src="../imagenes/odontograma_doctor.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana donde aparecerán una representación de la boca donde se podrá seleccionar
+        los dientes para ver en detalle el tratamiento de los dientes.
+    </p>
+
+    <br>
+
+    <!-- visualizar odontograma -->
+    <img class="imagen" src="../imagenes/odontograma_visualizar_doctor.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Añadir tratmiento odonto -->
+    <h2><span class="numeros" id="4">4</span> Añadir tratamiento en el Odontograma</h2>
+
+    <p>
+        Para añadir un tratamiento en el odontograma con la ventana del odontograma abierta y seleccionando un diente,
+        en la zona de la derecha con podrá incluirse una entrada de tratamiento e insertarla pulsando el botón de la
+        parte inferior que pone insertar.
+    </p>
+
+    <br>
+
+    <!-- Observaciones -->
+    <img class="imagen" src="../imagenes/añadir_odonto_doctor.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Visualizar tratamiento odonto -->
+    <h2><span class="numeros" id="5">5</span> Visualizar tratamiento en el Odontograma</h2>
+
+    <p>
+        Para visualizar un tratamiento en el odontograma con la ventana del odontograma abierta y seleccionando un
+        diente,
+        en la zona de la derecha con podrá visualizarse una entrada de tratamiento cambiando a la ventana historial en
+        la parte superior. En el desplegable de fecha se podrá cambiar la entrada a visualizar.
+    </p>
+
+    <br>
+
+    <!-- Observaciones -->
+    <img class="imagen" src="../imagenes/visualizar_odonto_doctor.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+</body>
+
+</html>
