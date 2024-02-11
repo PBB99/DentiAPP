@@ -17,6 +17,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -27,6 +29,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -230,7 +234,25 @@ public class DoctorAppointment extends JFrame {
 		btnHelp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Mostrar ayuda");
+				try {
+                    File fichero = new File("src/help/help_set.hs");
+                    //Con esto cargo el fichero de ayuda
+                    URL hsURL = fichero.toURI().toURL();
+
+                    HelpSet helpset = new HelpSet(getClass().getClassLoader(), hsURL);
+                    HelpBroker hb = helpset.createHelpBroker();
+
+                    hb.enableHelpOnButton(btnHelp, "manual", helpset);
+
+                    //Para colocarlo en la mitad de la pantlla
+                    Dimension pantalla = new Dimension(1000,860);
+                    Point p = new Point(200, 200);
+                    hb.setLocation(p);
+                    hb.setSize(pantalla);
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
 			}
 		});
 		contentPane.add(btnHelp);

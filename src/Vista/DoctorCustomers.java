@@ -3,9 +3,11 @@ package Vista;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
@@ -17,10 +19,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -216,7 +222,25 @@ public class DoctorCustomers extends JFrame {
 		btnHelp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Mostrar ayuda");
+				try {
+                    File fichero = new File("src/help/help_set.hs");
+                    //Con esto cargo el fichero de ayuda
+                    URL hsURL = fichero.toURI().toURL();
+
+                    HelpSet helpset = new HelpSet(getClass().getClassLoader(), hsURL);
+                    HelpBroker hb = helpset.createHelpBroker();
+
+                    hb.enableHelpOnButton(btnHelp, "manual", helpset);
+
+                    //Para colocarlo en la mitad de la pantlla
+                    Dimension pantalla = new Dimension(1000,860);
+                    Point p = new Point(200, 200);
+                    hb.setLocation(p);
+                    hb.setSize(pantalla);
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
 			}
 		});
 		contentPane.add(btnHelp);		
