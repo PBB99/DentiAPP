@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Pacientes Administrador</title>
+
+    <!-- CSS -->
+    <style>
+        .header {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #1FC0BF;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        h2 {
+            background-color: #5DCACA;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 45px;
+            margin-right: 15px;
+            text-align: justify;
+        }
+
+        .sangria {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 100px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            height: 2px;
+            background-color: #F45559;
+            border: transparent;
+        }
+
+        .numeros {
+            background-color: #F45559;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 6px;
+        }
+
+        .imagen {
+            display: block;
+            margin: auto;
+            border: 3px solid #a1a1a1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Titulo de la página -->
+    <div class="header">
+        <img src="../imagenes/logoMenu.png" alt="Imagen" />
+        <h1>Módulo Pacientes Administrador</h1>
+    </div>
+
+    <hr><br>
+
+    <!-- Explicación del módulo -->
+    <p> En este módulo se podrá gestionar las operaciones referentes a los pacientes:
+    <div class="sangria">
+        <strong><a href="#1">1. Visualizar pacientes</a></strong><br>
+        <strong><a href="#2">2. Añadir pacientes</a></strong><br>
+        <strong><a href="#3">3. Modificar pacientes</a></strong><br>
+        <strong><a href="#4">4. Visualizar Historial</a></strong><br>
+        <strong><a href="#5">4. Visualizar Odontograma</a></strong><br>
+        <strong><a href="#6">5. Imprimir historial</a></strong><br>
+    </div>
+    </p>
+    <br>
+
+    <!-- Visualizar paciente -->
+    <h2><span class="numeros" id="1">1</span> Visualizar pacientes</h2>
+
+    <p>
+        Los pacientes se pueden visualizar en la tabla cliente que aparece a la izquierda de la pantalla.
+        Se puede usar el buscador que se encuentra al lado de la lupa en la parte superior izquierda para buscar
+        usuarios por su nombre, dni o apellido.
+    </p>
+
+    <br>
+
+    <!-- paciente -->
+    <img class="imagen" src="../imagenes/pacientes_admin.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Añadir paciente -->
+    <h2><span class="numeros" id="2">2</span> Añadir pacientes</h2>
+
+    <p>
+        Para añadir pacientes se pulsará el botón representado por el icono cruz verde
+        que se encuentra en la esquina superior derecha de la tabla de clientes.
+    </p>
+
+    <br>
+
+    <!-- añadir paciente -->
+    <img class="imagen" src="../imagenes/pacientes_admin.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana para completar la siguiente información del paciente. <br>
+    <div class="sangria">
+        Dni del paciente. <br>
+        Nombre del paciente. <br>
+        Apellido del paciente. <br>
+        Edad del paciente. <br>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- ventana añadir paciente -->
+    <img class="imagen" src="../imagenes/añadir_pacientes_admin.PNG" alt="Imagen" width="300" height="200" />
+
+    <br>
+
+    <p>
+        Una vez que los campos hayan sido relleneados pulsando el botón “Guardar” de la parte inferior se
+        añadirá el paciente y se actualizará la tabla de pacientes con la nueva información. <br><br>
+        También se puede cancelar en cualquier momento la operación de añadir paciente pulsando el botón de “Cancel” de
+        la parte inferior.
+    </p>
+
+    <br>
+
+    <!-- Modificar paciente -->
+    <h2><span class="numeros" id="3">3</span> Modificar paciente</h2>
+
+    <p>
+        Para modificar un paciente es necesario seleccionar haciendo click izquierdo en un paciente ya existente,
+        posteriormente se pulsará el botón representado por el icono lápiz negro
+        que se encuentra en la esquina superior derecha de la tabla de cliente.
+    </p>
+
+    <br>
+
+    <!-- Modificar paciente -->
+    <img class="imagen" src="../imagenes/pacientes_admin.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana para completar la siguiente información del paciente. <br>
+    <div class="sangria">
+        Dni del paciente. <br>
+        Nombre del paciente. <br>
+        Apellido del paciente. <br>
+        Edad del paciente. <br>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- Modificar paciente -->
+    <h2><span class="numeros" id="4">4</span> Visualizar Historial</h2>
+
+    <p>
+        El historial de un paciente se puede visualizar en la tabla de la derecha cuando se hace click izquierdo sobre
+        un paciente. Se puede usar el buscador para buscar un paciente por DNI, nombre, apellido, años.
+    </p>
+
+    <br>
+
+    <!-- Usuarios -->
+    <img class="imagen" src="../imagenes/visualizar_historial_admin.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Añadir observación -->
+    <h2><span class="numeros" id="5">5</span> Visualizar Odontograma</h2>
+
+    <p>
+        Para visualizar el odontograma de un paciente seleccione al paciente en la tabla de los pacientes y luego pulse
+        el icono (Odontograma) para mostrar el odontograma.
+    </p>
+
+    <br>
+
+    <!-- Observaciones -->
+    <img class="imagen" src="../imagenes/odontograma_doctor.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, se abrirá una ventana donde aparecerán una representación de la boca donde se podrá seleccionar
+        los dientes para ver en detalle el tratamiento de los dientes.
+    </p>
+
+    <br>
+
+    <!-- visualizar odontograma -->
+    <img class="imagen" src="../imagenes/visualizar_odonto_admin.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <!-- Añadir observación -->
+    <h2><span class="numeros" id="5">6</span> Imprimir Historial</h2>
+
+    <p>
+        Para imprimir el historial de un paciente basta con tenerlo seleccionado y pulsar el botón con el icono a la
+        derecha de al tabla historial
+    </p>
+
+    <br>
+
+    <!-- Observaciones -->
+    <img class="imagen" src="../imagenes/pacientes_admin.PNG" alt="Imagen" width="640" height="340" />
+</body>
+
+</html>
