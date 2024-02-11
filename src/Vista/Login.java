@@ -188,13 +188,32 @@ public class Login extends JFrame {
 		btnLogin.setBounds(170, 674, 180, 50);
 		btnLogin.setBackground(new Color(148, 220, 219));
 		btnLogin.setForeground(Color.white);
-		//ojo mostrar o no contraseña
 		
+		//ojo mostrar o no contraseña
 		JLabel lblOjo=new JLabel();
 		lblOjo.setBounds(485, 495, 30, 30);
 		lblOjo.setIcon(new ImageIcon(getClass().getResource("/Resources/images/mostrar.png")));
 		loginPane.add(lblOjo);
 		
+		//Ayuda
+		JButton btnHelp = new JButton();
+		btnHelp.setBounds(480, 683, 40, 40);
+		btnHelp.setBorder(null);
+		btnHelp.setFocusPainted(false);
+		btnHelp.setBorderPainted(false);
+		btnHelp.setContentAreaFilled(false);
+		btnHelp.setOpaque(false);
+		btnHelp.setBackground(null);
+		btnHelp.setIcon(new ImageIcon(getClass().getResource("/Resources/images/help.png")));
+		btnHelp.setToolTipText("Ayuda (Alt+H)");
+		btnHelp.setMnemonic(KeyEvent.VK_H);
+		btnHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Mostrar ayuda");
+			}
+		});
+		loginPane.add(btnHelp);
 		
 		
 		// ----------------------------------------------LOGICA----------------------------------------------------------

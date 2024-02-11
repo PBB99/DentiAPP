@@ -89,7 +89,7 @@ public class AdminInsertUser extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setLayout(null);
 		setLocationRelativeTo(null);
-		
+
 		JLabel lblDNI = new JLabel("DNI: ");
 		lblDNI.setBounds(30, 50, 200, 20);
 		lblDNI.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -98,17 +98,17 @@ public class AdminInsertUser extends JDialog {
 		tfDNI.setColumns(10);
 		tfDNI.setBounds(250, 50, 150, 25);
 		tfDNI.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
+
 		JLabel lblNombre = new JLabel("Nombre: ");
 		lblNombre.setBounds(30, 100, 200, 20);
 		lblNombre.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		contentPanel.add(lblNombre);	
+		contentPanel.add(lblNombre);
 
 		tfNombre = new JTextField();
 		tfNombre.setColumns(10);
 		tfNombre.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		tfNombre.setBounds(250, 100, 150, 25);
-		
+
 		JLabel lblApellido = new JLabel("Apellido: ");
 		lblApellido.setBounds(30, 150, 200, 20);
 		lblApellido.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -117,14 +117,14 @@ public class AdminInsertUser extends JDialog {
 		tfApellido.setColumns(10);
 		tfApellido.setBounds(250, 150, 150, 25);
 		tfApellido.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
+
 		JLabel lblEspecialidad = new JLabel("Especialidad:");
 		lblEspecialidad.setBounds(30, 200, 200, 20);
 		lblEspecialidad.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
+
 		JComboBox cbEspecialidad = new JComboBox();
 		cbEspecialidad.setBounds(250, 200, 150, 25);
-		
+
 		JLabel lblContraseña = new JLabel("Contraseña: ");
 		lblContraseña.setBounds(30, 250, 200, 20);
 		lblContraseña.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -153,6 +153,26 @@ public class AdminInsertUser extends JDialog {
 			}
 		});
 		cancelButton.setActionCommand("Cancel");
+
+		// Ayuda
+		JButton btnHelp = new JButton();
+		btnHelp.setBounds(480, 683, 40, 40);
+		btnHelp.setBorder(null);
+		btnHelp.setFocusPainted(false);
+		btnHelp.setBorderPainted(false);
+		btnHelp.setContentAreaFilled(false);
+		btnHelp.setOpaque(false);
+		btnHelp.setBackground(null);
+		btnHelp.setIcon(new ImageIcon(getClass().getResource("/Resources/images/help.png")));
+		btnHelp.setToolTipText("Ayuda (Alt+H)");
+		btnHelp.setMnemonic(KeyEvent.VK_H);
+		btnHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Mostrar ayuda");
+			}
+		});
+		contentPane.add(btnHelp);
 		// ------------------------------------------LOGICA-----------------------------------------------
 
 		try {// CARGAR EN EL COMBO BOX LAS ESPECIALIDADES DE LA CLINICA
@@ -183,30 +203,30 @@ public class AdminInsertUser extends JDialog {
 						String contra = tfContraseña.getText();
 						String especialidad = cbEspecialidad.getSelectedItem().toString();
 						boolean encontrado = false;
-						
+
 						try {
-							//Comprobamos si todos los campos estan rellenos
+							// Comprobamos si todos los campos estan rellenos
 							if (dni.isEmpty() || nom.isEmpty() || ape.isEmpty() || contra.isEmpty()
 									|| cbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("")) {
 								JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos",
 										"WARNING_MESSAGE", JOptionPane.WARNING_MESSAGE);
 							} else {
-								
+
 								// Relaiza la consulta
 								String hql = "FROM UserHibernate";
 								Query<UserHibernate> consulta = miSesion.createQuery(hql, UserHibernate.class);
 
 								// Guarda los datos en una lista
 								List<UserHibernate> results = consulta.getResultList();
-								
-								//Comprobamos
+
+								// Comprobamos
 								for (UserHibernate u : results) {
 									if (u.getDni().equalsIgnoreCase(dni)) {
 										encontrado = true;
 									}
 								}
 
-								//Si existe lo notificamos si no lo creamos
+								// Si existe lo notificamos si no lo creamos
 								if (encontrado) {
 									JOptionPane.showMessageDialog(null, "Ese DNI ya esta ligado a un usuari/a",
 											"WARNING_MESSAGE", JOptionPane.WARNING_MESSAGE);
@@ -220,7 +240,7 @@ public class AdminInsertUser extends JDialog {
 									JOptionPane.showMessageDialog(null, "Nuevo usuario creado");
 									miSesion.getTransaction().commit();
 									miSesion.close();
-									
+
 									setModal(false);
 									setVisible(false);
 									dispose();

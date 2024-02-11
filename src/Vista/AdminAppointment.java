@@ -96,14 +96,14 @@ public class AdminAppointment extends JFrame {
 	private SessionFactory instancia;
 	private Session session;
 	private UserHibernate userHi;
-	
+
 	private LineBorder lb = new LineBorder(new Color(240, 240, 240), 3, true);
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private UserHibernate selUs;
 
 	private Color azulito = new Color(148, 220, 219);
-  private Font metropolis;
+	private Font metropolis;
 
 	/**
 	 * Launch the application.
@@ -134,13 +134,14 @@ public class AdminAppointment extends JFrame {
 				.addAnnotatedClass(TreatmentsHibernate.class).addAnnotatedClass(ClienteHibernate.class)
 				.addAnnotatedClass(SpecialityHibernate.class).buildSessionFactory();
 		this.session = instancia.openSession();
-		//----FUENTE
+		// ----FUENTE
 		try {
-			//crea la fuente
-			metropolis=Font.createFont(Font.TRUETYPE_FONT, new java.io.File("/Resources/fonts/metropolis.thin.otf")).deriveFont(80f);
-			//la registra en el entorno grafico
+			// crea la fuente
+			metropolis = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("/Resources/fonts/metropolis.thin.otf"))
+					.deriveFont(80f);
+			// la registra en el entorno grafico
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(metropolis);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		// -------------------- JFrame --------------------
@@ -235,21 +236,20 @@ public class AdminAppointment extends JFrame {
 		// Citas
 		JPanel panelTitleAdmin = new JPanel();
 		panelTitleAdmin.setBounds(1, 2, 170, 90);
-		panelTitleAdmin.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
+		panelTitleAdmin
+				.setBorder(new TitledBorder(lb2, "", TitledBorder.LEFT, TitledBorder.TOP, font, new Color(51, 51, 51)));
 		panelTitleAdmin.setOpaque(false);
 		panelTitleAdmin.setLayout(null);
-		
-		//rounded panel de fomdo para el nombre 
+
+		// rounded panel de fomdo para el nombre
 		JPanel panelnombre = new RoundedPanel(30, new Color(240, 240, 240));
 		panelnombre.setBounds(136, 0, 150, 60);
 		panelnombre.setOpaque(false);
 		panelnombre.setLayout(null);
 		contentPane.add(panelnombre);
 		panelnombre.add(panelTitleAdmin);
-		String htmlString = "<html><body style='font_size:30px;'><pre>" 
-		+ userHi.getNombre().toUpperCase() 
-				+ "\n    " + userHi.getApellido().toUpperCase() + 
-		"</pre></body></html>";
+		String htmlString = "<html><body style='font_size:30px;'><pre>" + userHi.getNombre().toUpperCase() + "\n    "
+				+ userHi.getApellido().toUpperCase() + "</pre></body></html>";
 		JLabel lblNAdmin = new JLabel(htmlString);
 		lblNAdmin.setToolTipText("Nombre & Apellido");
 		lblNAdmin.setBounds(10, 5, 150, 60);
@@ -396,7 +396,8 @@ public class AdminAppointment extends JFrame {
 				radioButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						//System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " + radioButton.getId());
+						// System.out.println("Seleccionaste: " + radioButton.getText() + " DNI: " +
+						// radioButton.getId());
 						Query<UserHibernate> consulUs = session.createQuery("FROM UserHibernate where dni=:id",
 								UserHibernate.class);
 						consulUs.setParameter("id", radioButton.getId());
@@ -425,6 +426,26 @@ public class AdminAppointment extends JFrame {
 		btnMod.setBounds(935, 13, 40, 20);
 		btnMod.setIcon(new ImageIcon(getClass().getResource("/Resources/images/edit.png")));
 		panelTitleCitas.add(btnMod);
+
+		// Ayuda
+		JButton btnHelp = new JButton();
+		btnHelp.setBounds(300, 10, 40, 40);
+		btnHelp.setBorder(null);
+		btnHelp.setFocusPainted(false);
+		btnHelp.setBorderPainted(false);
+		btnHelp.setContentAreaFilled(false);
+		btnHelp.setOpaque(false);
+		btnHelp.setBackground(null);
+		btnHelp.setIcon(new ImageIcon(getClass().getResource("/Resources/images/help.png")));
+		btnHelp.setToolTipText("Ayuda (Alt+H)");
+		btnHelp.setMnemonic(KeyEvent.VK_H);
+		btnHelp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Mostrar ayuda");
+			}
+		});
+		contentPane.add(btnHelp);
 
 		// -------------------- Lógica --------------------
 		// Acción para cerrar la ventana solo cuando se ha abierto la siguiente
@@ -564,7 +585,7 @@ public class AdminAppointment extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//System.out.println("funciona");
+				// System.out.println("funciona");
 				Login login = new Login(frame);
 				login.setVisible(true);
 				session.close();
@@ -581,7 +602,7 @@ public class AdminAppointment extends JFrame {
 				DChangePass cP = new DChangePass(userHi);
 				cP.setVisible(true);
 				cP.setModal(true);
-				//System.out.println("PINCHADO");
+				// System.out.println("PINCHADO");
 				session.close();
 
 			}
@@ -590,7 +611,7 @@ public class AdminAppointment extends JFrame {
 		// -------------------- Adiciones a los paneles --------------------
 		contentPane.add(menuPane);
 		contentPane.add(menuBar);
-		//contentPane.add(lblNAdmin);
+		// contentPane.add(lblNAdmin);
 
 		menuPane.add(lblLogo);
 		menuPane.add(btnAppointment);
