@@ -45,7 +45,7 @@ public class Video extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(Video.class.getResource("/Resources/images/inicio.gif")));
 		lblNewLabel.setBounds(0, 0, 853, 480);
 		getContentPane().add(lblNewLabel);
-		Timer timer=new Timer(6500, new ActionListener() {
+		Timer timer=new Timer(6000, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
