@@ -21,7 +21,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -61,6 +63,14 @@ import Modelo.UserHibernate;
 import Otros.RoundedPanel;
 import Vista.AdminCustomers.Renderer;
 import btndentiapp.ButtonDentiApp;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
+
 import javax.swing.JComboBox;
 
 public class AdminPayments extends JFrame {
@@ -80,7 +90,8 @@ public class AdminPayments extends JFrame {
 	private Font font = new Font("Dialog", Font.BOLD, 15);
 	private LineBorder lb2 = new LineBorder(new Color(148, 220, 219), 3, true);
 	private Color azulito = new Color(148, 220, 219);
-
+	private JasperReport reporte;
+	private ConexionMySQL cn;
 	/**
 	 * Launch the application.
 	 */
@@ -510,7 +521,17 @@ public class AdminPayments extends JFrame {
 
 		loadClientes(table);
 		loadCitaStart(tableHis);
-
+		JButton BinformeTotal=new JButton("<html><u>Imprimir informe completo</u></html>");
+		BinformeTotal.setBounds(1700,200,60,20);
+		contentPane.add(BinformeTotal);
+		BinformeTotal.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 //		JComboBox comboBox = new JComboBox();
 //		comboBox.setBounds(269, 115, 96, 22);
 //		comboBox.addItem("Pago Inmediato");
@@ -599,10 +620,38 @@ public class AdminPayments extends JFrame {
 						session.beginTransaction();
 						session.update(cita.get(0));
 						session.getTransaction().commit();
+						try {
+							
+							Map parametros = new HashMap();
+							//la clave es el mismo parametro que he creado en el informe, el 1 es el id que quiero buscar y del que me haga el informe
+							parametros.put("id_cita",cita.get(0).getIdcita() );
+							
+							// Cual es el tipo de informe que quiero realizar (lo visual)
+							reporte = JasperCompileManager.compileReport("src/Pagos_cita.jrxml");
+							// Parametros a meter: donde lo tengo el informe, de que parametros lo hago y la conexion
+							JasperPrint jp = JasperFillManager.fillReport(reporte, parametros, cn.conectar());
+							// Muestro el reporte
+							JasperViewer.viewReport(jp,true);
+							
+							//Para guardar el informe (lo pudo exportar a muchos formatos pero vamos a hacerlo en PDF) / Poner la extension en el nombre sino no lo guarda en ese formato
+							//JasperExportManager.exportReportToPdfFile(jp, "Informensito.pdf");
+							//En caso de querer guardarlo en una ruta especifica
+							String nombre=cita.get(0).getCliente().getApellidos();
+							JasperExportManager.exportReportToPdfFile(jp, "C:\\Users\\Pablo\\Escritorio\\"+nombre+cita.get(0).getFecha()+".pdf");
+							
+							
+							
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 						System.out.println(pagado + "asdyubasigvyudasbhasdyugvshbdasdyhvbusdaagyubh");
 						loadCita(tableHis);
 					}
+				}else {
+					
 				}
+				
+
 			}
 		});
 		btnInforme.setBounds(600, 30, 120, 23);
