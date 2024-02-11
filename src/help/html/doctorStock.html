@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Móduo de Inventario Doctor</title>
+    <!-- CSS -->
+    <style>
+        .header {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #1FC0BF;
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        h2 {
+            background-color: #5DCACA;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 45px;
+            margin-right: 15px;
+            text-align: justify;
+        }
+
+        .sangria {
+            color: #000000;
+            font-size: 16px;
+            line-height: 2;
+            margin-left: 100px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            height: 2px;
+            background-color: #F45559;
+            border: transparent;
+        }
+
+        .numeros {
+            background-color: #F45559;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 6px;
+        }
+
+        .imagen {
+            display: block;
+            margin: auto;
+            border: 3px solid #a1a1a1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Titulo de la página -->
+    <div class="header">
+        <img src="../imagenes/logoMenu.png" alt="Imagen" />
+        <h1>Módulo Inventario Doctor</h1>
+    </div>
+
+    <hr><br>
+
+    <!-- Explicación del módulo -->
+    <p> En este módulo el Doctor podrá gestionar las siguientes operaciones referentes al inventario de la clínica:
+    <div class="sangria">
+        <strong><a href="#1">1. Seleccionar un producto</a></strong><br>
+        <strong><a href="#2">2. Eliminar un producto de la selección</a></strong><br>
+        <strong><a href="#3">3. Borrar toda la lista de seleccionados</a></strong><br>
+        <strong><a href="#4">4. Confirmar selección de productos</a></strong><br>
+    </div>
+    </p>
+
+    <br>
+
+    <!-- Seleccionar producto -->
+    <h2><span class="numeros" id="1">1</span> Seleccionar un producto</h2>
+
+    <p>
+        Los productos disponibles en el inventario se pueden observar en la tabla que lleva este nombre, especificando que producto es y el número de unidades de las que se dispone.
+        Para seleccionar un producto debemos hacer click en él y seguidamente elegir el número de cantidades deseadas del mismo. 
+    </p>
+
+    <br>
+
+    <!-- elegir producto -->
+    <img class="imagen" src="../imagenes/seleccionar_producto.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        Tras esto esta pasará a nuestra tabla de elegidos, donde podremos realizar las operaciones explicadas a continuación.<br>
+        Si no encuentras un producto, puedes utilizar el buscador destinado a su localización <img src="../imagenes/buscador.PNG"/>
+    </p>
+
+    <br>
+
+    <!-- Eliminar producto -->
+    <h2><span class="numeros" id="2">2</span> Eliminar un producto de la selección</h2>
+
+    <p>
+        Para eliminar un solo producto de nuestra lista de productos escogidos, solo tenemos que seleccionar con un click aquel que deseemos eliminar. 
+    </p>
+
+    <br>
+
+    <!-- eliminar producto -->
+    <img class="imagen" src="../imagenes/eliminar_producto.PNG" alt="Imagen" width="640" height="340" />
+
+    <br>
+
+    <p>
+        A continuación, debemos de seleccionar el siguiente icono <img src="../imagenes/delete.png"/> <br>
+        Para que este sea eliminado de la lista.
+    </p>
+
+    
+
+    <!-- Modificar citas -->
+    <h2><span class="numeros" id="3">3</span> Borrar toda la lista de seleccionados</h2>
+
+    <p>
+        En el caso de que no solo se quiera borrar un único producto, si no que se desea empezar desde el principio la selección de productos.
+        Se debe seleccionar el siguiente icono <img src="../imagenes/resetpedio.png"/>
+        Tras esto, su tabla de pedido quedará vacía y podrá comenzar desde el inicio.
+    </p>
+
+    <h2><span class="numeros" id="4">4</span> Confirmar selección de productos</h2>
+    <p>
+        Para confirmar la lista de productos elegidos y dar constancia de su uso, es necesario confirmarlo pulsando el siguiente icono
+        <img src="../imagenes/conpedio.png"/>
+        Tras esto, su tabla de pedido quedará vacía y su elección de pedidos habrá sido registrada en el sistema.
+    </p>
+
+</body>
+
+</html>
