@@ -146,10 +146,10 @@ public class Insertar_Trat_Diente extends JDialog {
 	// metodo
 	public static void imagenDiente(int id_diente, JLabel imagen) {
 		switch (id_diente) {
-		case 11:
+		case 21:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_5.png")));
 			break;
-		case 15:
+		case 14:
 			imagen.setIcon(new ImageIcon(CustommerOdont.class.getResource("/Resources/images/Diente_2.png")));
 			break;
 		case 17:

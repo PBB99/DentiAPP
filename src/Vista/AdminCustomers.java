@@ -114,6 +114,18 @@ public class AdminCustomers extends JFrame {
 		contentPane.setLayout(null);
 
 		// -------------------- Componentes Gráficos --------------------
+		
+		JButton BinformeTotal=new JButton();
+		BinformeTotal.setToolTipText("Imprimir historial completo");
+		BinformeTotal.setIcon(new ImageIcon(getClass().getResource("/Resources/images/generarpdf.png")));
+		BinformeTotal.setBorder(null);
+		BinformeTotal.setFocusPainted(false);
+		BinformeTotal.setBorderPainted(false);
+		BinformeTotal.setContentAreaFilled(false);
+		BinformeTotal.setOpaque(false);
+		BinformeTotal.setBackground(null);
+		BinformeTotal.setBounds(1378, 250, 100, 100);
+		contentPane.add(BinformeTotal);
 		// menubar
 
 		// nombre esquina
@@ -489,6 +501,23 @@ public class AdminCustomers extends JFrame {
 		loadClientes(table);
 		loadCitaStart(tableHis);
 
+		tableHis.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (evnt.getClickCount() == 1) {
+
+					// Seleccionar row
+					tableHis.addColumnSelectionInterval(0, 2);
+
+					// Cambios en la selección
+					tableHis.setColumnSelectionAllowed(true);
+					tableHis.setCellSelectionEnabled(true);
+					
+
+				}
+			}
+		});
+		
+		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
 				if (evnt.getClickCount() == 1) {
@@ -570,7 +599,7 @@ public class AdminCustomers extends JFrame {
 		});
 		panelTitleCliente.add(btnInsert);
 
-		btnOdonto = new JButton("Odontograma");
+		btnOdonto = new JButton();
 		btnOdonto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (selected != null) {
@@ -584,10 +613,16 @@ public class AdminCustomers extends JFrame {
 				}
 			}
 		});
-		btnOdonto.setBackground(new Color(148, 220, 219));
-		btnOdonto.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOdonto.setBounds(1398, 800, 100, 100);
+		btnOdonto.setIcon(new ImageIcon(getClass().getResource("/Resources/images/odontoboton.png")));
+		btnOdonto.setToolTipText("Odontograma");
+		btnOdonto.setBounds(1378, 200, 100, 50);
 		btnOdonto.setBorder(null);
+		btnOdonto.setBorder(null);
+		btnOdonto.setFocusPainted(false);
+		btnOdonto.setBorderPainted(false);
+		btnOdonto.setContentAreaFilled(false);
+		btnOdonto.setOpaque(false);
+		btnOdonto.setBackground(null);
 		contentPane.add(btnOdonto);
 
 		JTextField txt = new JTextField();
