@@ -66,7 +66,7 @@ public class MakeDelivery extends JDialog {
 	 */
 	public MakeDelivery() {
 		setResizable(false);
-	
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		// -------------------- Conexión ------------------
 		this.instancia = (SessionFactory) new Configuration().configure("hibernate.cfg.xml")
 				.addAnnotatedClass(InventarioHibernate.class).addAnnotatedClass(ProveedorHibernate.class).addAnnotatedClass(PedidosHibernate.class)
@@ -85,7 +85,7 @@ public class MakeDelivery extends JDialog {
 		getContentPane().setLayout(null);
 
 		JPanel buttonPane = new JPanel();
-		buttonPane.setBounds(0, 820, 750, 33);
+		buttonPane.setBounds(0, 820, 700, 33);
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane);
 
@@ -125,8 +125,17 @@ public class MakeDelivery extends JDialog {
 				}
 				
 				session.getTransaction().commit();
-				setModal(false);
-				dispose();
+				String hql5 = "From InventarioHibernate where cantidad<0";
+				Query<InventarioHibernate> consulta6 = session.createQuery(hql5, InventarioHibernate.class);
+				List<InventarioHibernate> listaconf = consulta6.getResultList();
+				if(listaconf.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Pedido Realizado","Se ha realizado el pedido correctamente",JOptionPane.INFORMATION_MESSAGE);
+					setModal(false);
+					dispose();
+				}else {
+					JOptionPane.showMessageDialog(null, "ERROR","Algo ha ido mal, comprueba que las cantidades sean superior a 0",JOptionPane.WARNING_MESSAGE);
+				}
+				
 				
 			}
 		});

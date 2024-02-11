@@ -447,7 +447,7 @@ public class DoctorCustomers extends JFrame {
 				if (evnt.getClickCount() == 1) {
 
 					// Seleccionar row
-					tableHis.addColumnSelectionInterval(0, 3);
+					tableHis.addColumnSelectionInterval(0, 2);
 
 					// Cambios en la selección
 					tableHis.setColumnSelectionAllowed(true);
